@@ -1,0 +1,73 @@
+[
+    {
+        "type": "document",
+        "pathname": "index.html",
+        "layout": "default",
+        "data": {
+            "title": "Home | Test",
+            "h1": "Home"
+        }
+    },
+    {
+        "type": "document",
+        "pathname": "about.html",
+        "layout": "default",
+        "data": {
+            "title": "About | Test",
+            "h1": "About"
+        }
+    },
+    {
+        "id": "default",
+        "type": "layout",
+        "tree": [
+            {
+                "type": "doctype",
+                "value": "html"
+            },
+            {
+                "type": "element",
+                "name": "html",
+                "attributes": [],
+                "children": [
+                    {
+                        "type": "element",
+                        "name": "head",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "element",
+                                "name": "title",
+                                "attributes": [],
+                                "children": [
+                                    {
+                                        "type": "variable",
+                                        "reference": "title"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "element",
+                        "name": "body",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "element",
+                                "name": "h1",
+                                "attributes": [],
+                                "children": [
+                                    {
+                                        "type": "variable",
+                                        "reference": "h1"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

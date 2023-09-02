@@ -1,0 +1,69 @@
+[
+    {
+        "type": "document",
+        "pathname": "about.html",
+        "data": {
+            "h1": "About"
+        }
+
+    },
+    {
+        "type": "document",
+        "pathname": "index.html",
+        "data": {
+            "h1": "Home"
+        }
+    },
+    {
+        "type": "layout",
+        "tree": [
+            {
+                "type": "doctype",
+                "value": "html"
+            },
+            {
+                "type": "element",
+                "name": "html",
+                "attributes": [],
+                "children": [
+                    {
+                        "type": "element",
+                        "name": "head",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "element",
+                                "name": "title",
+                                "attributes": [],
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "value": "Test"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "element",
+                        "name": "body",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "element",
+                                "name": "h1",
+                                "attributes": [],
+                                "children": [
+                                    {
+                                        "type": "variable",
+                                        "reference": "h1"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

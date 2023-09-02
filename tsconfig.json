@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"module": "ES2020",
+		"moduleResolution": "node",
+		"outDir": "./lib"
+	},
+	"include": ["src", "test/dom.ts"],
+	"exclude": ["node_modules", "test"]
+}

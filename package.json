@@ -1,0 +1,54 @@
+{
+  "name": "static-to-ssg",
+  "description": "A CLI tool to convert a static site into an SSG site to be used as a baseline",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "lib/**/*.js"
+  ],
+  "type": "module",
+  "dependencies": {
+    "angular-html-parser": "^4.0.1",
+    "jsdom": "^21.1.1"
+  },
+  "scripts": {
+    "publish": "npm run build && np",
+    "test": "c8 ava",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "ava": "^5.0.0",
+    "c8": "^7.13.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CloudCannon/static-to-ssg.git"
+  },
+  "author": "CloudCannon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CloudCannon/static-to-ssg/issues"
+  },
+  "homepage": "https://github.com/CloudCannon/static-to-ssg#readme",
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--loader=ts-node/esm",
+      "--experimental-specifier-resolution=node"
+    ],
+    "environmentVariables": {
+      "TS_NODE_LOG_ERROR": "true"
+    },
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}
