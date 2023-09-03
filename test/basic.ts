@@ -7,7 +7,7 @@ const tests = [
     "two-pages",
     "two-pages-title-variable",
     "three-pages",
-    // "three-pages-title-variable",
+    "three-pages-title-variable",
     // "layouts-optional-meta",
     // "layouts-different-components",
     // "layouts-different-meta-order",

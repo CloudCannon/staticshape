@@ -1,24 +1,21 @@
 [
     {
-        "type": "document",
+        "type": "page",
         "pathname": "index.html",
-        "layout": "default",
         "data": {
             "title": "Home | Test",
             "h1": "Home"
         }
     },
     {
-        "type": "document",
+        "type": "page",
         "pathname": "about.html",
-        "layout": "default",
         "data": {
             "title": "About | Test",
             "h1": "About"
         }
     },
     {
-        "id": "default",
         "type": "layout",
         "tree": [
             {

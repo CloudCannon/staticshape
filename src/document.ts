@@ -3,9 +3,16 @@ import { parse } from 'angular-html-parser';
 import {
     ASTElementNode,
     ASTAttribute,
-    ASTNode,
-    ASTTree
+    ASTNode
 } from './types'
+import Page from './page';
+import Layout from './layout';
+
+export interface ASTTree {
+    base: Page;
+    pages: Page[];
+    layout: Layout;
+}
 
 export interface DocumentOptions {
     pathname: string;
@@ -36,10 +43,6 @@ function formatNode(node): ASTNode {
         })) || [],
         children: []
     }
-}
-
-function isEmptyTextNode(node) {
-    return node.type === 'text' && node.value.trim().length > 0
 }
 
 function traverseNode(depth: number, primaryDoc : Document, secondDoc : Document, firstNode, secondNode: Record<string, any> | void, parentNode) : ASTNode {
@@ -146,28 +149,21 @@ export default class Document {
 
         const htmlNode = traverseNode(0, this, other, sourceHtml, otherHtml, null);
 
-        const layoutId = 'default';
         return {
-            base: {
-                type: "document",
+            base: new Page({
                 pathname: this.options.pathname,
-                layout: layoutId,
                 data: this.data
-            },
-            pages: [{
-                type: "document",
+            }),
+            pages: [new Page({
                 pathname: other.options.pathname,
-                layout: layoutId,
                 data: other.data
-            }],
-            layout: {
-                id: layoutId,
-                type: 'layout',
+            })],
+            layout: new Layout({
                 tree: [
                     formatNode(sourceDoctype),
                     htmlNode
                 ]
-            }
+            })
         }
     }
 }

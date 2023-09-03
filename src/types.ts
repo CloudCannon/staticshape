@@ -47,24 +47,3 @@ export interface ASTElementNode {
 
 export type ASTAttribute = ASTVariableAttribute | ASTStaticAttribute;
 export type ASTNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTVariableNode | ASTConditionalNode;
-
-export interface ASTLayout {
-    id: string;
-    type: 'layout',
-    tree: ASTNode[]
-}
-
-export interface ASTPage {
-    type: 'document',
-    pathname: string,
-    layout: string;
-    data: Record<string, any>
-}
-
-export type AST = ASTPage | ASTLayout;
-
-export interface ASTTree {
-    base: ASTPage;
-    pages: ASTPage[];
-    layout: ASTLayout;
-}

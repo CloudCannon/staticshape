@@ -1,7 +1,6 @@
 [
     {
-        "type": "document",
-        "layout": "default",
+        "type": "page",
         "pathname": "about.html",
         "data": {
             "h1": "About"
@@ -9,23 +8,20 @@
 
     },
     {
-        "type": "document",
-        "layout": "default",
+        "type": "page",
         "pathname": "index.html",
         "data": {
             "h1": "Home"
         }
     },
     {
-        "type": "document",
-        "layout": "default",
+        "type": "page",
         "pathname": "contact.html",
         "data": {
             "h1": "Contact"
         }
     },
     {
-        "id": "default",
         "type": "layout",
         "tree": [
             {
