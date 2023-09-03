@@ -4,13 +4,13 @@ import {
     ASTElementNode,
     ASTAttribute,
     ASTNode,
-    AST
+    ASTTree
 } from './types'
 
 export interface DocumentOptions {
     pathname: string;
-    data: Record<string, any>,
-    content: string
+    data: Record<string, any>;
+    content: string;
 }
 
 function getElementSignature(element) {
@@ -133,7 +133,7 @@ export default class Document {
         this.data = {};
     }
 
-    buildSharedAst(other: Document): AST[] {
+    buildSharedAst(other: Document): ASTTree {
         const sourceDoctype = this.dom.rootNodes.find((node) => node.type === 'docType');
         const otherDoctype = other.dom.rootNodes.find((node) => node.type === 'docType');
 
@@ -147,20 +147,20 @@ export default class Document {
         const htmlNode = traverseNode(0, this, other, sourceHtml, otherHtml, null);
 
         const layoutId = 'default';
-        return [
-            {
+        return {
+            base: {
                 type: "document",
                 pathname: this.options.pathname,
                 layout: layoutId,
                 data: this.data
             },
-            {
+            pages: [{
                 type: "document",
                 pathname: other.options.pathname,
                 layout: layoutId,
                 data: other.data
-            },
-            {
+            }],
+            layout: {
                 id: layoutId,
                 type: 'layout',
                 tree: [
@@ -168,6 +168,6 @@ export default class Document {
                     htmlNode
                 ]
             }
-        ]
+        }
     }
 }

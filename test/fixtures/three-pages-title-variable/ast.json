@@ -1,20 +1,33 @@
 [
     {
         "type": "document",
-        "pathname": "about.html",
-        "data": {
-            "h1": "About"
-        }
-
-    },
-    {
-        "type": "document",
         "pathname": "index.html",
+        "layout": "default",
         "data": {
+            "title": "Home | Test",
             "h1": "Home"
         }
     },
     {
+        "type": "document",
+        "pathname": "about.html",
+        "layout": "default",
+        "data": {
+            "title": "Test",
+            "h1": "About"
+        }
+    },
+    {
+        "type": "document",
+        "pathname": "contact.html",
+        "layout": "default",
+        "data": {
+            "title": "Test",
+            "h1": "Contact"
+        }
+    },
+    {
+        "id": "default",
         "type": "layout",
         "tree": [
             {
@@ -37,8 +50,8 @@
                                 "attributes": [],
                                 "children": [
                                     {
-                                        "type": "text",
-                                        "value": "Test"
+                                        "type": "variable",
+                                        "reference": "title"
                                     }
                                 ]
                             }

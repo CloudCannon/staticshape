@@ -1,22 +1,27 @@
 [
     {
         "type": "document",
-        "pathname": "index.html",
         "layout": "default",
+        "pathname": "about.html",
         "data": {
-            "title": "Home | Test",
-            "description": null,
+            "h1": "About"
+        }
+
+    },
+    {
+        "type": "document",
+        "layout": "default",
+        "pathname": "index.html",
+        "data": {
             "h1": "Home"
         }
     },
     {
         "type": "document",
-        "pathname": "about.html",
         "layout": "default",
+        "pathname": "contact.html",
         "data": {
-            "title": "About | Test",
-            "description": "About description",
-            "h1": "About"
+            "h1": "Contact"
         }
     },
     {
@@ -43,34 +48,10 @@
                                 "attributes": [],
                                 "children": [
                                     {
-                                        "type": "variable",
-                                        "reference": "title"
+                                        "type": "text",
+                                        "value": "Test"
                                     }
                                 ]
-                            },
-                            {
-                                "type": "conditional",
-                                "name": "description",
-                                "ifChildren": [
-                                    {
-                                        "type": "element",
-                                        "name": "meta",
-                                        "attributes": [
-                                            {
-                                                "name": "name",
-                                                "type": "static",
-                                                "value": "description"
-                                            },
-                                            {
-                                                "name": "content",
-                                                "type": "static",
-                                                "value": "About description"
-                                            }
-                                       ],
-                                        "children": []
-                                    }
-                                ],
-                                "elseChildren": []
                             }
                         ]
                     },

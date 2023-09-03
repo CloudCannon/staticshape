@@ -62,3 +62,9 @@ export interface ASTPage {
 }
 
 export type AST = ASTPage | ASTLayout;
+
+export interface ASTTree {
+    base: ASTPage;
+    pages: ASTPage[];
+    layout: ASTLayout;
+}

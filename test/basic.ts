@@ -4,8 +4,10 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 const tests = [
-    "layouts-basic",
-    "layouts-title-variable"
+    "two-pages",
+    "two-pages-title-variable",
+    "three-pages",
+    // "three-pages-title-variable",
     // "layouts-optional-meta",
     // "layouts-different-components",
     // "layouts-different-meta-order",
