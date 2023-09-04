@@ -25,6 +25,10 @@ export interface ASTDoctypeNode {
     value: string;
 }
 
+export interface ASTContentNode {
+    type: 'content';
+}
+
 export interface ASTStaticAttribute {
     type: 'static';
     name: string;
@@ -45,4 +49,4 @@ export interface ASTElementNode {
 }
 
 export type ASTAttribute = ASTVariableAttribute | ASTStaticAttribute;
-export type ASTNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTVariableNode | ASTConditionalNode;
+export type ASTNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTVariableNode | ASTConditionalNode | ASTContentNode;

@@ -1,11 +1,12 @@
 import File from './file';
-import Document from './document';
+import Document, { DocumentContentConfig } from './document';
 
 export interface CollectionOptions {
     name: string;
     subPath: string;
     include?: string[] | null | void;
     exclude?: string[] | null | void;
+    content?: DocumentContentConfig;
 }
 
 export interface CollectionResponse {
@@ -46,7 +47,10 @@ export default class Collection {
             return new Document({
                 pathname: file.name(),
                 data: {},
-                content: html
+                content: html,
+                config: {
+                    content: this.options.content
+                }
             })
         }));
 

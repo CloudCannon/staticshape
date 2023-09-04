@@ -3,6 +3,7 @@
         "pages": [
             {
                 "pathname": "index.html",
+                "content": [],
                 "data": {
                     "title": "Home | Test",
                     "h1": "Home"
@@ -10,6 +11,7 @@
             },
             {
                 "pathname": "about.html",
+                "content": [],
                 "data": {
                     "title": "About | Test",
                     "h1": "About"

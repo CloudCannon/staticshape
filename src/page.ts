@@ -1,6 +1,9 @@
+import { ASTNode } from "./types";
+
 interface PageOptions {
     pathname: string,
     data: Record<string, any>;
+    content: ASTNode[];
 }
 
 export default class Page {

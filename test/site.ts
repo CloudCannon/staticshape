@@ -6,6 +6,7 @@ import * as fs from 'fs';
 const tests = [
     "two-pages",
     "two-pages-title-variable",
+    "two-pages-body-content",
     "three-pages",
     "three-pages-title-variable",
 ]

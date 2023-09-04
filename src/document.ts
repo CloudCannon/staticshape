@@ -13,15 +13,33 @@ export interface ASTTree {
     layout: Layout;
 }
 
+export interface DocumentContentConfig {
+    selector: string;
+}
+
+export interface DocumentConfig {
+    content?: DocumentContentConfig;
+}
+
 export interface DocumentOptions {
     pathname: string;
     data: Record<string, any>;
     content: string;
+    config: DocumentConfig;
+}
+
+function filterWhitespaceNodes(nodes) {
+    return nodes.filter((node) => node.type !== 'text' || node.value.trim().length > 0)
 }
 
 function getElementSignature(element) {
     // TODO include attributes that like <meta name="description"
     return element.name;
+}
+
+function isSelector(element: any, selector: string) {
+    // TODO support more than just a tag selector
+    return element.name === selector;
 }
 
 function formatNode(node): ASTNode {
@@ -44,19 +62,19 @@ function formatNode(node): ASTNode {
     }
 }
 
-function traverseNode(depth: number, primaryDoc : Document, secondDoc : Document, firstNode, secondNode: Record<string, any> | null, parentNode) : ASTNode {
-    if (!secondNode) {
-        const variableName = `show-${getElementSignature(firstNode)}`;
-        console.log(firstNode);
-        primaryDoc.data[variableName] = true;
-        secondDoc.data[variableName] = false;
-        return {
-            type: 'conditional',
-            name: variableName,
-            child: formatNode(firstNode)
-        };
+function generateNodeTree(element: any) : ASTNode {
+    const node = formatNode(element);
+    if (element.type === 'element') {
+        const children = filterWhitespaceNodes(element.children)
+        for (let i = 0; i < children?.length; i++) {
+            const childNode = children?.[i];
+            (node as ASTElementNode).children.push(generateNodeTree(childNode));
+        }
     }
+    return node;
+}
 
+function compareNodes(config: DocumentConfig, depth: number, primaryDoc : Document, secondDoc : Document, firstNode: object, secondNode: object, parentNode: object) : ASTNode {
     const typesMatch = firstNode.type === secondNode.type;
     if (!typesMatch) {
         throw new Error(`${firstNode.type} != ${secondNode.type}`);
@@ -84,6 +102,15 @@ function traverseNode(depth: number, primaryDoc : Document, secondDoc : Document
     }
 
     const node = formatNode(firstNode) as ASTElementNode;
+    if (config.content?.selector && isSelector(firstNode, config.content?.selector)) {
+        primaryDoc.pageContent = (generateNodeTree(firstNode) as ASTElementNode).children || [];
+        secondDoc.pageContent = (generateNodeTree(secondNode) as ASTElementNode).children || [];
+        node.children.push({
+            type: 'content'
+        })
+        return node;
+    }
+
     // TODO compare attribute variables
     if (!secondNode.children?.length && !firstNode.children?.length) {
         return node;
@@ -111,27 +138,49 @@ function traverseNode(depth: number, primaryDoc : Document, secondDoc : Document
     for (let i = 0; i < firstNode.children?.length; i++) {
         const childNode = firstNode.children?.[i];
         const equivalentNode = findEquivalentSibling(childNode);
-        node.children.push(traverseNode(depth + 1, primaryDoc, secondDoc, childNode, equivalentNode, firstNode));
+        
+        if (secondNode) {
+            node.children.push(compareNodes(config, depth + 1, primaryDoc, secondDoc, childNode, equivalentNode, firstNode));
+        } else {
+            const variableName = `show-${getElementSignature(firstNode)}`;
+            primaryDoc.data[variableName] = true;
+            secondDoc.data[variableName] = false;
+            node.children.push({
+                type: 'conditional',
+                name: variableName,
+                child: generateNodeTree(childNode)
+            });
+        }
     }
+
     // TODO do this all better to ensure the optional orders are merged like a zip
     for (let i = 0; i < secondChildren.length; i++) {
         const leftOverNode = secondChildren[i];
-        node.children.push(traverseNode(depth + 1, secondDoc, primaryDoc, leftOverNode, null, secondNode || firstNode));
+        const variableName = `show-${getElementSignature(secondNode)}`;
+        primaryDoc.data[variableName] = true;
+        secondDoc.data[variableName] = false;
+        node.children.push({
+            type: 'conditional',
+            name: variableName,
+            child: generateNodeTree(leftOverNode)
+        });
     }
 
-    node.children = node.children.filter((node) => node.type !== 'text' || node.value.trim().length > 0)
+    node.children = filterWhitespaceNodes(node.children);
     return node;
 }
 
 export default class Document {
     options: DocumentOptions;
     dom: any; // TODO import ParseTreeResult from somewhere
-    data: Record<string, any>; // TODO import ParseTreeResult from somewhere
+    data: Record<string, any>;
+    pageContent: ASTNode[];
 
     constructor(options: DocumentOptions) {
         this.options = options;
         this.dom = parse(this.options.content);
         this.data = {};
+        this.pageContent = [];
     }
 
     buildAstTree(other: Document): ASTTree {
@@ -145,15 +194,17 @@ export default class Document {
         const sourceHtml = this.dom.rootNodes.find((node) => node.name === 'html');
         const otherHtml = other.dom.rootNodes.find((node) => node.name === 'html');
 
-        const htmlNode = traverseNode(0, this, other, sourceHtml, otherHtml, null);
+        const htmlNode = compareNodes(this.options.config, 0, this, other, sourceHtml, otherHtml, null);
 
         return {
             base: new Page({
                 pathname: this.options.pathname,
+                content: this.pageContent,
                 data: this.data
             }),
             pages: [new Page({
                 pathname: other.options.pathname,
+                content: other.pageContent,
                 data: other.data
             })],
             layout: new Layout({

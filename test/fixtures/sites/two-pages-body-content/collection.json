@@ -3,17 +3,32 @@
         "pages": [
             {
                 "pathname": "about.html",
-                "content": [],
+                "content": [{
+                    "type": "element",
+                    "name": "h1",
+                    "attributes": [],
+                    "children": [{
+                        "type": "text",
+                        "value": "About"
+                    }]
+                }],
                 "data": {
-                    "h1": "About"
+                    "title": "About | Test"
                 }
-
             },
             {
                 "pathname": "index.html",
-                "content": [],
+                "content": [{
+                    "type": "element",
+                    "name": "h1",
+                    "attributes": [],
+                    "children": [{
+                        "type": "text",
+                        "value": "Home"
+                    }]
+                }],
                 "data": {
-                    "h1": "Home"
+                    "title": "Home | Test"
                 }
             }
         ],
@@ -39,8 +54,8 @@
                                     "attributes": [],
                                     "children": [
                                         {
-                                            "type": "text",
-                                            "value": "Test"
+                                            "type": "variable",
+                                            "reference": "title"
                                         }
                                     ]
                                 }
@@ -52,15 +67,7 @@
                             "attributes": [],
                             "children": [
                                 {
-                                    "type": "element",
-                                    "name": "h1",
-                                    "attributes": [],
-                                    "children": [
-                                        {
-                                            "type": "variable",
-                                            "reference": "h1"
-                                        }
-                                    ]
+                                    "type": "content"
                                 }
                             ]
                         }
