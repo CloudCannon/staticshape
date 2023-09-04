@@ -61,7 +61,7 @@
                                         "value": "description"
                                     }, {
                                         "type": "static",
-                                        "name": "content=",
+                                        "name": "content",
                                         "value": "Home"
                                     }],
                                     "children": []

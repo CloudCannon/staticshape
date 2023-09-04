@@ -1,24 +1,44 @@
 import File from './file';
-import Directory from './directory';
 import Document from './document';
 
-interface CollectionOptions {
-    basePath: string;
+export interface CollectionOptions {
+    name: string;
+    subPath: string;
+    include?: string[] | null | void;
+    exclude?: string[] | null | void;
 }
 
-interface CollectionResponse {
+export interface CollectionResponse {
     pages: object[];
     layout: object;
 }
 
 export default class Collection {
     options: CollectionOptions;
-    constructor(options: CollectionOptions) {
+    files: File[];
+
+    constructor(files: File[], options: CollectionOptions) {
+        this.files = files;
         this.options = options;
     }
 
     async build(): Promise<CollectionResponse> {
-        const htmlFiles = await this.loadHtmlFiles();
+        const htmlFiles = this.files.filter((file) => {
+            if (file.extension() !== '.html') {
+                return false;
+            }
+
+            const { pathname } = file.options;
+            if (this.options.include?.includes(pathname)) {
+                return true;
+            }
+
+            if (this.options.exclude?.includes(pathname)) {
+                return false;
+            }
+
+            return pathname.startsWith(this.options.subPath);
+        });
 
         const documents = await Promise.all(htmlFiles.map(async (file) => {
             const html = await file.read();
@@ -65,15 +85,5 @@ export default class Collection {
             ],
             layout: current.layout.toJSON()
         }
-    }
-
-    async loadHtmlFiles(): Promise<File[]> {
-        const directory = new Directory({
-            basePath: this.options.basePath,
-            pathname: ''
-        })
-
-        const files = await directory.files();
-        return files.filter((file) => file.extension() === '.html');
     }
 }

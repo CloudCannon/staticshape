@@ -4,7 +4,7 @@ interface LayoutOptions {
     tree: ASTNode[]
 }
 
-function isEquivalent(first, second) {
+function isEquivalent(first: ASTNode, second: ASTNode) : boolean {
     if (second.type === 'conditional') {
         return isEquivalent(first, second.child);
     }
@@ -22,11 +22,11 @@ function isEquivalent(first, second) {
         return false;
     }
 
-    if (first.type === 'doctype') {
+    if (first.type === 'doctype' && second.type === 'doctype') {
         return first.value === second.value;
     }
     
-    if (first.type === 'element') {
+    if (first.type === 'element' && second.type === 'element') {
         // TODO compare element attributes
         return first.name === second.name;
     }

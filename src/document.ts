@@ -44,7 +44,7 @@ function formatNode(node): ASTNode {
     }
 }
 
-function traverseNode(depth: number, primaryDoc : Document, secondDoc : Document, firstNode, secondNode: Record<string, any> | void, parentNode) : ASTNode {
+function traverseNode(depth: number, primaryDoc : Document, secondDoc : Document, firstNode, secondNode: Record<string, any> | null, parentNode) : ASTNode {
     if (!secondNode) {
         const variableName = `show-${getElementSignature(firstNode)}`;
         console.log(firstNode);
