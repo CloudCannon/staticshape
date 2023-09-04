@@ -20,8 +20,12 @@ for (let i = 0; i < tests.length; i++) {
             tree: JSON.parse((await fs.promises.readFile(`./test/fixtures/layouts/${testName}/b.json`)).toString('utf-8'))
         });
 
-        const layout = a.merge(b);
+        const forwards = a.merge(b);
 
-        t.deepEqual(layout.options.tree, expected);
+        t.deepEqual(forwards.options.tree, expected);
+
+        const backwards = b.merge(a);
+
+        t.deepEqual(backwards.options.tree, expected);
     });
 }

@@ -31,7 +31,7 @@ function isEquivalent(first, second) {
         return first.name === second.name;
     }
 
-    return first.type === second.type;
+    return true;
 }
 
 function mergeTree(firstTree: ASTNode[], secondTree: ASTNode[]) : ASTNode[] {
