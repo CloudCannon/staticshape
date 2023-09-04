@@ -1,0 +1,13 @@
+[
+    {
+        "type": "element",
+        "name": "p",
+        "attributes": [],
+        "children": [
+            {
+                "type": "variable",
+                "reference": "p"
+            }
+        ]
+    }
+]

@@ -2,28 +2,32 @@ import File from './file';
 import Directory from './directory';
 import Document from './document';
 
-interface InverserOptions {
+interface CollectionOptions {
     basePath: string;
 }
 
-export default class Inverser {
-    options: InverserOptions;
-    constructor(options: InverserOptions) {
+interface CollectionResponse {
+    pages: object[];
+    layout: object;
+}
+
+export default class Collection {
+    options: CollectionOptions;
+    constructor(options: CollectionOptions) {
         this.options = options;
     }
 
-    async build(): Promise<object[]> {
+    async build(): Promise<CollectionResponse> {
         const htmlFiles = await this.loadHtmlFiles();
 
-        const documents = [];
-        await Promise.all(htmlFiles.map(async (file) => {
+        const documents = await Promise.all(htmlFiles.map(async (file) => {
             const html = await file.read();
 
-            documents.push(new Document({
+            return new Document({
                 pathname: file.name(),
                 data: {},
                 content: html
-            }))
+            })
         }));
 
         if (documents.length === 1) {
@@ -31,9 +35,9 @@ export default class Inverser {
         }
 
         const baseDoc = documents[0];
-        let current = baseDoc.buildSharedAst(documents[1]);
+        let current = baseDoc.buildAstTree(documents[1]);
         for (let i = 2; i < documents.length; i++) {
-            const next = baseDoc.buildSharedAst(documents[i]);
+            const next = baseDoc.buildAstTree(documents[i]);
 
             // Merge the next and current bases
             const base = current.base.merge(next.base);
@@ -54,11 +58,13 @@ export default class Inverser {
             }
         }
 
-        return [
-            current.base.toJSON(),
-            ...current.pages.map((page) => page.toJSON()),
-            current.layout.toJSON()
-        ]
+        return {
+            pages: [
+                current.base.toJSON(),
+                ...current.pages.map((page) => page.toJSON())
+            ],
+            layout: current.layout.toJSON()
+        }
     }
 
     async loadHtmlFiles(): Promise<File[]> {

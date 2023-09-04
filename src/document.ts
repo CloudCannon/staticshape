@@ -1,12 +1,11 @@
 import { parse } from 'angular-html-parser';
-
+import Page from './page';
+import Layout from './layout';
 import {
     ASTElementNode,
     ASTAttribute,
     ASTNode
 } from './types'
-import Page from './page';
-import Layout from './layout';
 
 export interface ASTTree {
     base: Page;
@@ -54,8 +53,7 @@ function traverseNode(depth: number, primaryDoc : Document, secondDoc : Document
         return {
             type: 'conditional',
             name: variableName,
-            ifChildren: [formatNode(firstNode)],
-            elseChildren: [],
+            child: formatNode(firstNode)
         };
     }
 
@@ -136,7 +134,7 @@ export default class Document {
         this.data = {};
     }
 
-    buildSharedAst(other: Document): ASTTree {
+    buildAstTree(other: Document): ASTTree {
         const sourceDoctype = this.dom.rootNodes.find((node) => node.type === 'docType');
         const otherDoctype = other.dom.rootNodes.find((node) => node.type === 'docType');
 

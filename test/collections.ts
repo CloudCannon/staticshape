@@ -1,5 +1,5 @@
 import test, {ExecutionContext} from 'ava';
-import Inverser from "../src/index";
+import Collection from "../src/collection";
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -8,10 +8,6 @@ const tests = [
     "two-pages-title-variable",
     "three-pages",
     "three-pages-title-variable",
-    // "layouts-optional-meta",
-    // "layouts-different-components",
-    // "layouts-different-meta-order",
-    // "layouts-nav",
 ]
 
 function docSort(a, b) {
@@ -31,14 +27,15 @@ for (let i = 0; i < tests.length; i++) {
     const testName = tests[i];
         
     test(testName, async (t: ExecutionContext) => {
-        const inverser = new Inverser({
-            basePath: path.resolve(`./test/fixtures/${testName}/site`)
+        const collection = new Collection({
+            basePath: path.resolve(`./test/fixtures/collections/${testName}/files`)
         })
 
-        const ast = await inverser.build();
+        const output = await collection.build();
 
-        const expected = JSON.parse((await fs.promises.readFile(`./test/fixtures/${testName}/ast.json`)).toString('utf-8'));
+        const expected = JSON.parse((await fs.promises.readFile(`./test/fixtures/collections/${testName}/collection.json`)).toString('utf-8'));
 
-        t.deepEqual(ast.sort(docSort), expected.sort(docSort));
+        t.deepEqual(output.layout, expected.layout);
+        t.deepEqual(output.pages.sort(docSort), expected.pages.sort(docSort));
     });
 }

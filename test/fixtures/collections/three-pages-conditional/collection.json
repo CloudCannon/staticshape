@@ -1,21 +1,28 @@
-[
-    {
-        "type": "page",
-        "pathname": "about.html",
-        "data": {
-            "h1": "About"
+{
+    "pages": [
+        {
+            "pathname": "index.html",
+            "data": {
+                "title": "Home | Test",
+                "h1": "Home"
+            }
+        },
+        {
+            "pathname": "about.html",
+            "data": {
+                "title": "Test",
+                "h1": "About"
+            }
+        },
+        {
+            "pathname": "contact.html",
+            "data": {
+                "title": "Test",
+                "h1": "Contact"
+            }
         }
-
-    },
-    {
-        "type": "page",
-        "pathname": "index.html",
-        "data": {
-            "h1": "Home"
-        }
-    },
-    {
-        "type": "layout",
+    ],
+    "layout": {
         "tree": [
             {
                 "type": "doctype",
@@ -37,10 +44,28 @@
                                 "attributes": [],
                                 "children": [
                                     {
-                                        "type": "text",
-                                        "value": "Test"
+                                        "type": "variable",
+                                        "reference": "title"
                                     }
                                 ]
+                            },
+                            {
+                                "type": "conditional",
+                                "reference": "show-meta",
+                                "child": {
+                                    "type": "element",
+                                    "name": "meta",
+                                    "attributes": [{
+                                        "type": "static",
+                                        "name": "name",
+                                        "value": "description"
+                                    }, {
+                                        "type": "static",
+                                        "name": "content=",
+                                        "value": "Home"
+                                    }],
+                                    "children": []
+                                }
                             }
                         ]
                     },
@@ -66,4 +91,4 @@
             }
         ]
     }
-]
+}

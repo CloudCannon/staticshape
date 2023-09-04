@@ -1,22 +1,28 @@
-[
-    {
-        "type": "page",
-        "pathname": "index.html",
-        "data": {
-            "title": "Home | Test",
-            "h1": "Home"
+{
+    "pages": [
+        {
+            "pathname": "index.html",
+            "data": {
+                "title": "Home | Test",
+                "h1": "Home"
+            }
+        },
+        {
+            "pathname": "about.html",
+            "data": {
+                "title": "Test",
+                "h1": "About"
+            }
+        },
+        {
+            "pathname": "contact.html",
+            "data": {
+                "title": "Test",
+                "h1": "Contact"
+            }
         }
-    },
-    {
-        "type": "page",
-        "pathname": "about.html",
-        "data": {
-            "title": "About | Test",
-            "h1": "About"
-        }
-    },
-    {
-        "type": "layout",
+    ],
+    "layout": {
         "tree": [
             {
                 "type": "doctype",
@@ -67,4 +73,4 @@
             }
         ]
     }
-]
+}

@@ -1,0 +1,13 @@
+[
+    {
+        "type": "element",
+        "name": "h1",
+        "attributes": [],
+        "children": [
+            {
+                "type": "text",
+                "value": "Should be ignored"
+            }
+        ]
+    }
+]

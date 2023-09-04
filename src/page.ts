@@ -25,9 +25,6 @@ export default class Page {
     }
 
     toJSON() : object {
-        return {
-            type: 'page',
-            ...this.options
-        };
+        return this.options;
     }
 }
