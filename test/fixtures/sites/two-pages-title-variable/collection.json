@@ -1,69 +1,71 @@
-{ 
-    "pages": [
-        {
-            "pathname": "index.html",
-            "data": {
-                "title": "Home | Test",
-                "h1": "Home"
-            }
-        },
-        {
-            "pathname": "about.html",
-            "data": {
-                "title": "About | Test",
-                "h1": "About"
-            }
-        }
-    ],
-    "layout": {
-        "tree": [
+{
+    "pages": {
+        "pages": [
             {
-                "type": "doctype",
-                "value": "html"
+                "pathname": "index.html",
+                "data": {
+                    "title": "Home | Test",
+                    "h1": "Home"
+                }
             },
             {
-                "type": "element",
-                "name": "html",
-                "attributes": [],
-                "children": [
-                    {
-                        "type": "element",
-                        "name": "head",
-                        "attributes": [],
-                        "children": [
-                            {
-                                "type": "element",
-                                "name": "title",
-                                "attributes": [],
-                                "children": [
-                                    {
-                                        "type": "variable",
-                                        "reference": "title"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "element",
-                        "name": "body",
-                        "attributes": [],
-                        "children": [
-                            {
-                                "type": "element",
-                                "name": "h1",
-                                "attributes": [],
-                                "children": [
-                                    {
-                                        "type": "variable",
-                                        "reference": "h1"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
+                "pathname": "about.html",
+                "data": {
+                    "title": "About | Test",
+                    "h1": "About"
+                }
             }
-        ]
+        ],
+        "layout": {
+            "tree": [
+                {
+                    "type": "doctype",
+                    "value": "html"
+                },
+                {
+                    "type": "element",
+                    "name": "html",
+                    "attributes": [],
+                    "children": [
+                        {
+                            "type": "element",
+                            "name": "head",
+                            "attributes": [],
+                            "children": [
+                                {
+                                    "type": "element",
+                                    "name": "title",
+                                    "attributes": [],
+                                    "children": [
+                                        {
+                                            "type": "variable",
+                                            "reference": "title"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "element",
+                            "name": "body",
+                            "attributes": [],
+                            "children": [
+                                {
+                                    "type": "element",
+                                    "name": "h1",
+                                    "attributes": [],
+                                    "children": [
+                                        {
+                                            "type": "variable",
+                                            "reference": "h1"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
     }
 }

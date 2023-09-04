@@ -23,6 +23,13 @@ function docSort(a, b) {
     return 0;
 }
 
+function sortCollectionPages(collections) {
+    Object.keys(collections).forEach((key) => {
+        const collection = collections[key];
+        collection.pages = collection.pages.sort(docSort);
+    })
+} 
+
 for (let i = 0; i < tests.length; i++) {
     const testName = tests[i];
         
@@ -36,9 +43,8 @@ for (let i = 0; i < tests.length; i++) {
 
         const output = await site.build();
         const expected = JSON.parse((await fs.promises.readFile(`./test/fixtures/sites/${testName}/collection.json`)).toString('utf-8'));
-        const collection = output.collections.pages;
-
-        t.deepEqual(collection.layout, expected.layout);
-        t.deepEqual(collection.pages.sort(docSort), expected.pages.sort(docSort));
+        sortCollectionPages(output.collections);
+        sortCollectionPages(expected);
+        t.deepEqual(output.collections, expected);
     });
 }
