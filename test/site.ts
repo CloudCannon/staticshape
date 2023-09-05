@@ -9,6 +9,7 @@ const tests = [
     "two-pages-body-content",
     "three-pages",
     "three-pages-title-variable",
+    "three-pages-body-content",
 ]
 
 function docSort(a, b) {
