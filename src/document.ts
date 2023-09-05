@@ -29,10 +29,6 @@ export interface DocumentOptions {
     config: DocumentConfig;
 }
 
-function filterWhitespaceNodes(nodes) {
-    return nodes //.filter((node) => node.type !== 'text' || node.value.trim().length > 0)
-}
-
 function getElementSignature(element) {
     // TODO include attributes that like <meta name="description"
     return element.name;
@@ -86,9 +82,8 @@ function formatNode(node): ASTNode {
 function generateNodeTree(element: any) : ASTNode {
     const node = formatNode(element);
     if (element.type === 'element') {
-        const children = filterWhitespaceNodes(element.children)
-        for (let i = 0; i < children?.length; i++) {
-            const childNode = children?.[i];
+        for (let i = 0; i < element.children?.length; i++) {
+            const childNode = element.children?.[i];
             (node as ASTElementNode).children.push(generateNodeTree(childNode));
         }
     }
@@ -187,7 +182,6 @@ function compareNodes(config: DocumentConfig, depth: number, primaryDoc : Docume
         });
     }
 
-    node.children = filterWhitespaceNodes(node.children);
     return node;
 }
 
