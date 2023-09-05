@@ -1,5 +1,5 @@
 import { CollectionResponse } from '../collection';
-import { ASTConditionalNode, ASTNode, ASTVariableNode } from '../types';
+import { ASTConditionalNode, ASTContentNode, ASTNode, ASTVariableNode } from '../types';
 import ExportEngine, { FileExport } from './interface';
 import { dump } from 'js-yaml';
 
@@ -61,5 +61,10 @@ export default class HugoExportEngine extends ExportEngine {
 
     renderConditional(node: ASTConditionalNode) : string {
         return `{{ if .Params.${node.reference} }}${this.renderAST([node.child])}{{ end }}`;
+    }
+
+    renderContent(_node: ASTContentNode) : string {
+        // TODO support different render types (markdown vs blocks vs basic)
+        return `{{ content }}`; // TODO make this the actual render
     }
 }

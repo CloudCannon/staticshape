@@ -9,11 +9,9 @@ p.intro(`Welcome to the static to ssg`);
 const sourcePath = await p.text({
   message: "What folder contains your static site?",
   placeholder: "./_site/",
-  initialValue: "./test/fixtures/sites/three-pages/files",
+  initialValue: "",
   validate(sourcePath) {
     if (sourcePath.length === 0) return `Source path is required!`;
-    if (!sourcePath.startsWith('./')) return `Source path must be relative`;
-    if (path.normalize(sourcePath).includes('..')) return `Source path must be relative`;
 
     const absoluteSourcePath = path.resolve(sourcePath);
     try {
@@ -39,12 +37,9 @@ p.log.success(`Input set to ${absoluteSourcePath}`);
 const configPath = await p.text({
   message: "Where is your static-to-ssg config file?",
   placeholder: "./_site/",
-  initialValue: "./test/fixtures/sites/three-pages/config.json",
+  initialValue: "",
   validate(configPath) {
     if (configPath.length === 0) return `Config path is required!`;
-    if (!configPath.startsWith('./')) return `Config path must be relative`;
-    if (path.normalize(configPath).includes('..')) return `Config path must be relative`;
-
     const absoluteConfigPath = path.resolve(configPath);
 
     try {

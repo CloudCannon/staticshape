@@ -4,7 +4,8 @@ import Layout from './layout';
 import {
     ASTElementNode,
     ASTAttribute,
-    ASTNode
+    ASTNode,
+    ASTStaticAttribute
 } from './types'
 
 export interface ASTTree {
@@ -29,7 +30,7 @@ export interface DocumentOptions {
 }
 
 function filterWhitespaceNodes(nodes) {
-    return nodes.filter((node) => node.type !== 'text' || node.value.trim().length > 0)
+    return nodes //.filter((node) => node.type !== 'text' || node.value.trim().length > 0)
 }
 
 function getElementSignature(element) {
@@ -38,6 +39,26 @@ function getElementSignature(element) {
 }
 
 function isSelector(element: any, selector: string) {
+    if (selector.startsWith('#')) {
+        const id = element.attrs?.find((attr : ASTStaticAttribute) => attr.name === 'id');
+
+        if (!id) {
+            return false;
+        }
+
+        return id.value === selector.substring(1);
+    }
+    if (selector.startsWith('.')) {
+        const classList = element.attrs
+            ?.find((attr : ASTStaticAttribute) => attr.name === 'class')
+            ?.value?.split(' ') || [];
+
+        if (classList.length === 0) {
+            return false;
+        }
+
+        return classList.includes(selector.substring(1));
+    }
     // TODO support more than just a tag selector
     return element.name === selector;
 }
@@ -139,7 +160,7 @@ function compareNodes(config: DocumentConfig, depth: number, primaryDoc : Docume
         const childNode = firstNode.children?.[i];
         const equivalentNode = findEquivalentSibling(childNode);
         
-        if (secondNode) {
+        if (equivalentNode) {
             node.children.push(compareNodes(config, depth + 1, primaryDoc, secondDoc, childNode, equivalentNode, firstNode));
         } else {
             const variableName = `show-${getElementSignature(firstNode)}`;

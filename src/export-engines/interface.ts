@@ -2,7 +2,7 @@ import { CollectionResponse } from '../collection';
 import Layout from '../layout';
 import Page from '../page';
 import { SiteResponse } from '../site';
-import { ASTAttribute, ASTConditionalNode, ASTDoctypeNode, ASTElementNode, ASTNode, ASTTextNode, ASTVariableNode } from '../types';
+import { ASTAttribute, ASTConditionalNode, ASTContentNode, ASTDoctypeNode, ASTElementNode, ASTNode, ASTTextNode, ASTVariableNode } from '../types';
 
 interface ExportEngineOptions {
     sourceBasePath: string;
@@ -54,6 +54,8 @@ export default class ExportEngine {
                     return this.renderVariable(node);
                 case 'conditional':
                     return this.renderConditional(node);
+                case 'content':
+                    return this.renderContent(node);
                 default:
                     break;
             }
@@ -95,5 +97,9 @@ export default class ExportEngine {
 
     renderConditional(node: ASTConditionalNode) : string {
         throw new Error('Conditional render not yet implemented');
+    }
+
+    renderContent(node: ASTContentNode) : string {
+        throw new Error('Content render not yet implemented');
     }
 }

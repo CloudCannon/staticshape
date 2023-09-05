@@ -4,6 +4,7 @@ import Document, { DocumentContentConfig } from './document';
 export interface CollectionOptions {
     name: string;
     subPath: string;
+    only?: string[] | null | void;
     include?: string[] | null | void;
     exclude?: string[] | null | void;
     content?: DocumentContentConfig;
@@ -30,6 +31,9 @@ export default class Collection {
             }
 
             const { pathname } = file.options;
+            if (this.options.only) {
+                return this.options.only.includes(pathname);
+            }
             if (this.options.include?.includes(pathname)) {
                 return true;
             }
