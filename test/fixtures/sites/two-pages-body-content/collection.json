@@ -1,79 +1,90 @@
 {
-    "pages": {
-        "pages": [
-            {
-                "pathname": "about.html",
-                "content": [{
-                    "type": "element",
-                    "name": "h1",
-                    "attributes": [],
-                    "children": [{
-                        "type": "text",
-                        "value": "About"
-                    }]
-                }],
-                "data": {
-                    "title": "About | Test"
-                }
-            },
-            {
-                "pathname": "index.html",
-                "content": [{
-                    "type": "element",
-                    "name": "h1",
-                    "attributes": [],
-                    "children": [{
-                        "type": "text",
-                        "value": "Home"
-                    }]
-                }],
-                "data": {
-                    "title": "Home | Test"
-                }
-            }
-        ],
-        "layout": {
-            "tree": [
+    "staticFiles": [],
+    "collections": {
+        "pages": {
+            "pages": [
                 {
-                    "type": "doctype",
-                    "value": "html"
-                },
-                {
-                    "type": "element",
-                    "name": "html",
-                    "attributes": [],
-                    "children": [
+                    "pathname": "about.html",
+                    "content": [
                         {
                             "type": "element",
-                            "name": "head",
+                            "name": "h1",
                             "attributes": [],
                             "children": [
                                 {
-                                    "type": "element",
-                                    "name": "title",
-                                    "attributes": [],
-                                    "children": [
-                                        {
-                                            "type": "variable",
-                                            "reference": "title"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "element",
-                            "name": "body",
-                            "attributes": [],
-                            "children": [
-                                {
-                                    "type": "content"
+                                    "type": "text",
+                                    "value": "About"
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    "data": {
+                        "title": "About | Test"
+                    }
+                },
+                {
+                    "pathname": "index.html",
+                    "content": [
+                        {
+                            "type": "element",
+                            "name": "h1",
+                            "attributes": [],
+                            "children": [
+                                {
+                                    "type": "text",
+                                    "value": "Home"
+                                }
+                            ]
+                        }
+                    ],
+                    "data": {
+                        "title": "Home | Test"
+                    }
                 }
-            ]
+            ],
+            "layout": {
+                "tree": [
+                    {
+                        "type": "doctype",
+                        "value": "html"
+                    },
+                    {
+                        "type": "element",
+                        "name": "html",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "element",
+                                "name": "head",
+                                "attributes": [],
+                                "children": [
+                                    {
+                                        "type": "element",
+                                        "name": "title",
+                                        "attributes": [],
+                                        "children": [
+                                            {
+                                                "type": "variable",
+                                                "reference": "title"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "element",
+                                "name": "body",
+                                "attributes": [],
+                                "children": [
+                                    {
+                                        "type": "content"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
         }
     }
 }

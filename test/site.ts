@@ -46,7 +46,7 @@ for (let i = 0; i < tests.length; i++) {
         const output = await site.build();
         const expected = JSON.parse((await fs.promises.readFile(`./test/fixtures/sites/${testName}/collection.json`)).toString('utf-8'));
         sortCollectionPages(output.collections);
-        sortCollectionPages(expected);
-        t.deepEqual(output.collections, expected);
+        sortCollectionPages(expected.collections);
+        t.deepEqual(output, expected);
     });
 }

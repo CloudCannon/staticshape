@@ -16,7 +16,7 @@ export interface ASTVariableNode {
 
 export interface ASTConditionalNode {
     type: 'conditional';
-    name: string;
+    reference: string;
     child: ASTNode;
 }
 

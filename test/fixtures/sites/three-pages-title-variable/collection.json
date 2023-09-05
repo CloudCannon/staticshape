@@ -1,81 +1,84 @@
 {
-    "pages": {
-        "pages": [
-            {
-                "pathname": "index.html",
-                "content": [],
-                "data": {
-                    "title": "Home | Test",
-                    "h1": "Home"
-                }
-            },
-            {
-                "pathname": "about.html",
-                "content": [],
-                "data": {
-                    "title": "Test",
-                    "h1": "About"
-                }
-            },
-            {
-                "pathname": "contact.html",
-                "content": [],
-                "data": {
-                    "title": "Test",
-                    "h1": "Contact"
-                }
-            }
-        ],
-        "layout": {
-            "tree": [
+    "staticFiles": [],
+    "collections": {
+        "pages": {
+            "pages": [
                 {
-                    "type": "doctype",
-                    "value": "html"
+                    "pathname": "index.html",
+                    "content": [],
+                    "data": {
+                        "title": "Home | Test",
+                        "h1": "Home"
+                    }
                 },
                 {
-                    "type": "element",
-                    "name": "html",
-                    "attributes": [],
-                    "children": [
-                        {
-                            "type": "element",
-                            "name": "head",
-                            "attributes": [],
-                            "children": [
-                                {
-                                    "type": "element",
-                                    "name": "title",
-                                    "attributes": [],
-                                    "children": [
-                                        {
-                                            "type": "variable",
-                                            "reference": "title"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "element",
-                            "name": "body",
-                            "attributes": [],
-                            "children": [
-                                {
-                                    "type": "element",
-                                    "name": "h1",
-                                    "attributes": [],
-                                    "children": [
-                                        {
-                                            "type": "variable",
-                                            "reference": "h1"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
+                    "pathname": "about.html",
+                    "content": [],
+                    "data": {
+                        "title": "Test",
+                        "h1": "About"
+                    }
+                },
+                {
+                    "pathname": "contact.html",
+                    "content": [],
+                    "data": {
+                        "title": "Test",
+                        "h1": "Contact"
+                    }
                 }
-            ]
+            ],
+            "layout": {
+                "tree": [
+                    {
+                        "type": "doctype",
+                        "value": "html"
+                    },
+                    {
+                        "type": "element",
+                        "name": "html",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "element",
+                                "name": "head",
+                                "attributes": [],
+                                "children": [
+                                    {
+                                        "type": "element",
+                                        "name": "title",
+                                        "attributes": [],
+                                        "children": [
+                                            {
+                                                "type": "variable",
+                                                "reference": "title"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "element",
+                                "name": "body",
+                                "attributes": [],
+                                "children": [
+                                    {
+                                        "type": "element",
+                                        "name": "h1",
+                                        "attributes": [],
+                                        "children": [
+                                            {
+                                                "type": "variable",
+                                                "reference": "h1"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
         }
     }
 }
