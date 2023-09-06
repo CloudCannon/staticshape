@@ -29,10 +29,6 @@ export interface DocumentOptions {
     config: DocumentConfig;
 }
 
-function filterWhitespaceNodes(nodes) {
-    return nodes //.filter((node) => node.type !== 'text' || node.value.trim().length > 0)
-}
-
 function getElementSignature(element) {
     // TODO include attributes that like <meta name="description"
     return element.name;
@@ -86,9 +82,8 @@ function formatNode(node): ASTNode {
 function generateNodeTree(element: any) : ASTNode {
     const node = formatNode(element);
     if (element.type === 'element') {
-        const children = filterWhitespaceNodes(element.children)
-        for (let i = 0; i < children?.length; i++) {
-            const childNode = children?.[i];
+        for (let i = 0; i < element.children?.length; i++) {
+            const childNode = element.children?.[i];
             (node as ASTElementNode).children.push(generateNodeTree(childNode));
         }
     }
@@ -162,6 +157,8 @@ function compareNodes(config: DocumentConfig, depth: number, primaryDoc : Docume
         
         if (equivalentNode) {
             node.children.push(compareNodes(config, depth + 1, primaryDoc, secondDoc, childNode, equivalentNode, firstNode));
+        } else if (childNode.type === 'text' && !childNode.value.trim()) {
+            node.children.push(formatNode(childNode));
         } else {
             const variableName = `show-${getElementSignature(firstNode)}`;
             primaryDoc.data[variableName] = true;
@@ -177,17 +174,20 @@ function compareNodes(config: DocumentConfig, depth: number, primaryDoc : Docume
     // TODO do this all better to ensure the optional orders are merged like a zip
     for (let i = 0; i < secondChildren.length; i++) {
         const leftOverNode = secondChildren[i];
-        const variableName = `show-${getElementSignature(secondNode)}`;
-        primaryDoc.data[variableName] = true;
-        secondDoc.data[variableName] = false;
-        node.children.push({
-            type: 'conditional',
-            reference: variableName,
-            child: generateNodeTree(leftOverNode)
-        });
+        if (leftOverNode.type === 'text' && !leftOverNode.value.trim()) {
+            node.children.push(formatNode(leftOverNode));
+        } else {
+            const variableName = `show-${getElementSignature(secondNode)}`;
+            primaryDoc.data[variableName] = true;
+            secondDoc.data[variableName] = false;
+            node.children.push({
+                type: 'conditional',
+                reference: variableName,
+                child: generateNodeTree(leftOverNode)
+            });
+        }
     }
 
-    node.children = filterWhitespaceNodes(node.children);
     return node;
 }
 

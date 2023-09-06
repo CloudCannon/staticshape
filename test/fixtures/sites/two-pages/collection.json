@@ -32,10 +32,18 @@
                         "attributes": [],
                         "children": [
                             {
+                                "type": "text",
+                                "value": "\n\t"
+                            },
+                            {
                                 "type": "element",
                                 "name": "head",
                                 "attributes": [],
                                 "children": [
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
                                     {
                                         "type": "element",
                                         "name": "title",
@@ -46,14 +54,26 @@
                                                 "value": "Test"
                                             }
                                         ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t"
                                     }
                                 ]
+                            },
+                            {
+                                "type": "text",
+                                "value": "\n\t"
                             },
                             {
                                 "type": "element",
                                 "name": "body",
                                 "attributes": [],
                                 "children": [
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
                                     {
                                         "type": "element",
                                         "name": "h1",
@@ -64,8 +84,16 @@
                                                 "reference": "h1"
                                             }
                                         ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t"
                                     }
                                 ]
+                            },
+                            {
+                                "type": "text",
+                                "value": "\n"
                             }
                         ]
                     }

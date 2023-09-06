@@ -15,7 +15,7 @@
                     "pathname": "about.html",
                     "content": [],
                     "data": {
-                        "title": "About | Test",
+                        "title": "Test",
                         "h1": "About"
                     }
                 }
@@ -54,6 +54,31 @@
                                                 "reference": "title"
                                             }
                                         ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
+                                        "type": "conditional",
+                                        "reference": "show-head",
+                                        "child": {
+                                            "type": "element",
+                                            "name": "meta",
+                                            "attributes": [
+                                                {
+                                                    "type": "static",
+                                                    "name": "name",
+                                                    "value": "description"
+                                                },
+                                                {
+                                                    "type": "static",
+                                                    "name": "content",
+                                                    "value": "Home"
+                                                }
+                                            ],
+                                            "children": []
+                                        }
                                     },
                                     {
                                         "type": "text",
