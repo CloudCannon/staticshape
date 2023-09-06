@@ -7,11 +7,11 @@ const tests = [
     "two-pages",
     "two-pages-title-variable",
     "two-pages-body-content",
-    // "two-pages-conditional",
+    "two-pages-conditional",
     "three-pages",
     "three-pages-title-variable",
     "three-pages-body-content",
-    // "three-pages-conditional",
+    "three-pages-conditional",
 ]
 
 function docSort(a, b) {

@@ -63,9 +63,9 @@ export default class Collection {
         }
 
         const baseDoc = documents[0];
-        let current = baseDoc.buildAstTree(documents[1]);
+        let current = baseDoc.diff(documents[1]);
         for (let i = 2; i < documents.length; i++) {
-            const next = baseDoc.buildAstTree(documents[i]);
+            const next = baseDoc.diff(documents[i]);
 
             // Merge the next and current bases
             const base = current.base.merge(next.base);

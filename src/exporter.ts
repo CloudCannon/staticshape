@@ -25,7 +25,12 @@ export default class Exporter {
 
     async run(): Promise<void> {
         await this.exportStaticFiles();
+        await this.exportCollectionFiles();
+        await this.exportEngineConfig();
+        await this.exportCloudCannonConfig();
+    }
 
+    async exportCollectionFiles(): Promise<void> {
         const { collections } = this.options.siteResponse;
         const collectionKeys = Object.keys(collections);
 
@@ -44,8 +49,6 @@ export default class Exporter {
                 await this.writeFileExport(itemFile);
             }
         }
-        await this.exportEngineConfig();
-        await this.exportCloudCannonConfig();
     }
 
     async exportEngineConfig(): Promise<void> {
