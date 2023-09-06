@@ -1,29 +1,22 @@
 {
-    "staticFiles": [
-        "assets/goose.jpg"
-    ],
+    "staticFiles": [],
     "collections": {
         "pages": {
             "pages": [
                 {
-                    "pathname": "about.html",
-                    "content": [],
-                    "data": {
-                        "h1": "About"
-                    }
-                },
-                {
                     "pathname": "index.html",
                     "content": [],
                     "data": {
+                        "title": "Home | Test",
                         "h1": "Home"
                     }
                 },
                 {
-                    "pathname": "contact.html",
+                    "pathname": "about.html",
                     "content": [],
                     "data": {
-                        "h1": "Contact"
+                        "title": "Test",
+                        "h1": "About"
                     }
                 }
             ],
@@ -57,10 +50,35 @@
                                         "attributes": [],
                                         "children": [
                                             {
-                                                "type": "text",
-                                                "value": "Test"
+                                                "type": "variable",
+                                                "reference": "title"
                                             }
                                         ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
+                                        "type": "conditional",
+                                        "reference": "show-head",
+                                        "child": {
+                                            "type": "element",
+                                            "name": "meta",
+                                            "attributes": [
+                                                {
+                                                    "type": "static",
+                                                    "name": "name",
+                                                    "value": "description"
+                                                },
+                                                {
+                                                    "type": "static",
+                                                    "name": "content",
+                                                    "value": "Home"
+                                                }
+                                            ],
+                                            "children": []
+                                        }
                                     },
                                     {
                                         "type": "text",
