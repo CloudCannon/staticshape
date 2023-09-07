@@ -63,8 +63,8 @@ export function formatNode(node : Node): ASTNode {
     return {
         type: 'element',
         name: element.name,
-        attributes: element.attrs.map((attr : Attribute) : ASTAttribute => ({
-            type: 'static',
+        attrs: element.attrs.map((attr : Attribute) : ASTAttribute => ({
+            type: 'attribute',
             name: attr.name,
             value: attr.value,
         })) || [],
@@ -130,12 +130,65 @@ export function generateAstDiff(config: DocumentConfig, depth: number, primaryDo
         return node;
     }
 
-    // TODO merge attributes
+    node.attrs = mergeAttrs(config, primaryDoc, secondDoc, firstNode, secondNode);
     node.children = mergeChildren(config, depth + 1, primaryDoc, secondDoc, firstNode, secondNode);
     return node;
 }
 
-export function isEquivalent(first : Node, second: Node) {
+function attrsToObject(attrs: Attribute[]): Record<string, string> {
+    return attrs.reduce((memo : Record<string, string>, attr : Attribute) : Record<string, string> => {
+        memo[attr.name] = attr.value;
+        return memo;
+    }, {})
+}
+
+export function mergeAttrs(config: DocumentConfig, primaryDoc : Document, secondDoc : Document, firstElement: Element, secondElement: Element) : ASTAttribute[] {
+    const firstAttrs = attrsToObject(firstElement.attrs);
+    const secondAttrs = attrsToObject(secondElement.attrs);
+    const combined = {} as Record<string, ASTAttribute>;
+
+    Object.keys(firstAttrs).forEach((attrName) => {
+        if (!secondAttrs[attrName]) {
+            console.log('attrDiff', attrName, firstAttrs[attrName])
+            return;
+        }
+
+        // TODO better check for known attributes (e.g. class)
+        if (firstAttrs[attrName] === secondAttrs[attrName]) {
+            combined[attrName] = {
+                type: 'attribute',
+                name: attrName,
+                value: secondAttrs[attrName]
+            };
+        } else {
+            const variableName = [
+                getElementSignature(firstElement),
+                attrName
+            ].join('_');
+            primaryDoc.data[variableName] = firstAttrs[attrName];
+            secondDoc.data[variableName] = secondAttrs[attrName];
+            combined[attrName] = {
+                type: 'variable-attribute',
+                name: attrName,
+                reference: variableName
+            };
+        }
+    });
+
+    Object.keys(secondAttrs).forEach((attrName) => {
+        if (!combined[attrName]) {
+            return;
+        }
+
+        if (!firstAttrs[attrName]) {
+            console.log('attrDiff', attrName, secondAttrs[attrName])
+        }
+    });
+
+    return Object.values(combined);
+}
+
+export function isNodeEquivalent(first : Node, second: Node) : boolean {
     if (first.type === 'text') {
         return second.type === 'text' && second.value === first.value;
     }
@@ -144,7 +197,7 @@ export function isEquivalent(first : Node, second: Node) {
         && getElementSignature(second as Element) === getElementSignature(first as Element);
 }
 
-export function mergeChildren(config: DocumentConfig, depth: number, primaryDoc : Document, secondDoc : Document, firstElement: Element, secondElement: Element) {
+export function mergeChildren(config: DocumentConfig, depth: number, primaryDoc : Document, secondDoc : Document, firstElement: Element, secondElement: Element) : ASTNode[] {
     let firstPointer = 0;
     let secondPointer = 0;
 
@@ -177,7 +230,7 @@ export function mergeChildren(config: DocumentConfig, depth: number, primaryDoc 
 
             for (let j = 0; j < otherTree.length; j++) {
                 const otherAlternative = otherTree[j];
-                if (isEquivalent(currentAlternative, otherAlternative)) {
+                if (isNodeEquivalent(currentAlternative, otherAlternative)) {
                     return false;
                 }
             }
@@ -199,7 +252,7 @@ export function mergeChildren(config: DocumentConfig, depth: number, primaryDoc 
         const firstNode = firstTree[firstPointer];
         const secondNode = secondTree[secondPointer];
 
-        if (isEquivalent(firstNode, secondNode)) {
+        if (isNodeEquivalent(firstNode, secondNode)) {
             addComparisonNode(firstNode, secondNode);
         } else if (firstRemaining > secondRemaining) {
             if (isBestTextMatch(firstNode, secondNode, firstTree.slice(firstPointer + 1), secondTree.slice(secondPointer))) {

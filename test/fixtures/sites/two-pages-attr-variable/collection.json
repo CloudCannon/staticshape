@@ -1,5 +1,7 @@
 {
-    "staticFiles": [],
+    "staticFiles": [
+        "assets/goose.jpg"
+    ],
     "collections": {
         "pages": {
             "pages": [
@@ -7,16 +9,16 @@
                     "pathname": "index.html",
                     "content": [],
                     "data": {
-                        "title": "Home | Test",
-                        "h1": "Home"
+                        "title": "Goose Owner",
+                        "img_alt": "Our goose"
                     }
                 },
                 {
                     "pathname": "about.html",
                     "content": [],
                     "data": {
-                        "title": "About | Test",
-                        "h1": "About"
+                        "title": "Goose Admirer",
+                        "img_alt": "Their goose"
                     }
                 }
             ],
@@ -76,14 +78,20 @@
                                     },
                                     {
                                         "type": "element",
-                                        "name": "h1",
-                                        "attrs": [],
-                                        "children": [
+                                        "name": "img",
+                                        "attrs": [
                                             {
-                                                "type": "variable",
-                                                "reference": "h1"
+                                                "type": "attribute",
+                                                "name": "src",
+                                                "value": "assets/goose.jpg"
+                                            },
+                                            {
+                                                "type": "variable-attribute",
+                                                "name": "alt",
+                                                "reference": "img_alt"
                                             }
-                                        ]
+                                        ],
+                                        "children": []
                                     },
                                     {
                                         "type": "text",

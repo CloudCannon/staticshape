@@ -44,12 +44,12 @@
                             "name": "meta",
                             "attributes": [
                                 {
-                                    "type": "static",
+                                    "type": "attribute",
                                     "name": "name",
                                     "value": "description"
                                 },
                                 {
-                                    "type": "static",
+                                    "type": "attribute",
                                     "name": "content",
                                     "value": "Home"
                                 }

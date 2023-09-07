@@ -69,13 +69,13 @@ export default class ExportEngine {
         return `<!DOCTYPE ${doctype.value}>`;
     }
 
-    renderAttributes(attributes: ASTAttribute[]) : string {
-        if (attributes.length === 0) {
+    renderAttributes(attrs: ASTAttribute[]) : string {
+        if (attrs.length === 0) {
             return '';
         }
 
-        return ` ${attributes.map((attr) => {
-            if (attr.type === 'variable') {
+        return ` ${attrs.map((attr) => {
+            if (attr.type === 'variable-attribute') {
                 throw new Error('Not yet implemented');
             }
             return [
@@ -86,7 +86,7 @@ export default class ExportEngine {
     }
 
     renderElement(element: ASTElementNode) : string {
-        return `<${element.name}${this.renderAttributes(element.attributes)}>${this.renderAST(element.children)}</${element.name}>`;
+        return `<${element.name}${this.renderAttributes(element.attrs)}>${this.renderAST(element.children)}</${element.name}>`;
     }
 
     renderText(text: ASTTextNode) : string {

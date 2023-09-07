@@ -35,13 +35,13 @@ export interface ASTContentNode {
 }
 
 export interface ASTStaticAttribute {
-    type: 'static';
+    type: 'attribute';
     name: string;
     value: string;
 }
 
 export interface ASTVariableAttribute {
-    type: 'variable';
+    type: 'variable-attribute';
     name: string;
     reference: string;
 }
@@ -49,7 +49,7 @@ export interface ASTVariableAttribute {
 export interface ASTElementNode {
     type: 'element';
     name: string;
-    attributes: ASTAttribute[];
+    attrs: ASTAttribute[];
     children: ASTNode[]
 }
 

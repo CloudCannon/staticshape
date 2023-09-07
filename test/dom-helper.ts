@@ -89,7 +89,7 @@ const tests = [
             {
                 type: 'element',
                 name: 'title',
-                attributes: [],
+                attrs: [],
                 children: [{ type: 'variable', reference: 'title' }]
             },
             {
@@ -98,12 +98,12 @@ const tests = [
                 child: {
                     type: 'element',
                     name: 'meta',
-                    attributes: [{ 
-                        type: 'static',
+                    attrs: [{ 
+                        type: 'attribute',
                         name: 'name',
                         value: 'description',
                     }, { 
-                        type: 'static',
+                        type: 'attribute',
                         name: 'content',
                         value: 'Home',
                     }],
@@ -160,7 +160,7 @@ const tests = [
             {
                 type: 'element',
                 name: 'title',
-                attributes: [],
+                attrs: [],
                 children: []
             },
             { type: 'text', value: '\n\t\t' },
@@ -170,12 +170,12 @@ const tests = [
                 child: {
                     type: 'element',
                     name: 'meta',
-                    attributes: [{ 
-                        type: 'static',
+                    attrs: [{ 
+                        type: 'attribute',
                         name: 'name',
                         value: 'description',
                     }, { 
-                        type: 'static',
+                        type: 'attribute',
                         name: 'content',
                         value: 'Home',
                     }],
