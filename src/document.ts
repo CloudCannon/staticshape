@@ -5,7 +5,7 @@ import { ASTNode } from './types'
 
 import { ParseTreeResult } from 'angular-html-parser/lib/compiler/src/ml_parser/parser';
 import { DocType, Element, Node } from 'angular-html-parser/lib/compiler/src/ml_parser/ast';
-import { formatNode, generateAstDiff } from './helpers/dom-helper';
+import { formatNode, generateAstDiff, printAstTree } from './helpers/dom-helper';
 
 export interface ASTTree {
     base: Page;
@@ -71,6 +71,13 @@ export default class Document {
                     htmlNode
                 ]
             })
+        }
+    }
+
+    debug() {
+        return {
+            pathname: this.options.pathname,
+            dom: printAstTree(this.dom.rootNodes.find((node : Node) => node.type === 'element' && node.name === 'html') as Node)
         }
     }
 }

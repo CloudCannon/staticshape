@@ -78,7 +78,7 @@ export function formatNode(node : Node): ASTNode {
     }
 }
 
-function printAstTree(element: Node) : ASTNode {
+export function printAstTree(element: Node) : ASTNode {
     const node = formatNode(element);
     if (element.type === 'element') {
         for (let i = 0; i < element.children?.length; i++) {
@@ -141,9 +141,9 @@ export function generateAstDiff(config: DocumentConfig, depth: number, primaryDo
     return node;
 }
 
-function attrsToObject(attrs: Attribute[]): Record<string, string> {
-    return attrs.reduce((memo : Record<string, string>, attr : Attribute) : Record<string, string> => {
-        memo[attr.name] = attr.value;
+function attrsToObject(attrs: Attribute[]): Record<string, Attribute> {
+    return attrs.reduce((memo : Record<string, Attribute>, attr : Attribute) : Record<string, Attribute> => {
+        memo[attr.name] = attr;
         return memo;
     }, {})
 }
@@ -159,13 +159,9 @@ export function mergeAttrs(config: DocumentConfig, primaryDoc : Document, second
                 getElementSignature(firstElement),
                 attrName
             ].join('_');
-            if (secondAttrs[attrName]) {
-                primaryDoc.data[variableName] = firstAttrs[attrName];
-                secondDoc.data[variableName] = '';
-            } else {
-                primaryDoc.data[variableName] = true;
-                secondDoc.data[variableName] = false;
-            }
+
+            primaryDoc.data[variableName] = true;
+            secondDoc.data[variableName] = false;
             combined[attrName] = {
                 type: 'conditional-attribute',
                 name: attrName,
@@ -175,19 +171,19 @@ export function mergeAttrs(config: DocumentConfig, primaryDoc : Document, second
         }
 
         // TODO better check for known attributes (e.g. class)
-        if (firstAttrs[attrName] === secondAttrs[attrName]) {
+        if (firstAttrs[attrName].value === secondAttrs[attrName].value) {
             combined[attrName] = {
                 type: 'attribute',
                 name: attrName,
-                value: secondAttrs[attrName]
+                value: secondAttrs[attrName].value
             };
         } else {
             const variableName = [
                 getElementSignature(firstElement),
                 attrName
             ].join('_');
-            primaryDoc.data[variableName] = firstAttrs[attrName];
-            secondDoc.data[variableName] = secondAttrs[attrName];
+            primaryDoc.data[variableName] = firstAttrs[attrName].value;
+            secondDoc.data[variableName] = secondAttrs[attrName].value;
             combined[attrName] = {
                 type: 'variable-attribute',
                 name: attrName,
@@ -206,13 +202,8 @@ export function mergeAttrs(config: DocumentConfig, primaryDoc : Document, second
                 getElementSignature(firstElement),
                 attrName
             ].join('_');
-            if (secondAttrs[attrName]) {
-                primaryDoc.data[variableName] = '';
-                secondDoc.data[variableName] = secondAttrs[attrName];
-            } else {
-                primaryDoc.data[variableName] = false;
-                secondDoc.data[variableName] = true;
-            }
+            primaryDoc.data[variableName] = null;
+            secondDoc.data[variableName] = secondAttrs[attrName].value;
             combined[attrName] = {
                 type: 'conditional-attribute',
                 name: attrName,

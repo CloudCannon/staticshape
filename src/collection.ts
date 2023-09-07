@@ -16,6 +16,7 @@ export interface CollectionResponse {
 }
 
 export interface CollectionDebug {
+    base: object | null;
     rounds: object[];
     files: string[];
 }
@@ -29,6 +30,7 @@ export default class Collection {
         this.files = files;
         this.options = options;
         this.debug = {
+            base: null,
             files: [],
             rounds: []
         };
@@ -75,12 +77,13 @@ export default class Collection {
 
         const baseDoc = documents[0];
         let current = baseDoc.diff(documents[1]);
+        this.debug.base = baseDoc.debug();
+        this.debug.rounds.push({
+            doc: documents[1].debug(),
+            result: current
+        });
         for (let i = 2; i < documents.length; i++) {
             const next = baseDoc.diff(documents[i]);
-            this.debug.rounds.push({
-                next,
-                current
-            });
 
             // Merge the next and current bases
             const base = current.base.merge(next.base);
@@ -99,6 +102,12 @@ export default class Collection {
                 pages: [...oldPages, ...newPages],
                 layout,
             }
+
+            this.debug.rounds.push({
+                doc: documents[i].debug(),
+                result: next,
+                current
+            });
         }
 
         return {
