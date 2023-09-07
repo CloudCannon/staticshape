@@ -45,6 +45,13 @@ export function formatNode(node : Node): ASTNode {
         }
     }
 
+    if (node.type === 'comment') {
+        return {
+            "type": 'comment',
+            "value": node.value || ''
+        }
+    }
+
     if (node.type === 'docType') {
         return {
             "type": 'doctype',
@@ -98,6 +105,10 @@ export function generateAstDiff(config: DocumentConfig, depth: number, primaryDo
             type: 'variable',
             reference: variableName
         };
+    }
+
+    if (firstNode.type === 'comment' || secondNode.type === 'comment') {
+        return formatNode(firstNode);
     }
 
     if (firstNode.type !== 'element' || secondNode.type !== 'element') {

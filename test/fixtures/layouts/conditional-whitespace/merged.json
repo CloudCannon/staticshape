@@ -1,0 +1,102 @@
+[
+    {
+        "type": "doctype",
+        "value": "html"
+    },
+    {
+        "type": "element",
+        "name": "html",
+        "attributes": [],
+        "children": [
+            {
+                "type": "text",
+                "value": "\n\t"
+            },
+            {
+                "type": "element",
+                "name": "head",
+                "attributes": [],
+                "children": [
+                    {
+                        "type": "text",
+                        "value": "\n\t\t"
+                    },
+                    {
+                        "type": "element",
+                        "name": "title",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "variable",
+                                "reference": "title"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "value": "\n\t\t"
+                    },
+                    {
+                        "type": "conditional",
+                        "reference": "show-meta",
+                        "child": {
+                            "type": "element",
+                            "name": "meta",
+                            "attributes": [
+                                {
+                                    "type": "static",
+                                    "name": "name",
+                                    "value": "description"
+                                },
+                                {
+                                    "type": "static",
+                                    "name": "content",
+                                    "value": "Home"
+                                }
+                            ],
+                            "children": []
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "value": "\n\t"
+                    }
+                ]
+            },
+            {
+                "type": "text",
+                "value": "\n\t"
+            },
+            {
+                "type": "element",
+                "name": "body",
+                "attributes": [],
+                "children": [
+                    {
+                        "type": "text",
+                        "value": "\n\t\t"
+                    },
+                    {
+                        "type": "element",
+                        "name": "h1",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "variable",
+                                "reference": "h1"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "value": "\n\t"
+                    }
+                ]
+            },
+            {
+                "type": "text",
+                "value": "\n"
+            }
+        ]
+    }
+]

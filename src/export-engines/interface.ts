@@ -2,7 +2,7 @@ import { CollectionResponse } from '../collection';
 import Layout from '../layout';
 import Page from '../page';
 import { SiteResponse } from '../site';
-import { ASTAttribute, ASTConditionalNode, ASTContentNode, ASTDoctypeNode, ASTElementNode, ASTNode, ASTTextNode, ASTVariableNode } from '../types';
+import { ASTAttribute, ASTConditionalNode, ASTContentNode, ASTDoctypeNode, ASTElementNode, ASTNode, ASTTextNode, ASTVariableNode, ASTCommentNode } from '../types';
 
 interface ExportEngineOptions {
     sourceBasePath: string;
@@ -50,6 +50,8 @@ export default class ExportEngine {
                     return this.renderElement(node);
                 case 'text':
                     return this.renderText(node);
+                case 'comment':
+                    return this.renderComment(node);
                 case 'variable':
                     return this.renderVariable(node);
                 case 'conditional':
@@ -89,6 +91,10 @@ export default class ExportEngine {
 
     renderText(text: ASTTextNode) : string {
         return text.value;
+    }
+
+    renderComment(text: ASTCommentNode) : string {
+        return `<!-- ${text.value} -->`;
     }
 
     renderVariable(node: ASTVariableNode) : string {

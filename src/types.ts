@@ -9,6 +9,11 @@ export interface ASTTextNode {
     value: string;
 }
 
+export interface ASTCommentNode {
+    type: 'comment';
+    value: string;
+}
+
 export interface ASTVariableNode {
     type: 'variable';
     reference: string;
@@ -49,4 +54,4 @@ export interface ASTElementNode {
 }
 
 export type ASTAttribute = ASTVariableAttribute | ASTStaticAttribute;
-export type ASTNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTVariableNode | ASTConditionalNode | ASTContentNode;
+export type ASTNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTVariableNode | ASTConditionalNode | ASTContentNode | ASTCommentNode;

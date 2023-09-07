@@ -1,0 +1,77 @@
+[
+    {
+        "type": "doctype",
+        "value": "html"
+    },
+    {
+        "type": "element",
+        "name": "html",
+        "attributes": [],
+        "children": [
+            {
+                "type": "text",
+                "value": "\n\t"
+            },
+            {
+                "type": "element",
+                "name": "head",
+                "attributes": [],
+                "children": [
+                    {
+                        "type": "text",
+                        "value": "\n\t\t"
+                    },
+                    {
+                        "type": "element",
+                        "name": "title",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "text",
+                                "value": "Test"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "value": "\n\t"
+                    }
+                ]
+            },
+            {
+                "type": "text",
+                "value": "\n\t"
+            },
+            {
+                "type": "element",
+                "name": "body",
+                "attributes": [],
+                "children": [
+                    {
+                        "type": "text",
+                        "value": "\n\t\t"
+                    },
+                    {
+                        "type": "element",
+                        "name": "h1",
+                        "attributes": [],
+                        "children": [
+                            {
+                                "type": "variable",
+                                "reference": "h1"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "text",
+                        "value": "\n\t"
+                    }
+                ]
+            },
+            {
+                "type": "text",
+                "value": "\n"
+            }
+        ]
+    }
+]

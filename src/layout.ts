@@ -26,6 +26,14 @@ function isEquivalent(first: ASTNode, second: ASTNode) : boolean {
         return first.value === second.value;
     }
     
+    if (first.type === 'variable' && second.type === 'variable') {
+        return first.reference === second.reference;
+    }
+    
+    if (first.type === 'text' && second.type === 'text') {
+        return first.value === second.value;
+    }
+    
     if (first.type === 'element' && second.type === 'element') {
         // TODO compare element attributes
         return first.name === second.name;

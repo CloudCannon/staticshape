@@ -5,6 +5,7 @@ import Layout from '../src/layout';
 const tests = [
     "variable",
     "conditional",
+    "conditional-whitespace",
 ]
 
 for (let i = 0; i < tests.length; i++) {
