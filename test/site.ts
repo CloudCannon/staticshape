@@ -11,6 +11,7 @@ const tests = [
     "two-pages-conditional",
     "three-pages",
     "three-pages-title-variable",
+    "three-pages-attr-variable",
     "three-pages-body-content",
     "three-pages-conditional",
 ]

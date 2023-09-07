@@ -5,7 +5,7 @@
         "child": {
             "type": "element",
             "name": "h1",
-            "attributes": [],
+            "attrs": [],
             "children": [
                 {
                     "type": "variable",
@@ -17,7 +17,7 @@
     {
         "type": "element",
         "name": "p",
-        "attributes": [],
+        "attrs": [],
         "children": [
             {
                 "type": "variable",

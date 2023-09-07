@@ -6,7 +6,7 @@
     {
         "type": "element",
         "name": "html",
-        "attributes": [],
+        "attrs": [],
         "children": [
             {
                 "type": "text",
@@ -15,7 +15,7 @@
             {
                 "type": "element",
                 "name": "head",
-                "attributes": [],
+                "attrs": [],
                 "children": [
                     {
                         "type": "text",
@@ -24,7 +24,7 @@
                     {
                         "type": "element",
                         "name": "title",
-                        "attributes": [],
+                        "attrs": [],
                         "children": [
                             {
                                 "type": "text",
@@ -45,7 +45,7 @@
             {
                 "type": "element",
                 "name": "body",
-                "attributes": [],
+                "attrs": [],
                 "children": [
                     {
                         "type": "text",
@@ -54,7 +54,7 @@
                     {
                         "type": "element",
                         "name": "h1",
-                        "attributes": [],
+                        "attrs": [],
                         "children": [
                             {
                                 "type": "variable",

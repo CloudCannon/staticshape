@@ -1,4 +1,4 @@
-import { ASTNode } from "./types";
+import { ASTAttribute, ASTNode } from "./types";
 
 interface LayoutOptions {
     tree: ASTNode[]
@@ -42,6 +42,39 @@ function isEquivalent(first: ASTNode, second: ASTNode) : boolean {
     return true;
 }
 
+function attrsToObject(attrs: ASTAttribute[]): Record<string, ASTAttribute> {
+    return attrs.reduce((memo : Record<string, ASTAttribute>, attr : ASTAttribute) : Record<string, ASTAttribute> => {
+        memo[attr.name] = attr;
+        return memo;
+    }, {})
+}
+
+function mergeAttributes(first: ASTAttribute[], second: ASTAttribute[]) : ASTAttribute[] {
+    const firstAttrs = attrsToObject(first || []);
+    const secondAttrs = attrsToObject(second || []);
+    const merged = [] as ASTAttribute[];
+
+    Object.keys(firstAttrs).forEach((attrName) => {
+        if (!secondAttrs[attrName]) {
+            console.log('unhandled extra attr', attrName, firstAttrs[attrName])
+            return;
+        }
+
+        if (firstAttrs[attrName].type === 'variable-attribute') {
+            merged.push(firstAttrs[attrName]);
+        } else {
+            merged.push(secondAttrs[attrName]);
+        }
+        delete secondAttrs[attrName];
+    });
+
+    Object.keys(secondAttrs).forEach((attrName) => {
+        console.log('unhandled extra attr', attrName, secondAttrs[attrName])
+    });
+
+    return merged;
+}
+
 function mergeTree(firstTree: ASTNode[], secondTree: ASTNode[]) : ASTNode[] {
     let firstPointer = 0;
     let secondPointer = 0;
@@ -65,6 +98,7 @@ function mergeTree(firstTree: ASTNode[], secondTree: ASTNode[]) : ASTNode[] {
             } else if (firstNode.type === 'element' && secondNode.type === 'element') {
                 merged.push({
                     ...firstNode,
+                    attrs: mergeAttributes(firstNode.attrs, secondNode.attrs),
                     children: mergeTree(firstNode.children, secondNode.children)
                 });
             } else {
