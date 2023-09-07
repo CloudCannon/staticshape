@@ -145,6 +145,8 @@ const site = new Site({
 const siteResponse = await site.build();
 s.stop(`Site built`);
 
+await fs.promises.writeFile('.export-debug.json', JSON.stringify(site.debug, null, '\t'))
+
 s.start(`Exporting site`);
 const exporter = new Exporter({
   sourceBasePath: absoluteSourcePath,

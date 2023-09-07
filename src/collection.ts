@@ -15,13 +15,23 @@ export interface CollectionResponse {
     layout: object;
 }
 
+export interface CollectionDebug {
+    rounds: object[];
+    files: string[];
+}
+
 export default class Collection {
     options: CollectionOptions;
     files: File[];
+    debug: CollectionDebug;
 
     constructor(files: File[], options: CollectionOptions) {
         this.files = files;
         this.options = options;
+        this.debug = {
+            files: [],
+            rounds: []
+        };
     }
 
     async build(): Promise<CollectionResponse> {
@@ -45,6 +55,7 @@ export default class Collection {
             return pathname.startsWith(this.options.subPath);
         });
 
+        this.debug.files = collectionFiles.map((file) => file.name());
         const documents = await Promise.all(collectionFiles.map(async (file) => {
             const html = await file.read();
 
@@ -66,6 +77,10 @@ export default class Collection {
         let current = baseDoc.diff(documents[1]);
         for (let i = 2; i < documents.length; i++) {
             const next = baseDoc.diff(documents[i]);
+            this.debug.rounds.push({
+                next,
+                current
+            });
 
             // Merge the next and current bases
             const base = current.base.merge(next.base);
