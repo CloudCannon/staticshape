@@ -38,7 +38,7 @@
                     },
                     {
                         "type": "conditional",
-                        "reference": "show-meta",
+                        "reference": "show-meta_description",
                         "child": {
                             "type": "element",
                             "name": "meta",

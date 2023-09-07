@@ -2,7 +2,7 @@ import { CollectionResponse } from '../collection';
 import Layout from '../layout';
 import Page from '../page';
 import { SiteResponse } from '../site';
-import { ASTAttribute, ASTConditionalNode, ASTContentNode, ASTDoctypeNode, ASTElementNode, ASTNode, ASTTextNode, ASTVariableNode, ASTCommentNode } from '../types';
+import { ASTAttribute, ASTConditionalNode, ASTContentNode, ASTDoctypeNode, ASTElementNode, ASTNode, ASTTextNode, ASTVariableNode, ASTCommentNode, ASTVariableAttribute, ASTConditionalAttribute, ASTStaticAttribute } from '../types';
 
 interface ExportEngineOptions {
     sourceBasePath: string;
@@ -76,17 +76,38 @@ export default class ExportEngine {
 
         return ` ${attrs.map((attr) => {
             if (attr.type === 'variable-attribute') {
-                throw new Error('Not yet implemented');
+                return this.renderVariableAttribute(attr);
             }
-            return [
-                attr.name,
-                `"${attr.value}"`
-            ].join('=')
+            if (attr.type === 'conditional-attribute') {
+                return this.renderConditionalAttribute(attr);
+            }
+            return this.renderAttribute(attr);
         }).join(' ')}`;
     }
 
+    renderAttribute(attr: ASTStaticAttribute) : string {
+        return [
+            attr.name,
+            `"${attr.value}"`
+        ].join('=')
+    }
+
+    renderVariableAttribute(attr: ASTVariableAttribute | ASTConditionalAttribute) : string {
+        throw new Error('Not yet implemented');
+    }
+
+    renderConditionalAttribute(attr: ASTConditionalAttribute) : string {
+        throw new Error('Not yet implemented');
+    }
+
     renderElement(element: ASTElementNode) : string {
-        return `<${element.name}${this.renderAttributes(element.attrs)}>${this.renderAST(element.children)}</${element.name}>`;
+        let { name } = element;
+
+        if (name.startsWith(':svg:')) {
+            name = name.substring(5);
+        }
+
+        return `<${name}${this.renderAttributes(element.attrs)}>${this.renderAST(element.children)}</${name}>`;
     }
 
     renderText(text: ASTTextNode) : string {

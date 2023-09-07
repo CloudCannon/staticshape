@@ -6,6 +6,20 @@ interface PageOptions {
     content: ASTNode[];
 }
 
+function mergeData(data: Record<string, any>, other : Record<string, any>) {
+    const clone = structuredClone(data);
+    Object.keys(other).forEach((key) => {
+        if (!clone[key]) {
+            clone[key] = other[key];
+        }
+
+        if (typeof clone[key] === 'object' && other[key]) {
+            mergeData(clone[key], other[key])
+        }
+    });
+    return clone;
+}
+
 export default class Page {
     options: PageOptions;
 
@@ -14,16 +28,9 @@ export default class Page {
     }
 
     merge(other: Page) : Page {
-        const data = structuredClone(this.options.data);
-        Object.keys(other.options.data).forEach((key) => {
-            if (!data[key]) {
-                data[key] = other.options.data[key];
-            }
-        });
-
         return new Page({
             ...this.options,
-            data
+            data: mergeData(this.options.data, other.options.data)
         });
     }
 

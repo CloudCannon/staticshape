@@ -46,6 +46,12 @@ export interface ASTVariableAttribute {
     reference: string;
 }
 
+export interface ASTConditionalAttribute {
+    type: 'conditional-attribute';
+    name: string;
+    reference: string;
+}
+
 export interface ASTElementNode {
     type: 'element';
     name: string;
@@ -53,5 +59,5 @@ export interface ASTElementNode {
     children: ASTNode[]
 }
 
-export type ASTAttribute = ASTVariableAttribute | ASTStaticAttribute;
+export type ASTAttribute = ASTVariableAttribute | ASTStaticAttribute | ASTConditionalAttribute;
 export type ASTNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTVariableNode | ASTConditionalNode | ASTContentNode | ASTCommentNode;

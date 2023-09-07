@@ -94,7 +94,7 @@ const tests = [
             },
             {
                 type: 'conditional',
-                reference: 'show-meta',
+                reference: 'show-meta_description',
                 child: {
                     type: 'element',
                     name: 'meta',
@@ -113,11 +113,11 @@ const tests = [
         ],
         expectedPrimaryData: {
             title: 'Primary',
-            'show-meta': false,
+            'show-meta_description': false,
         },
         expectedSecondaryData: {
             title: 'Secondary',
-            'show-meta': true,
+            'show-meta_description': true,
         },
     },
     {
@@ -166,7 +166,7 @@ const tests = [
             { type: 'text', value: '\n\t\t' },
             {
                 type: 'conditional',
-                reference: 'show-meta',
+                reference: 'show-meta_description',
                 child: {
                     type: 'element',
                     name: 'meta',
@@ -185,10 +185,10 @@ const tests = [
             { type: 'text', value: '\n\t' }
         ],
         expectedPrimaryData: {
-            'show-meta': false,
+            'show-meta_description': false,
         },
         expectedSecondaryData: {
-            'show-meta': true,
+            'show-meta_description': true,
         },
     }
 ] as TestDefinition[];

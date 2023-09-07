@@ -8,6 +8,12 @@ import {
 } from '../types'
 
 function getElementSignature(element: Element) {
+    if (element.name === 'meta') {
+        const nameAttr = element.attrs.find((attr) => attr.name === 'name');
+        const propertyAttr = element.attrs.find((attr) => attr.name === 'property');
+
+        return ['meta', nameAttr?.value || propertyAttr?.value || 'unknown'].join('_');
+    }
     // TODO include attributes that like <meta name="description"
     return element.name;
 }
@@ -149,7 +155,22 @@ export function mergeAttrs(config: DocumentConfig, primaryDoc : Document, second
 
     Object.keys(firstAttrs).forEach((attrName) => {
         if (!secondAttrs[attrName]) {
-            console.log('attrDiff', attrName, firstAttrs[attrName])
+            const variableName = [
+                getElementSignature(firstElement),
+                attrName
+            ].join('_');
+            if (secondAttrs[attrName]) {
+                primaryDoc.data[variableName] = firstAttrs[attrName];
+                secondDoc.data[variableName] = '';
+            } else {
+                primaryDoc.data[variableName] = true;
+                secondDoc.data[variableName] = false;
+            }
+            combined[attrName] = {
+                type: 'conditional-attribute',
+                name: attrName,
+                reference: variableName
+            };
             return;
         }
 
@@ -181,7 +202,22 @@ export function mergeAttrs(config: DocumentConfig, primaryDoc : Document, second
         }
 
         if (!firstAttrs[attrName]) {
-            console.log('attrDiff', attrName, secondAttrs[attrName])
+            const variableName = [
+                getElementSignature(firstElement),
+                attrName
+            ].join('_');
+            if (secondAttrs[attrName]) {
+                primaryDoc.data[variableName] = '';
+                secondDoc.data[variableName] = secondAttrs[attrName];
+            } else {
+                primaryDoc.data[variableName] = false;
+                secondDoc.data[variableName] = true;
+            }
+            combined[attrName] = {
+                type: 'conditional-attribute',
+                name: attrName,
+                reference: variableName
+            };
         }
     });
 

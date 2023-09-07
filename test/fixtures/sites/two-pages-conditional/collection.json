@@ -8,7 +8,7 @@
                     "content": [],
                     "data": {
                         "title": "Home | Test",
-                        "show-meta": true,
+                        "show-meta_description": true,
                         "h1": "Home"
                     }
                 },
@@ -17,7 +17,7 @@
                     "content": [],
                     "data": {
                         "title": "Test",
-                        "show-meta": false,
+                        "show-meta_description": false,
                         "h1": "About"
                     }
                 }
@@ -63,7 +63,7 @@
                                     },
                                     {
                                         "type": "conditional",
-                                        "reference": "show-meta",
+                                        "reference": "show-meta_description",
                                         "child": {
                                             "type": "element",
                                             "name": "meta",

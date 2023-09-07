@@ -56,7 +56,11 @@ function mergeAttributes(first: ASTAttribute[], second: ASTAttribute[]) : ASTAtt
 
     Object.keys(firstAttrs).forEach((attrName) => {
         if (!secondAttrs[attrName]) {
-            console.log('unhandled extra attr', attrName, firstAttrs[attrName])
+            if (firstAttrs[attrName].type === 'conditional-attribute') {
+                merged.push(firstAttrs[attrName]);
+            } else {
+                console.log('unhandled extra attr', attrName, firstAttrs, secondAttrs)
+            }
             return;
         }
 
@@ -69,7 +73,11 @@ function mergeAttributes(first: ASTAttribute[], second: ASTAttribute[]) : ASTAtt
     });
 
     Object.keys(secondAttrs).forEach((attrName) => {
-        console.log('unhandled extra attr', attrName, secondAttrs[attrName])
+        if (secondAttrs[attrName].type === 'conditional-attribute') {
+            merged.push(secondAttrs[attrName]);
+        } else {
+            console.log('unhandled extra attr', attrName, secondAttrs, firstAttrs)
+        }
     });
 
     return merged;
