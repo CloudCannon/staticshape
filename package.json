@@ -14,6 +14,7 @@
   "dependencies": {
     "@clack/prompts": "^0.7.0",
     "angular-html-parser": "^4.0.1",
+    "fastest-levenshtein": "^1.0.16",
     "js-yaml": "^4.1.0",
     "jsdom": "^21.1.1"
   },

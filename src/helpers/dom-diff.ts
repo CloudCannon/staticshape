@@ -7,36 +7,11 @@ import {
     ASTStaticAttribute
 } from '../types'
 import { invalidLoopTags } from './loops';
+import { getClassList, isAttrEquivalent } from './node-helper';
+import { attrsToObject } from './attrsToObject';
+import { nodeEquivalencyScore, isBestMatch, loopThreshold } from './node-equivalency';
 
-function normalizeClassList(value: string) {
-    const classList = (value || '').split(' ')
-        .reduce((list : string[], className: string) : string[] => {
-            const trimmed = className.trim();
-            if (trimmed) {
-                list.push(trimmed);
-            }
-            return list;
-        }, [] as string[]);
-    return classList.sort();
-}
-
-function getClassList(element: Element) {
-    const classAttr = element.attrs?.find((attr) => attr.name === 'class');
-    return normalizeClassList(classAttr?.value || '');
-}
-
-function isAttrEquivalent(attrName: string, first: Attribute, second: Attribute) {
-    if (attrName === 'class') {
-        const firstClassList = normalizeClassList(first?.value || '');
-        const secondClassList = normalizeClassList(second?.value || '');
-
-        return firstClassList.join('') === secondClassList.join('');
-    }
-
-    return first.value === second.value;
-}
-
-function getElementSignature(element: Element) {
+export function getElementSignature(element: Element) {
     if (element.name === 'meta') {
         const nameAttr = element.attrs.find((attr) => attr.name === 'name');
         const propertyAttr = element.attrs.find((attr) => attr.name === 'property');
@@ -172,7 +147,7 @@ export function generateAstDiff(config: DocumentConfig, depth: number, firstData
         throw new Error(`Unknown node type ${secondNode.type}`);
     }
 
-    const tagsMatch = getElementSignature(firstNode) === getElementSignature(secondNode);
+    const tagsMatch = firstNode.name === secondNode.name;
     if (!tagsMatch) {
         throw new Error(`Mismatched node names ${firstNode.name}, ${secondNode.name}`);
     }
@@ -190,13 +165,6 @@ export function generateAstDiff(config: DocumentConfig, depth: number, firstData
     node.attrs = mergeAttrs(firstData, secondData, firstNode, secondNode);
     node.children = mergeChildren(config, depth + 1, firstData, secondData, firstNode, secondNode);
     return node;
-}
-
-function attrsToObject(attrs: Attribute[]): Record<string, Attribute> {
-    return attrs.reduce((memo : Record<string, Attribute>, attr : Attribute) : Record<string, Attribute> => {
-        memo[attr.name] = attr;
-        return memo;
-    }, {})
 }
 
 export function mergeAttrs(firstData : Record<string, any>, secondData : Record<string, any>, firstElement: Element, secondElement: Element) : ASTAttribute[] {
@@ -265,16 +233,7 @@ export function mergeAttrs(firstData : Record<string, any>, secondData : Record<
     return Object.values(combined);
 }
 
-export function isNodeEquivalent(first : Node, second: Node) : boolean {
-    if (first.type === 'text') {
-        return second.type === 'text' && second.value === first.value;
-    }
-
-    return second.type === first.type
-        && getElementSignature(second as Element) === getElementSignature(first as Element);
-}
-
-function findRepeatedIndex(signature: string, remainingNodes: Node[]) : number {
+function findRepeatedIndex(config: DocumentConfig, current: Element, remainingNodes: Node[]) : number {
     let matchFound = false;
     for (let i = 0; i < remainingNodes.length; i++) {
         const node = remainingNodes[i];
@@ -284,7 +243,11 @@ function findRepeatedIndex(signature: string, remainingNodes: Node[]) : number {
                 return i - 1;
             }
         } else if (node.type === 'element') {
-            if (signature !== getElementSignature(node)) {
+            if (config.content?.selector && isSelector(node, config.content?.selector)) {
+                return i - 1;
+            }
+            const score = nodeEquivalencyScore(current, node);
+            if (score <= loopThreshold) {
                 return i - 1;
             }
             matchFound = true;
@@ -359,39 +322,21 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
         }
     }
 
-    const isBestTextMatch = (current : Node, other : Node, currentTree: Node[], otherTree: Node[]) => {
-        if (current.type !== 'text' || other.type !== 'text') {
-            return false;
-        }
-
-        for (let i = 0; i < currentTree.length; i++) {
-            const currentAlternative = currentTree[i];
-
-            for (let j = 0; j < otherTree.length; j++) {
-                const otherAlternative = otherTree[j];
-                if (isNodeEquivalent(currentAlternative, otherAlternative)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     const addComparisonNode = (current : Node, other : Node) => {
         firstPointer += 1;
         secondPointer += 1;
 
         if (current.type === 'element' && other.type === 'element' && 
             !invalidLoopTags[current.name] && !invalidLoopTags[other.name]) {
-            const currentSignature = getElementSignature(current as Element);
-            const otherSignature = getElementSignature(other as Element);
-            if (currentSignature === otherSignature) {
+            const currentSignature = getElementSignature(current);
+
+            const score = nodeEquivalencyScore(current, other);
+            if (score > loopThreshold) {
                 const firstRemainingNodes = firstTree.slice(firstPointer);
                 const secondRemainingNodes = secondTree.slice(secondPointer);
 
-                const firstIndex = findRepeatedIndex(currentSignature, firstRemainingNodes);
-                const secondIndex = findRepeatedIndex(currentSignature, secondRemainingNodes);
+                const firstIndex = findRepeatedIndex(config, current, firstRemainingNodes);
+                const secondIndex = findRepeatedIndex(config, current, secondRemainingNodes);
 
                 if (firstIndex > 0 || secondIndex > 0) {
                     const firstEls = [
@@ -433,19 +378,22 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
         const firstNode = firstTree[firstPointer];
         const secondNode = secondTree[secondPointer];
 
-        if (isNodeEquivalent(firstNode, secondNode)) {
+        const equivalency = nodeEquivalencyScore(firstNode, secondNode)
+        if (equivalency === 1) {
             addComparisonNode(firstNode, secondNode);
         } else if (firstRemaining > secondRemaining) {
-            if (isBestTextMatch(firstNode, secondNode, firstTree.slice(firstPointer + 1), secondTree.slice(secondPointer))) {
+            if (isBestMatch(firstNode, secondNode, firstTree.slice(firstPointer + 1), secondTree.slice(secondPointer))) {
                 addComparisonNode(firstNode, secondNode);
             } else {
+                // console.log('First no match', formatNode(firstNode));
                 addConditionalNode(firstNode, firstData, secondData);
                 firstPointer += 1;
             }
         } else {
-            if (isBestTextMatch(secondNode, firstNode, secondTree.slice(secondPointer + 1), firstTree.slice(firstPointer))) {
+            if (isBestMatch(secondNode, firstNode, secondTree.slice(secondPointer + 1), firstTree.slice(firstPointer))) {
                 addComparisonNode(firstNode, secondNode);
             } else {
+                // console.log('Second no match', formatNode(secondNode));
                 addConditionalNode(secondNode, secondData, firstData);
                 secondPointer += 1;
             }
@@ -453,11 +401,13 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
     }
 
     while (firstPointer < firstTree.length) {
+        console.log('First Remaining');
         addConditionalNode(firstTree[firstPointer], firstData, secondData)
         firstPointer += 1;
     }
 
     while (secondPointer < secondTree.length) {
+        console.log('First Remaining');
         addConditionalNode(secondTree[secondPointer], secondData, firstData)
         secondPointer += 1;
     }

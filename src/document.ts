@@ -1,11 +1,10 @@
 import { parse } from 'angular-html-parser';
 import Page from './page';
 import Layout from './layout';
-import { ASTNode } from './types'
 
 import { ParseTreeResult } from 'angular-html-parser/lib/compiler/src/ml_parser/parser';
 import { DocType, Element, Node } from 'angular-html-parser/lib/compiler/src/ml_parser/ast';
-import { formatNode, generateAstDiff, printAstTree } from './helpers/dom-helper';
+import { formatNode, generateAstDiff, printAstTree } from './helpers/dom-diff';
 
 export interface ASTTree {
     base: Page;

@@ -1,7 +1,6 @@
 import test, {ExecutionContext} from 'ava';
-import * as fs from 'fs';
-import { mergeChildren } from '../src/helpers/dom-helper';
-import Document, { DocumentConfig } from '../src/document';
+import { mergeChildren } from '../src/helpers/dom-diff';
+import { DocumentConfig } from '../src/document';
 import { Element, Node, Text } from 'angular-html-parser/lib/compiler/src/ml_parser/ast';
 import { ASTNode } from '../src/types';
 
@@ -195,13 +194,6 @@ const tests = [
   
 tests.forEach((def: TestDefinition) => {
     test(def.name, async (t: ExecutionContext) => {
-        const config = {
-            pathname: 'string',
-            data: {},
-            content: 'string',
-            config: documentConfig
-        };
-    
         const primaryData = {};
         const secondaryData = {};
         const firstElement = {

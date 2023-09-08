@@ -9,7 +9,7 @@ p.intro(`Welcome to the static to ssg`);
 const sourcePath = await p.text({
   message: "What folder contains your static site?",
   placeholder: "./_site/",
-  initialValue: "",
+  initialValue: "../../scrapes/dunedinattractions.nz",
   validate(sourcePath) {
     if (sourcePath.length === 0) return `Source path is required!`;
 
@@ -36,8 +36,8 @@ p.log.success(`Input set to ${absoluteSourcePath}`);
 
 const configPath = await p.text({
   message: "Where is your static-to-ssg config file?",
-  placeholder: "./_site/",
-  initialValue: "",
+  placeholder: "./example.json",
+  initialValue: "../../scrapes/dunedinattractions.json",
   validate(configPath) {
     if (configPath.length === 0) return `Config path is required!`;
     const absoluteConfigPath = path.resolve(configPath);

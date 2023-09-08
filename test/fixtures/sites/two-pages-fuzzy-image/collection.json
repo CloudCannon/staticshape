@@ -11,9 +11,9 @@
                     "content": [],
                     "data": {
                         "title": "Goose Owner",
-                        "img_src": "assets/goose.jpg",
-                        "img_class": "",
-                        "img_alt": "Goose",
+                        "img.reversed_src": "assets/goose.jpg",
+                        "img.reversed_class": "",
+                        "img.reversed_alt": "Goose",
                         "h1": "Goose Owner"
                     }
                 },
@@ -22,9 +22,9 @@
                     "content": [],
                     "data": {
                         "title": "Goose Admirer",
-                        "img_src": "assets/goose-reversed.jpg",
-                        "img_class": "reversed",
-                        "img_alt": "Goose Reversed",
+                        "img.reversed_src": "assets/goose-reversed.jpg",
+                        "img.reversed_class": "reversed",
+                        "img.reversed_alt": "Goose Reversed",
                         "h1": "Goose Admirer"
                     }
                 }
@@ -104,23 +104,23 @@
                                                 "attrs": [
                                                     {
                                                         "type": "variable-attribute",
-                                                        "name": "src",
-                                                        "reference": "img_src"
+                                                        "name": "alt",
+                                                        "reference": "img.reversed_alt"
                                                     },
                                                     {
                                                         "type": "variable-attribute",
                                                         "name": "class",
-                                                        "reference": "img_class"
-                                                    },
-                                                    {
-                                                        "type": "variable-attribute",
-                                                        "name": "alt",
-                                                        "reference": "img_alt"
+                                                        "reference": "img.reversed_class"
                                                     },
                                                     {
                                                         "type": "attribute",
                                                         "name": "height",
                                                         "value": "275"
+                                                    },
+                                                    {
+                                                        "type": "variable-attribute",
+                                                        "name": "src",
+                                                        "reference": "img.reversed_src"
                                                     },
                                                     {
                                                         "type": "attribute",
@@ -147,7 +147,7 @@
                                             },
                                             {
                                                 "type": "text",
-                                                "value": "\n\t"
+                                                "value": "\n\t\t"
                                             }
                                         ]
                                     },
