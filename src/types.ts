@@ -52,6 +52,17 @@ export interface ASTConditionalAttribute {
     reference: string;
 }
 
+export interface ASTMarkdownNode {
+    type: 'markdown-variable';
+    reference: string;
+}
+
+export interface ASTLoopNode {
+    type: 'loop';
+    reference: string;
+    template: ASTNode;
+}
+
 export interface ASTElementNode {
     type: 'element';
     name: string;
@@ -60,4 +71,4 @@ export interface ASTElementNode {
 }
 
 export type ASTAttribute = ASTVariableAttribute | ASTStaticAttribute | ASTConditionalAttribute;
-export type ASTNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTVariableNode | ASTConditionalNode | ASTContentNode | ASTCommentNode;
+export type ASTNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTVariableNode | ASTConditionalNode | ASTContentNode | ASTCommentNode | ASTMarkdownNode | ASTLoopNode;

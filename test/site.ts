@@ -9,6 +9,8 @@ const tests = [
     "two-pages-attr-variable",
     "two-pages-body-content",
     "two-pages-conditional",
+    // "two-pages-markdown-variable",
+    "two-pages-loop",
     "three-pages",
     "three-pages-title-variable",
     "three-pages-attr-variable",

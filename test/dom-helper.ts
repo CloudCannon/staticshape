@@ -202,8 +202,8 @@ tests.forEach((def: TestDefinition) => {
             config: documentConfig
         };
     
-        const primaryDoc = new Document(structuredClone(config));
-        const secondaryDoc = new Document(structuredClone(config));
+        const primaryData = {};
+        const secondaryData = {};
         const firstElement = {
             type: 'element',
             name: 'div',
@@ -216,13 +216,11 @@ tests.forEach((def: TestDefinition) => {
             children: def.secondary
         } as Element;
 
-        const tree = mergeChildren(documentConfig, 0, primaryDoc, secondaryDoc, firstElement, secondElement);
+        const tree = mergeChildren(documentConfig, 0, primaryData, secondaryData, firstElement, secondElement);
     
         t.deepEqual(tree, def.merged);
-        t.deepEqual(primaryDoc.data, def.expectedPrimaryData || {});
-        t.deepEqual(primaryDoc.pageContent, def.expectedPrimaryContents || []);
-        t.deepEqual(secondaryDoc.data, def.expectedSecondaryData || {});
-        t.deepEqual(secondaryDoc.pageContent, def.expectedSecondaryContents || []);
+        t.deepEqual(primaryData, def.expectedPrimaryData || {});
+        t.deepEqual(secondaryData, def.expectedSecondaryData || {});
     });
     
 })

@@ -32,13 +32,11 @@ export default class Document {
     options: DocumentOptions;
     dom: ParseTreeResult;
     data: Record<string, any>;
-    pageContent: ASTNode[];
 
     constructor(options: DocumentOptions) {
         this.options = options;
         this.dom = parse(this.options.content);
         this.data = {};
-        this.pageContent = [];
     }
 
     diff(other: Document): ASTTree {
@@ -52,17 +50,22 @@ export default class Document {
         const sourceHtml = this.dom.rootNodes.find((node : Node) => node.type === 'element' && node.name === 'html') as Element;
         const otherHtml = other.dom.rootNodes.find((node : Node) => node.type === 'element' && node.name === 'html') as Element;
 
-        const htmlNode = generateAstDiff(this.options.config, 0, this, other, sourceHtml, otherHtml, null);
+        const htmlNode = generateAstDiff(this.options.config, 0, this.data, other.data, sourceHtml, otherHtml, null);
 
+        const pageContent = this.data['@pageContent'] || [];
+        const otherPageContent = other.data['@pageContent'] || [];
+
+        delete this.data['@pageContent'];
+        delete other.data['@pageContent'];
         return {
             base: new Page({
                 pathname: this.options.pathname,
-                content: this.pageContent,
+                content: pageContent,
                 data: this.data
             }),
             pages: [new Page({
                 pathname: other.options.pathname,
-                content: other.pageContent,
+                content: otherPageContent,
                 data: other.data
             })],
             layout: new Layout({
