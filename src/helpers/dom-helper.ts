@@ -1,11 +1,12 @@
 import { Attribute, Element, Node } from 'angular-html-parser/lib/compiler/src/ml_parser/ast';
-import Document, { DocumentConfig } from '../document';
+import { DocumentConfig } from '../document';
 import {
     ASTElementNode,
     ASTAttribute,
     ASTNode,
     ASTStaticAttribute
 } from '../types'
+import { invalidLoopTags } from './loops';
 
 function normalizeClassList(value: string) {
     const classList = (value || '').split(' ')
@@ -39,8 +40,16 @@ function getElementSignature(element: Element) {
     if (element.name === 'meta') {
         const nameAttr = element.attrs.find((attr) => attr.name === 'name');
         const propertyAttr = element.attrs.find((attr) => attr.name === 'property');
+        const httpEquivAttr = element.attrs.find((attr) => attr.name === 'http-equiv');
+        const charsetAttr = element.attrs.find((attr) => attr.name === 'charset');
 
-        return [element.name, nameAttr?.value || propertyAttr?.value || 'unknown'].join('_');
+        return [element.name,
+            nameAttr?.value
+            || propertyAttr?.value
+            || httpEquivAttr?.value
+            || charsetAttr?.value
+            || 'unknown'
+        ].join('_');
     }
 
     if (element.name === 'link') {
@@ -202,8 +211,8 @@ export function mergeAttrs(firstData : Record<string, any>, secondData : Record<
                 attrName
             ].join('_');
 
-            firstData[variableName] = true;
-            secondData[variableName] = false;
+            firstData[variableName] = firstAttrs[attrName].value;
+            secondData[variableName] = null;
             combined[attrName] = {
                 type: 'conditional-attribute',
                 name: attrName,
@@ -287,10 +296,10 @@ function findRepeatedIndex(signature: string, remainingNodes: Node[]) : number {
 interface Loop {
     firstItems: Record<string, any>[];
     secondItems: Record<string, any>[];
-    template: ASTNode | null;
+    template: ASTNode;
 }
 
-function buildLoop(firstEls: Element[], secondEls: Element[], parentElement: Element) : Loop {
+function buildLoop(firstEls: Element[], secondEls: Element[], parentElement: Element) : Loop | null {
     const base = firstEls[0];
     let baseData = {};
     const firstItems = [] as Record<string, any>[];
@@ -317,14 +326,14 @@ function buildLoop(firstEls: Element[], secondEls: Element[], parentElement: Ele
         secondItems.push(otherData);
     }
 
-    return {
+    return template ? {
         template,
         firstItems: [
             baseData,
             ...firstItems
         ],
         secondItems
-    };
+    } : null;
 }
 
 export function mergeChildren(config: DocumentConfig, depth: number, firstData : Record<string, any>, secondData : Record<string, any>, firstElement: Element, secondElement: Element) : ASTNode[] {
@@ -373,7 +382,8 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
         firstPointer += 1;
         secondPointer += 1;
 
-        if (current.type === 'element' && other.type === 'element') {
+        if (current.type === 'element' && other.type === 'element' && 
+            !invalidLoopTags[current.name] && !invalidLoopTags[other.name]) {
             const currentSignature = getElementSignature(current as Element);
             const otherSignature = getElementSignature(other as Element);
             if (currentSignature === otherSignature) {
@@ -403,7 +413,7 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
                         merged.push({
                             type: 'loop',
                             reference: variableName,
-                            template: template,
+                            template,
                         })
                         firstPointer += firstIndex;
                         secondPointer += secondIndex;

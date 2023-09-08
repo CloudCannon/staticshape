@@ -1,5 +1,5 @@
 import { CollectionResponse } from '../collection';
-import { ASTConditionalAttribute, ASTConditionalNode, ASTContentNode, ASTNode, ASTVariableAttribute, ASTVariableNode } from '../types';
+import { ASTConditionalAttribute, ASTConditionalNode, ASTContentNode, ASTLoopNode, ASTNode, ASTVariableAttribute, ASTVariableNode } from '../types';
 import ExportEngine, { FileExport } from './interface';
 import { dump } from 'js-yaml';
 
@@ -60,7 +60,11 @@ export default class HugoExportEngine extends ExportEngine {
     }
 
     renderConditional(node: ASTConditionalNode) : string {
-        return `{{ if .Params.${node.reference} }}${this.renderAST([node.child])}{{ end }}`;
+        return `{{ if .Params.${node.reference} }}${this.renderASTNode(node.child)}{{ end }}`;
+    }
+
+    renderLoop(node: ASTLoopNode) : string {
+        return `{{ range .Params.${node.reference} }}${this.renderASTNode(node.template)}{{ end }}`
     }
 
     renderContent(_node: ASTContentNode) : string {

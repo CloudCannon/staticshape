@@ -44,7 +44,7 @@ export default class Document {
         const otherDoctype = other.dom.rootNodes.find((node : Node) => node.type === 'docType') as DocType;
 
         if (sourceDoctype?.value !== otherDoctype?.value) {
-            throw new Error(`doctype does not match. ${sourceDoctype.value} !== ${otherDoctype.value}`)
+            console.warn(`doctype does not match. ${sourceDoctype.value} !== ${otherDoctype.value}`)
         }
         
         const sourceHtml = this.dom.rootNodes.find((node : Node) => node.type === 'element' && node.name === 'html') as Element;
@@ -70,7 +70,10 @@ export default class Document {
             })],
             layout: new Layout({
                 tree: [
-                    formatNode(sourceDoctype),
+                    sourceDoctype ? formatNode(sourceDoctype) : {
+                        type: 'doctype',
+                        value: 'html'
+                    },
                     htmlNode
                 ]
             })

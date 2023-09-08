@@ -1,0 +1,161 @@
+{
+	"staticFiles": [],
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "index.html",
+					"content": [],
+					"data": {
+						"title": "Home | Test",
+						"h1": "Home"
+					}
+				},
+				{
+					"pathname": "about.html",
+					"content": [],
+					"data": {
+						"title": "About | Test",
+						"h1": "About"
+					}
+				}
+			],
+			"layout": {
+				"tree": [
+					{
+						"type": "doctype",
+						"value": "html"
+					},
+					{
+						"type": "element",
+						"name": "html",
+						"attrs": [],
+						"children": [
+							{
+								"type": "text",
+								"value": "\n\t"
+							},
+							{
+								"type": "element",
+								"name": "head",
+								"attrs": [],
+								"children": [
+									{
+										"type": "text",
+										"value": "\n\t\t"
+									},
+									{
+										"type": "element",
+										"name": "title",
+										"attrs": [],
+										"children": [
+											{
+												"type": "variable",
+												"reference": "title"
+											}
+										]
+									},
+									{
+										"type": "text",
+										"value": "\n\t\t"
+									},
+									{
+										"name": "link",
+										"type": "element",
+										"attrs": [
+											{
+												"name": "href",
+												"type": "attribute",
+												"value": "/touch-icon.png"
+											},
+											{
+												"name": "rel",
+												"type": "attribute",
+												"value": "icon"
+											},
+											{
+												"name": "sizes",
+												"type": "attribute",
+												"value": "192x192"
+											},
+											{
+												"name": "type",
+												"type": "attribute",
+												"value": "image/png"
+											}
+										],
+										"children": []
+									},
+									{
+										"type": "text",
+										"value": "\n\t\t"
+									},
+									{
+										"name": "link",
+										"type": "element",
+										"attrs": [
+											{
+												"name": "href",
+												"type": "attribute",
+												"value": "/images/favicon.png"
+											},
+											{
+												"name": "rel",
+												"type": "attribute",
+												"value": "icon"
+											},
+											{
+												"name": "type",
+												"type": "attribute",
+												"value": "image/png"
+											}
+										],
+										"children": []
+									},
+									{
+										"type": "text",
+										"value": "\n\t"
+									}
+								]
+							},
+							{
+								"type": "text",
+								"value": "\n\t"
+							},
+							{
+								"type": "element",
+								"name": "body",
+								"attrs": [],
+								"children": [
+									{
+										"type": "text",
+										"value": "\n\t\t"
+									},
+									{
+										"type": "element",
+										"name": "h1",
+										"attrs": [],
+										"children": [
+											{
+												"type": "variable",
+												"reference": "h1"
+											}
+										]
+									},
+									{
+										"type": "text",
+										"value": "\n\t"
+									}
+								]
+							},
+							{
+								"type": "text",
+								"value": "\n"
+							}
+						]
+					}
+				]
+			}
+		}
+	}
+}

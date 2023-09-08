@@ -1,0 +1,170 @@
+{
+    "staticFiles": [
+        "assets/goose.jpg",
+        "assets/goose-reversed.jpg"
+    ],
+    "collections": {
+        "pages": {
+            "pages": [
+                {
+                    "pathname": "index.html",
+                    "content": [],
+                    "data": {
+                        "title": "Goose Owner",
+                        "img_src": "assets/goose.jpg",
+                        "img_class": "",
+                        "img_alt": "Goose",
+                        "h1": "Goose Owner"
+                    }
+                },
+                {
+                    "pathname": "about.html",
+                    "content": [],
+                    "data": {
+                        "title": "Goose Admirer",
+                        "img_src": "assets/goose-reversed.jpg",
+                        "img_class": "reversed",
+                        "img_alt": "Goose Reversed",
+                        "h1": "Goose Admirer"
+                    }
+                }
+            ],
+            "layout": {
+                "tree": [
+                    {
+                        "type": "doctype",
+                        "value": "html"
+                    },
+                    {
+                        "type": "element",
+                        "name": "html",
+                        "attrs": [],
+                        "children": [
+                            {
+                                "type": "text",
+                                "value": "\n\t"
+                            },
+                            {
+                                "type": "element",
+                                "name": "head",
+                                "attrs": [],
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
+                                        "type": "element",
+                                        "name": "title",
+                                        "attrs": [],
+                                        "children": [
+                                            {
+                                                "type": "variable",
+                                                "reference": "title"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "value": "\n\t"
+                            },
+                            {
+                                "type": "element",
+                                "name": "body",
+                                "attrs": [],
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
+                                        "type": "element",
+                                        "name": "section",
+                                        "attrs": [
+                                            {
+                                                "type": "attribute",
+                                                "name": "class",
+                                                "value": "hero"
+                                            }
+                                        ],
+                                        "children": [
+                                            {
+                                                "type": "text",
+                                                "value": "\n\t\t\t"
+                                            },
+                                            {
+                                                "type": "element",
+                                                "name": "img",
+                                                "attrs": [
+                                                    {
+                                                        "type": "variable-attribute",
+                                                        "name": "src",
+                                                        "reference": "img_src"
+                                                    },
+                                                    {
+                                                        "type": "variable-attribute",
+                                                        "name": "class",
+                                                        "reference": "img_class"
+                                                    },
+                                                    {
+                                                        "type": "variable-attribute",
+                                                        "name": "alt",
+                                                        "reference": "img_alt"
+                                                    },
+                                                    {
+                                                        "type": "attribute",
+                                                        "name": "height",
+                                                        "value": "275"
+                                                    },
+                                                    {
+                                                        "type": "attribute",
+                                                        "name": "width",
+                                                        "value": "183"
+                                                    }
+                                                ],
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "text",
+                                                "value": "\n\t\t\t"
+                                            },
+                                            {
+                                                "type": "element",
+                                                "name": "h1",
+                                                "attrs": [],
+                                                "children": [
+                                                    {
+                                                        "type": "variable",
+                                                        "reference": "h1"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "text",
+                                                "value": "\n\t"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "value": "\n"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -11,6 +11,9 @@ const tests = [
     "two-pages-conditional",
     // "two-pages-markdown-variable",
     "two-pages-loop",
+    "two-pages-not-loop",
+    "two-pages-fuzzy-loop",
+    "two-pages-fuzzy-image",
     "three-pages",
     "three-pages-title-variable",
     "three-pages-attr-variable",
@@ -53,6 +56,9 @@ for (let i = 0; i < tests.length; i++) {
         const expected = JSON.parse((await fs.promises.readFile(`./test/fixtures/sites/${testName}/collection.json`)).toString('utf-8'));
         sortCollectionPages(output.collections);
         sortCollectionPages(expected.collections);
+
+        output.staticFiles = output.staticFiles.filter((pathname) => !pathname.toLowerCase().endsWith('.ds_store')).sort();
+        expected.staticFiles = expected.staticFiles.sort();
         t.deepEqual(output, expected);
     });
 }
