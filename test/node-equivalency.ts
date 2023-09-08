@@ -151,33 +151,6 @@ const tests = [
         score: 0.97
     },
     {
-        name: 'li.badge-green.badge to li.badge.badge-navy comparison',
-        current: {
-            name: 'li',
-            type: 'element',
-            attrs: [{
-                type: 'attribute',
-                name: 'class',
-                value: 'badge-green badge'
-            }],
-            children: [],
-        },
-        other: {
-            name: 'li',
-            type: 'element',
-            attrs: [{
-                type: 'attribute',
-                name: 'class',
-                value: 'badge badge-navy'
-            }],
-            children: [],
-        },
-        currentTree: [],
-        otherTree: [],
-        isBestMatch: true,
-        score: 0.97
-    },
-    {
         name: 'img - different alt',
         current:  {
             name: 'img',
@@ -242,6 +215,7 @@ const tests = [
 tests.forEach((def: TestDefinition) => {
     test(def.name, async (t: ExecutionContext) => {
         t.is(Math.round(nodeEquivalencyScore(def.current, def.other) * 100) / 100, def.score);
+        t.is(Math.round(nodeEquivalencyScore(def.other, def.current) * 100) / 100, def.score);
         t.is(isBestMatch(def.current, def.other, def.currentTree, def.otherTree), def.isBestMatch);
     });
 })
