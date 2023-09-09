@@ -29,16 +29,12 @@
 					{
 						"type": "element",
 						"name": "html",
-						"attrs": [],
+						"attrs": {},
 						"children": [
-							{
-								"type": "text",
-								"value": "\n\t"
-							},
 							{
 								"type": "element",
 								"name": "head",
-								"attrs": [],
+								"attrs": {},
 								"children": [
 									{
 										"type": "text",
@@ -47,7 +43,7 @@
 									{
 										"type": "element",
 										"name": "title",
-										"attrs": [],
+										"attrs": {},
 										"children": [
 											{
 												"type": "variable",
@@ -60,30 +56,30 @@
 										"value": "\n\t\t"
 									},
 									{
-										"name": "link",
 										"type": "element",
-										"attrs": [
-											{
-												"name": "href",
+										"name": "link",
+										"attrs": {
+											"href": {
 												"type": "attribute",
+												"name": "href",
 												"value": "/touch-icon.png"
 											},
-											{
-												"name": "rel",
+											"rel": {
 												"type": "attribute",
+												"name": "rel",
 												"value": "icon"
 											},
-											{
-												"name": "sizes",
+											"sizes": {
 												"type": "attribute",
+												"name": "sizes",
 												"value": "192x192"
 											},
-											{
-												"name": "type",
+											"type": {
 												"type": "attribute",
+												"name": "type",
 												"value": "image/png"
 											}
-										],
+										},
 										"children": []
 									},
 									{
@@ -91,25 +87,25 @@
 										"value": "\n\t\t"
 									},
 									{
-										"name": "link",
 										"type": "element",
-										"attrs": [
-											{
-												"name": "href",
+										"name": "link",
+										"attrs": {
+											"href": {
 												"type": "attribute",
+												"name": "href",
 												"value": "/images/favicon.png"
 											},
-											{
-												"name": "rel",
+											"rel": {
 												"type": "attribute",
+												"name": "rel",
 												"value": "icon"
 											},
-											{
-												"name": "type",
+											"type": {
 												"type": "attribute",
+												"name": "type",
 												"value": "image/png"
 											}
-										],
+										},
 										"children": []
 									},
 									{
@@ -125,7 +121,7 @@
 							{
 								"type": "element",
 								"name": "body",
-								"attrs": [],
+								"attrs": {},
 								"children": [
 									{
 										"type": "text",
@@ -134,7 +130,7 @@
 									{
 										"type": "element",
 										"name": "h1",
-										"attrs": [],
+										"attrs": {},
 										"children": [
 											{
 												"type": "variable",
@@ -144,13 +140,9 @@
 									},
 									{
 										"type": "text",
-										"value": "\n\t"
+										"value": "\n\t\n"
 									}
 								]
-							},
-							{
-								"type": "text",
-								"value": "\n"
 							}
 						]
 					}

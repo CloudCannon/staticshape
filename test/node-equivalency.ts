@@ -3,7 +3,6 @@ import { isBestMatch, nodeEquivalencyScore } from '../src/helpers/node-equivalen
 import { ASTNode, ASTTextNode } from '../src/types';
 
 interface TestDefinition {
-    name: string;
     current: ASTNode;
     other: ASTNode;
     currentTree: ASTNode[];
@@ -14,222 +13,217 @@ interface TestDefinition {
 
 const textNode = (text: string) : ASTNode => ({ type: 'text', value: text } as ASTTextNode);
 
-const tests = [
-    {
-        name: 'same',
-        current: textNode('a'),
-        other: textNode('a'),
-        currentTree: [],
-        otherTree: [],
-        isBestMatch: true,
-        score: 1
+async function runTest(t: ExecutionContext, def: TestDefinition) {
+    t.is(Math.round(nodeEquivalencyScore(def.current, def.other) * 100) / 100, def.score);
+    t.is(Math.round(nodeEquivalencyScore(def.other, def.current) * 100) / 100, def.score);
+    t.is(isBestMatch(def.current, def.other, def.currentTree, def.otherTree), def.isBestMatch);
+}
+
+test('same', (t: ExecutionContext) => runTest(t, {
+    current: textNode('a'),
+    other: textNode('a'),
+    currentTree: [],
+    otherTree: [],
+    isBestMatch: true,
+    score: 1
+}));
+
+test('just as good', (t: ExecutionContext) => runTest(t, {
+    current: textNode('a'),
+    other: textNode('b'),
+    currentTree: [textNode('c')],
+    otherTree: [],
+    isBestMatch: true,
+    score: 0.5
+}));
+
+test('later', (t: ExecutionContext) => runTest(t, {
+    current: textNode('a'),
+    other: textNode('b'),
+    currentTree: [textNode('b')],
+    otherTree: [],
+    isBestMatch: false,
+    score: 0.5
+}));
+
+test('even later', (t: ExecutionContext) => runTest(t, {
+    current: textNode('a'),
+    other: textNode('b'),
+    currentTree: [textNode('c'), textNode('b')],
+    otherTree: [],
+    isBestMatch: false,
+    score: 0.5
+}));
+
+test('text to element comparison', (t: ExecutionContext) => runTest(t, {
+    current: textNode('a'),
+    other: { type: 'element', name: 'div', attrs: {}, children: [] },
+    currentTree: [],
+    otherTree: [],
+    isBestMatch: false,
+    score: 0
+}));
+
+test('element to text comparison', (t: ExecutionContext) => runTest(t, {
+    current: { type: 'element', name: 'div', attrs: {}, children: [] },
+    other: textNode('a'),
+    currentTree: [],
+    otherTree: [],
+    isBestMatch: false,
+    score: 0
+}));
+
+test('div to section comparison', (t: ExecutionContext) => runTest(t, {
+    current:  {
+        name: 'div',
+        type: 'element',
+        attrs: {},
+        children: [],
     },
-    {
-        name: 'just as good',
-        current: textNode('a'),
-        other: textNode('b'),
-        currentTree: [textNode('c')],
-        otherTree: [],
-        isBestMatch: true,
-        score: 0.5
+    other: {
+        name: 'section',
+        type: 'element',
+        attrs: {},
+        children: [],
     },
-    {
-        name: 'later',
-        current: textNode('a'),
-        other: textNode('b'),
-        currentTree: [textNode('b')],
-        otherTree: [],
-        isBestMatch: false,
-        score: 0.5
-    },
-    {
-        name: 'even later',
-        current: textNode('a'),
-        other: textNode('b'),
-        currentTree: [textNode('c'), textNode('b')],
-        otherTree: [],
-        isBestMatch: false,
-        score: 0.5
-    },
-    {
-        name: 'text to element comparison',
-        current: textNode('a'),
-        other: { type: 'element', name: 'div' },
-        currentTree: [],
-        otherTree: [],
-        isBestMatch: false,
-        score: 0
-    },
-    {
-        name: 'element to text comparison',
-        current: { type: 'element', name: 'div' },
-        other: textNode('a'),
-        currentTree: [],
-        otherTree: [],
-        isBestMatch: false,
-        score: 0
-    },
-    {
-        name: 'div to section comparison',
-        current:  {
-            name: 'div',
-            type: 'element',
-            attrs: {},
-            children: [],
-        },
-        other: {
-            name: 'section',
-            type: 'element',
-            attrs: {},
-            children: [],
-        },
-        currentTree: [],
-        otherTree: [],
-        isBestMatch: false,
-        score: 0
-    },
-    {
-        name: 'a to a[target] comparison',
-        current: {
-            name: 'a',
-            type: 'element',
-            attrs: {
-                href: {
-                    type: 'attribute',
-                    name: 'href',
-                    value: 'https://google.com'
-                },
-                target: {
-                    type: 'attribute',
-                    name: 'target',
-                    value: '_blank'
-                }
+    currentTree: [],
+    otherTree: [],
+    isBestMatch: false,
+    score: 0
+}));
+
+test('a to a[target] comparison', (t: ExecutionContext) => runTest(t, {
+    current: {
+        name: 'a',
+        type: 'element',
+        attrs: {
+            href: {
+                type: 'attribute',
+                name: 'href',
+                value: 'https://google.com'
             },
-            children: [],
+            target: {
+                type: 'attribute',
+                name: 'target',
+                value: '_blank'
+            }
         },
-        other: {
-            name: 'a',
-            type: 'element',
-            attrs: {
-                href: {
-                    type: 'attribute',
-                    name: 'href',
-                    value: 'https://duckduckgo.com'
-                },
-                rel: {
-                    type: 'attribute',
-                    name: 'rel',
-                    value: 'noopener'
-                }
-            },
-            children: [],
-        },
-        currentTree: [],
-        otherTree: [],
-        isBestMatch: true,
-        score: 0.85
+        children: [],
     },
-    {
-        name: 'li.badge.badge-green to li.badge.badge-navy comparison',
-        current: {
-            name: 'li',
-            type: 'element',
-            attrs: {
-                class: {
-                    type: 'attribute',
-                    name: 'class',
-                    value: 'badge badge-green'
-                }
+    other: {
+        name: 'a',
+        type: 'element',
+        attrs: {
+            href: {
+                type: 'attribute',
+                name: 'href',
+                value: 'https://duckduckgo.com'
             },
-            children: [],
+            rel: {
+                type: 'attribute',
+                name: 'rel',
+                value: 'noopener'
+            }
         },
-        other: {
-            name: 'li',
-            type: 'element',
-            attrs: {
-                class: {
-                    type: 'attribute',
-                    name: 'class',
-                    value: 'badge badge-navy'
-                }
-            },
-            children: [],
-        },
-        currentTree: [],
-        otherTree: [],
-        isBestMatch: true,
-        score: 0.97
+        children: [],
     },
-    {
-        name: 'img - different alt',
-        current:  {
-            name: 'img',
-            type: 'element',
-            attrs: {
-                src: {
-                    name: 'src',
-                    type: 'attribute',
-                    value: 'assets/goose.jpg',
-                },
-                alt: {
-                    name: 'alt',
-                    type: 'attribute',
-                    value: 'Our goose',
-                },
-            },
-            children: [],
+    currentTree: [],
+    otherTree: [],
+    isBestMatch: true,
+    score: 0.85
+}));
+
+test('li.badge.badge-green to li.badge.badge-navy comparison', (t: ExecutionContext) => runTest(t, {
+    current: {
+        name: 'li',
+        type: 'element',
+        attrs: {
+            class: {
+                type: 'attribute',
+                name: 'class',
+                value: 'badge badge-green'
+            }
         },
-        other: {
-            name: 'img',
-            type: 'element',
-            attrs: {
-                src: {
-                    name: 'src',
-                    type: 'attribute',
-                    value: 'assets/goose.jpg',
-                },
-                alt: {
-                    name: 'alt',
-                    type: 'attribute',
-                    value: 'Their goose',
-                },
-            },
-            children: [],
-        },
-        currentTree: [],
-        otherTree: [],
-        isBestMatch: true,
-        score: 0.98
+        children: [],
     },
-    {
-        name: 'ul to the same ul',
-        current: {
-            type: 'element',
-            name: 'ul',
-            attrs: {
-                class: { type: 'attribute', name: 'class', value: 'badges' }
-            },
-            children: []
+    other: {
+        name: 'li',
+        type: 'element',
+        attrs: {
+            class: {
+                type: 'attribute',
+                name: 'class',
+                value: 'badge badge-navy'
+            }
         },
-        other: {
-            type: 'element',
-            name: 'ul',
-            attrs: {
-                class: { type: 'attribute', name: 'class', value: 'badges' }
+        children: [],
+    },
+    currentTree: [],
+    otherTree: [],
+    isBestMatch: true,
+    score: 0.97
+}));
+
+test('img - different alt', (t: ExecutionContext) => runTest(t, {
+    current:  {
+        name: 'img',
+        type: 'element',
+        attrs: {
+            src: {
+                name: 'src',
+                type: 'attribute',
+                value: 'assets/goose.jpg',
             },
-            children: []
+            alt: {
+                name: 'alt',
+                type: 'attribute',
+                value: 'Our goose',
+            },
         },
-        currentTree: [],
-        otherTree: [],
-        isBestMatch: true,
-        score: 1
-    }
-] as TestDefinition[];
-  
-tests.forEach((def: TestDefinition) => {
-    test(def.name, async (t: ExecutionContext) => {
-        t.is(Math.round(nodeEquivalencyScore(def.current, def.other) * 100) / 100, def.score);
-        t.is(Math.round(nodeEquivalencyScore(def.other, def.current) * 100) / 100, def.score);
-        t.is(isBestMatch(def.current, def.other, def.currentTree, def.otherTree), def.isBestMatch);
-    });
-})
+        children: [],
+    },
+    other: {
+        name: 'img',
+        type: 'element',
+        attrs: {
+            src: {
+                name: 'src',
+                type: 'attribute',
+                value: 'assets/goose.jpg',
+            },
+            alt: {
+                name: 'alt',
+                type: 'attribute',
+                value: 'Their goose',
+            },
+        },
+        children: [],
+    },
+    currentTree: [],
+    otherTree: [],
+    isBestMatch: true,
+    score: 0.98
+}));
+
+test('ul to the same ul', (t: ExecutionContext) => runTest(t, {
+    current: {
+        type: 'element',
+        name: 'ul',
+        attrs: {
+            class: { type: 'attribute', name: 'class', value: 'badges' }
+        },
+        children: []
+    },
+    other: {
+        type: 'element',
+        name: 'ul',
+        attrs: {
+            class: { type: 'attribute', name: 'class', value: 'badges' }
+        },
+        children: []
+    },
+    currentTree: [],
+    otherTree: [],
+    isBestMatch: true,
+    score: 1
+}));

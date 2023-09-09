@@ -1,7 +1,5 @@
-import { Attribute, Element, Node } from 'angular-html-parser/lib/compiler/src/ml_parser/ast';
 import {
     ASTElementNode,
-    ASTAttribute,
     ASTNode,
     ASTAttributeList
 } from '../types'
@@ -9,12 +7,14 @@ import { invalidLoopTags } from './loops';
 import { getClassList, isAttrEquivalent } from './node-helper';
 import { nodeEquivalencyScore, isBestMatch, loopThreshold } from './node-equivalency';
 
-export function getElementSignature(element: Element) {
+type Data = Record<string, any>;
+
+export function getElementSignature(element: ASTElementNode) {
     if (element.name === 'meta') {
-        const nameAttr = element.attrs.find((attr) => attr.name === 'name');
-        const propertyAttr = element.attrs.find((attr) => attr.name === 'property');
-        const httpEquivAttr = element.attrs.find((attr) => attr.name === 'http-equiv');
-        const charsetAttr = element.attrs.find((attr) => attr.name === 'charset');
+        const nameAttr = element.attrs['name'];
+        const propertyAttr = element.attrs['property'];
+        const httpEquivAttr = element.attrs['http-equiv'];
+        const charsetAttr = element.attrs['charset'];
 
         return [element.name,
             nameAttr?.value
@@ -26,12 +26,12 @@ export function getElementSignature(element: Element) {
     }
 
     if (element.name === 'link') {
-        const relAttr = element.attrs.find((attr) => attr.name === 'rel');
+        const relAttr = element.attrs['rel'];
 
         return [element.name, relAttr?.value || 'unknown'].join('_');
     }
 
-    const id = element.attrs?.find((attr) => attr.name === 'id')?.value?.trim();
+    const id = element.attrs['id']?.value?.trim();
     if (id) {
         return `#${id}`
     }
@@ -43,65 +43,16 @@ export function getElementSignature(element: Element) {
     return `${element.name}${classes}`;
 }
 
-export function formatNode(node : Node): ASTNode {
-    if (node.type === 'text') {
-        return {
-            "type": 'text',
-            "value": node.value
-        }
-    }
-
-    if (node.type === 'comment') {
-        return {
-            "type": 'comment',
-            "value": node.value || ''
-        }
-    }
-
-    if (node.type === 'docType') {
-        return {
-            "type": 'doctype',
-            "value": node.value || ''
-        }
-    }
-
-    const element = node as Element;
-    return {
-        type: 'element',
-        name: element.name,
-        attrs: (element.attrs || []).reduce((attrs: Record<string, ASTAttribute>, attr : Attribute) : Record<string, ASTAttribute> => {
-            attrs[attr.name] = {
-                type: 'attribute',
-                name: attr.name,
-                value: attr.value,
-            }
-            return attrs;
-        }, {}),
-        children: []
-    }
-}
-
-export function printAstTree(depth: number, data : Record<string, any>, element: Node) : ASTNode {
-    const node = formatNode(element);
-    if (element.type === 'element') {
-        for (let i = 0; i < element.children?.length; i++) {
-            const childNode = element.children?.[i];
-            (node as ASTElementNode).children.push(printAstTree(depth + 1, data, childNode));
-        }
-    }
-    return node;
-}
-
-export function generateAstDiff(depth: number, firstData : Record<string, any>, secondData : Record<string, any>, firstNode: Node, secondNode: Node, parentNode: Element | null) : ASTNode {
+export function generateAstDiff(depth: number, firstData : Data, secondData : Data, firstNode: ASTNode, secondNode: ASTNode, parentNode: ASTElementNode | null) : ASTNode {
     const typesMatch = firstNode.type === secondNode.type;
     if (!typesMatch) {
         throw new Error(`Mismatched node types ${firstNode.type}, ${secondNode.type}`);
     }
 
-    if (firstNode.type === 'text' || firstNode.type === 'docType') {
+    if (firstNode.type === 'text' || firstNode.type === 'doctype') {
         const valuesMatch = firstNode.value.trim() === secondNode.value.trim();
         if (valuesMatch) {
-            return formatNode(firstNode);
+            return structuredClone(firstNode);
         }
         if (!parentNode) {
             throw new Error(`Can't print variable as a direct child of html (No parentNode)`);
@@ -117,7 +68,11 @@ export function generateAstDiff(depth: number, firstData : Record<string, any>, 
     }
 
     if (firstNode.type === 'comment' || secondNode.type === 'comment') {
-        return formatNode(firstNode);
+        return firstNode;
+    }
+
+    if (firstNode.type === 'content' || secondNode.type === 'content') {
+        return firstNode;
     }
 
     if (firstNode.type !== 'element' || secondNode.type !== 'element') {
@@ -129,16 +84,16 @@ export function generateAstDiff(depth: number, firstData : Record<string, any>, 
         throw new Error(`Mismatched node names ${firstNode.name}, ${secondNode.name}`);
     }
 
-    const node = formatNode(firstNode) as ASTElementNode;
+    const node = structuredClone(firstNode) as ASTElementNode;
     node.attrs = mergeAttrs(firstData, secondData, firstNode, secondNode);
     node.children = mergeChildren(depth + 1, firstData, secondData, firstNode, secondNode);
     return node;
 }
 
-export function mergeAttrs(firstData : Record<string, any>, secondData : Record<string, any>, firstElement: Element, secondElement: Element) : ASTAttributeList {
-    const firstAttrs = attrsToObject(firstElement.attrs);
-    const secondAttrs = attrsToObject(secondElement.attrs);
-    const combined = {} as Record<string, ASTAttribute>;
+export function mergeAttrs(firstData : Data, secondData : Data, firstElement: ASTElementNode, secondElement: ASTElementNode) : ASTAttributeList {
+    const firstAttrs = firstElement.attrs;
+    const secondAttrs = secondElement.attrs;
+    const combined = {} as ASTAttributeList;
 
     Object.keys(firstAttrs).forEach((attrName) => {
         if (!secondAttrs[attrName]) {
@@ -201,7 +156,7 @@ export function mergeAttrs(firstData : Record<string, any>, secondData : Record<
     return combined;
 }
 
-function findRepeatedIndex(current: Element, remainingNodes: Node[]) : number {
+function findRepeatedIndex(current: ASTElementNode, remainingNodes: ASTNode[]) : number {
     let matchFound = false;
     for (let i = 0; i < remainingNodes.length; i++) {
         const node = remainingNodes[i];
@@ -222,16 +177,16 @@ function findRepeatedIndex(current: Element, remainingNodes: Node[]) : number {
 }
 
 interface Loop {
-    firstItems: Record<string, any>[];
-    secondItems: Record<string, any>[];
+    firstItems: Data[];
+    secondItems: Data[];
     template: ASTNode;
 }
 
-function buildLoop(firstEls: Element[], secondEls: Element[], parentElement: Element) : Loop | null {
+function buildLoop(firstEls: ASTElementNode[], secondEls: ASTElementNode[], parentElement: ASTElementNode | null) : Loop | null {
     const base = firstEls[0];
     let baseData = {};
-    const firstItems = [] as Record<string, any>[];
-    const secondItems = [] as Record<string, any>[];
+    const firstItems = [] as Data[];
+    const secondItems = [] as Data[];
 
     // TODO merge template and data like with Page and Layout
     let template = null;
@@ -239,7 +194,7 @@ function buildLoop(firstEls: Element[], secondEls: Element[], parentElement: Ele
         const other = firstEls[i];
         const newBaseData = {};
         const otherData = {};
-        template = generateAstDiff({}, 0, newBaseData, otherData, base, other, parentElement);
+        template = generateAstDiff(0, newBaseData, otherData, base, other, parentElement);
 
         baseData = newBaseData;
         firstItems.push(otherData);
@@ -249,7 +204,7 @@ function buildLoop(firstEls: Element[], secondEls: Element[], parentElement: Ele
         const other = secondEls[i];
         const newBaseData = {};
         const otherData = {};
-        template = generateAstDiff({}, 0, newBaseData, otherData, base, other, parentElement);
+        template = generateAstDiff(0, newBaseData, otherData, base, other, parentElement);
         baseData = newBaseData;
         secondItems.push(otherData);
     }
@@ -264,17 +219,20 @@ function buildLoop(firstEls: Element[], secondEls: Element[], parentElement: Ele
     } : null;
 }
 
-export function mergeChildren(depth: number, firstData : Record<string, any>, secondData : Record<string, any>, firstElement: Element, secondElement: Element) : ASTNode[] {
+export function mergeChildren(depth: number, firstData : Data, secondData : Data, firstElement: ASTElementNode, secondElement: ASTElementNode) : ASTNode[] {
+    return mergeTree(depth, firstData, secondData, firstElement.children, secondElement.children, firstElement);
+}
+
+export function mergeTree(depth: number, firstData : Data, secondData : Data, firstTree: ASTNode[], secondTree: ASTNode[], parentElement: ASTElementNode | null) : ASTNode[] {
+    const merged = [] as ASTNode[];
     let firstPointer = 0;
     let secondPointer = 0;
 
-    const merged = [] as ASTNode[];
-    let secondTree = structuredClone(secondElement.children || []);
-    let firstTree = structuredClone(firstElement.children || []);
-
-    const addConditionalNode = (node: Node, firstData : Record<string, any>, secondData : Record<string, any>) => {
+    const addConditionalNode = (node: ASTNode, firstData : Data, secondData : Data) => {
         if (node.type === 'text' && !node.value.trim()) {
-            merged.push(formatNode(node));
+            merged.push(node);
+        } else if (node.type === 'content') {
+            merged.push(node);
         } else {
             const variableName = `show-${getElementSignature(node)}`;
             firstData[variableName] = true;
@@ -282,12 +240,12 @@ export function mergeChildren(depth: number, firstData : Record<string, any>, se
             merged.push({
                 type: 'conditional',
                 reference: variableName,
-                child: printAstTree(depth + 1, firstData, node)
+                child: structuredClone(node)
             });
         }
     }
 
-    const addComparisonNode = (current : Node, other : Node) => {
+    const addComparisonNode = (current : ASTNode, other : ASTNode) => {
         firstPointer += 1;
         secondPointer += 1;
 
@@ -307,13 +265,13 @@ export function mergeChildren(depth: number, firstData : Record<string, any>, se
                     const firstEls = [
                         current,
                         ...firstRemainingNodes.slice(0, firstIndex)
-                    ].filter((node) => node.type === 'element') as Element[];
+                    ].filter((node) => node.type === 'element') as ASTElementNode[];
                     const secondEls = [
                         other,
                         ...secondRemainingNodes.slice(0, secondIndex)
-                    ].filter((node) => node.type === 'element') as Element[];
+                    ].filter((node) => node.type === 'element') as ASTElementNode[];
                     
-                    const loopData = buildLoop(firstEls, secondEls, firstElement);
+                    const loopData = buildLoop(firstEls, secondEls, parentElement);
                     if (loopData) {
                         const { firstItems, secondItems, template } = loopData;
                         const variableName = `${currentSignature}_items`;
@@ -333,7 +291,7 @@ export function mergeChildren(depth: number, firstData : Record<string, any>, se
             }
         }
 
-        merged.push(generateAstDiff(depth + 1, firstData, secondData, current, other, firstElement));
+        merged.push(generateAstDiff(depth + 1, firstData, secondData, current, other, parentElement));
     }
 
     while (firstPointer < firstTree.length && secondPointer < secondTree.length) {

@@ -37,16 +37,12 @@
                     {
                         "type": "element",
                         "name": "html",
-                        "attrs": [],
+                        "attrs": {},
                         "children": [
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
                             {
                                 "type": "element",
                                 "name": "head",
-                                "attrs": [],
+                                "attrs": {},
                                 "children": [
                                     {
                                         "type": "text",
@@ -55,7 +51,7 @@
                                     {
                                         "type": "element",
                                         "name": "title",
-                                        "attrs": [],
+                                        "attrs": {},
                                         "children": [
                                             {
                                                 "type": "variable",
@@ -76,7 +72,7 @@
                             {
                                 "type": "element",
                                 "name": "body",
-                                "attrs": [],
+                                "attrs": {},
                                 "children": [
                                     {
                                         "type": "text",
@@ -85,7 +81,7 @@
                                     {
                                         "type": "element",
                                         "name": "h1",
-                                        "attrs": [],
+                                        "attrs": {},
                                         "children": [
                                             {
                                                 "type": "variable",
@@ -95,13 +91,9 @@
                                     },
                                     {
                                         "type": "text",
-                                        "value": "\n\t"
+                                        "value": "\n\t\n"
                                     }
                                 ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n"
                             }
                         ]
                     }

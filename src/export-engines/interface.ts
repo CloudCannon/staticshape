@@ -2,7 +2,7 @@ import { CollectionResponse } from '../collection';
 import Layout from '../layout';
 import Page from '../page';
 import { SiteResponse } from '../site';
-import { ASTAttribute, ASTConditionalNode, ASTContentNode, ASTDoctypeNode, ASTElementNode, ASTNode, ASTTextNode, ASTVariableNode, ASTCommentNode, ASTVariableAttribute, ASTConditionalAttribute, ASTStaticAttribute, ASTLoopNode } from '../types';
+import { ASTAttribute, ASTConditionalNode, ASTContentNode, ASTDoctypeNode, ASTElementNode, ASTNode, ASTTextNode, ASTVariableNode, ASTCommentNode, ASTVariableAttribute, ASTConditionalAttribute, ASTStaticAttribute, ASTLoopNode, ASTAttributeList } from '../types';
 
 interface ExportEngineOptions {
     sourceBasePath: string;
@@ -73,7 +73,8 @@ export default class ExportEngine {
         return `<!DOCTYPE ${doctype.value}>`;
     }
 
-    renderAttributes(attrs: ASTAttribute[]) : string {
+    renderAttributes(attrMap: ASTAttributeList) : string {
+        const attrs = Object.values(attrMap);
         if (attrs.length === 0) {
             return '';
         }

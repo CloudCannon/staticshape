@@ -111,6 +111,10 @@ export function nodeEquivalencyScore(first : ASTNode, second: ASTNode) : number 
         return (1 + elementEquivalencyScore(second, first)) / 2;
     }
 
+    if ((first.type === 'content' && second.type === 'content')) {
+        return 1;
+    }
+
     if ((first.type === 'text' && second.type === 'text')
         || (first.type === 'comment' && second.type === 'comment')
         || (first.type === 'doctype' && second.type === 'doctype')
@@ -118,7 +122,7 @@ export function nodeEquivalencyScore(first : ASTNode, second: ASTNode) : number 
         return (1 + textEquivalencyScore(second.value, first.value)) / 2;
     }
 
-    console.warn(`${first.type} an ${first.type} comparison, not yet implemented`);
+    console.warn(`${first.type} and ${second.type} comparison, not yet implemented`);
     return 0;
 }
 

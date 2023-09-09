@@ -38,16 +38,12 @@
                     {
                         "type": "element",
                         "name": "html",
-                        "attrs": [],
+                        "attrs": {},
                         "children": [
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
                             {
                                 "type": "element",
                                 "name": "head",
-                                "attrs": [],
+                                "attrs": {},
                                 "children": [
                                     {
                                         "type": "text",
@@ -56,7 +52,7 @@
                                     {
                                         "type": "element",
                                         "name": "title",
-                                        "attrs": [],
+                                        "attrs": {},
                                         "children": [
                                             {
                                                 "type": "variable",
@@ -77,7 +73,7 @@
                             {
                                 "type": "element",
                                 "name": "body",
-                                "attrs": [],
+                                "attrs": {},
                                 "children": [
                                     {
                                         "type": "text",
@@ -86,13 +82,13 @@
                                     {
                                         "type": "element",
                                         "name": "section",
-                                        "attrs": [
-                                            {
+                                        "attrs": {
+                                            "class": {
                                                 "type": "attribute",
                                                 "name": "class",
                                                 "value": "hero"
                                             }
-                                        ],
+                                        },
                                         "children": [
                                             {
                                                 "type": "text",
@@ -101,33 +97,33 @@
                                             {
                                                 "type": "element",
                                                 "name": "img",
-                                                "attrs": [
-                                                    {
+                                                "attrs": {
+                                                    "alt": {
                                                         "type": "variable-attribute",
                                                         "name": "alt",
                                                         "reference": "img.reversed_alt"
                                                     },
-                                                    {
+                                                    "class": {
                                                         "type": "variable-attribute",
                                                         "name": "class",
                                                         "reference": "img.reversed_class"
                                                     },
-                                                    {
+                                                    "height": {
                                                         "type": "attribute",
                                                         "name": "height",
                                                         "value": "275"
                                                     },
-                                                    {
+                                                    "src": {
                                                         "type": "variable-attribute",
                                                         "name": "src",
                                                         "reference": "img.reversed_src"
                                                     },
-                                                    {
+                                                    "width": {
                                                         "type": "attribute",
                                                         "name": "width",
                                                         "value": "183"
                                                     }
-                                                ],
+                                                },
                                                 "children": []
                                             },
                                             {
@@ -137,7 +133,7 @@
                                             {
                                                 "type": "element",
                                                 "name": "h1",
-                                                "attrs": [],
+                                                "attrs": {},
                                                 "children": [
                                                     {
                                                         "type": "variable",
@@ -153,13 +149,9 @@
                                     },
                                     {
                                         "type": "text",
-                                        "value": "\n\t"
+                                        "value": "\n\t\n"
                                     }
                                 ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n"
                             }
                         ]
                     }

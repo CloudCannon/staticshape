@@ -1,4 +1,4 @@
-import { Element, Attribute } from 'angular-html-parser/lib/compiler/src/ml_parser/ast';
+import { ASTAttribute, ASTElementNode } from '../types';
 
 export function normalizeClassList(value: string) {
     const classList = (value || '').split(' ')
@@ -12,12 +12,12 @@ export function normalizeClassList(value: string) {
     return classList.sort();
 }
 
-export function getClassList(element: Element) {
-    const classAttr = element.attrs?.find((attr) => attr.name === 'class');
+export function getClassList(element: ASTElementNode) {
+    const classAttr = element.attrs['class'];
     return normalizeClassList(classAttr?.value || '');
 }
 
-export function isAttrEquivalent(attrName: string, first: Attribute, second: Attribute) {
+export function isAttrEquivalent(attrName: string, first: ASTAttribute, second: ASTAttribute) {
     if (attrName === 'class') {
         const firstClassList = normalizeClassList(first?.value || '');
         const secondClassList = normalizeClassList(second?.value || '');
