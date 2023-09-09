@@ -1,18 +1,18 @@
 import test, {ExecutionContext} from 'ava';
 import { isBestMatch, nodeEquivalencyScore } from '../src/helpers/node-equivalency';
-import { Node, Text } from 'angular-html-parser/lib/compiler/src/ml_parser/ast';
+import { ASTNode, ASTTextNode } from '../src/types';
 
 interface TestDefinition {
     name: string;
-    current: Node;
-    other: Node;
-    currentTree: Node[];
-    otherTree: Node[];
+    current: ASTNode;
+    other: ASTNode;
+    currentTree: ASTNode[];
+    otherTree: ASTNode[];
     isBestMatch: boolean;
     score: number;
 }
 
-const textNode = (text: string) : Node => ({ type: 'text', value: text } as Text);
+const textNode = (text: string) : ASTNode => ({ type: 'text', value: text } as ASTTextNode);
 
 const tests = [
     {
@@ -74,13 +74,13 @@ const tests = [
         current:  {
             name: 'div',
             type: 'element',
-            attrs: [],
+            attrs: {},
             children: [],
         },
         other: {
             name: 'section',
             type: 'element',
-            attrs: [],
+            attrs: {},
             children: [],
         },
         currentTree: [],
@@ -93,29 +93,35 @@ const tests = [
         current: {
             name: 'a',
             type: 'element',
-            attrs: [{
-                type: 'attribute',
-                name: 'href',
-                value: 'https://google.com'
-            }, {
-                type: 'attribute',
-                name: 'target',
-                value: '_blank'
-            }],
+            attrs: {
+                href: {
+                    type: 'attribute',
+                    name: 'href',
+                    value: 'https://google.com'
+                },
+                target: {
+                    type: 'attribute',
+                    name: 'target',
+                    value: '_blank'
+                }
+            },
             children: [],
         },
         other: {
             name: 'a',
             type: 'element',
-            attrs: [{
-                type: 'attribute',
-                name: 'href',
-                value: 'https://duckduckgo.com'
-            }, {
-                type: 'attribute',
-                name: 'rel',
-                value: 'noopener'
-            }],
+            attrs: {
+                href: {
+                    type: 'attribute',
+                    name: 'href',
+                    value: 'https://duckduckgo.com'
+                },
+                rel: {
+                    type: 'attribute',
+                    name: 'rel',
+                    value: 'noopener'
+                }
+            },
             children: [],
         },
         currentTree: [],
@@ -128,21 +134,25 @@ const tests = [
         current: {
             name: 'li',
             type: 'element',
-            attrs: [{
-                type: 'attribute',
-                name: 'class',
-                value: 'badge badge-green'
-            }],
+            attrs: {
+                class: {
+                    type: 'attribute',
+                    name: 'class',
+                    value: 'badge badge-green'
+                }
+            },
             children: [],
         },
         other: {
             name: 'li',
             type: 'element',
-            attrs: [{
-                type: 'attribute',
-                name: 'class',
-                value: 'badge badge-navy'
-            }],
+            attrs: {
+                class: {
+                    type: 'attribute',
+                    name: 'class',
+                    value: 'badge badge-navy'
+                }
+            },
             children: [],
         },
         currentTree: [],
@@ -155,35 +165,35 @@ const tests = [
         current:  {
             name: 'img',
             type: 'element',
-            attrs: [
-                {
+            attrs: {
+                src: {
                     name: 'src',
                     type: 'attribute',
                     value: 'assets/goose.jpg',
                 },
-                {
+                alt: {
                     name: 'alt',
                     type: 'attribute',
                     value: 'Our goose',
                 },
-            ],
+            },
             children: [],
         },
         other: {
             name: 'img',
             type: 'element',
-            attrs: [
-                {
+            attrs: {
+                src: {
                     name: 'src',
                     type: 'attribute',
                     value: 'assets/goose.jpg',
                 },
-                {
+                alt: {
                     name: 'alt',
                     type: 'attribute',
                     value: 'Their goose',
                 },
-            ],
+            },
             children: [],
         },
         currentTree: [],
@@ -196,13 +206,17 @@ const tests = [
         current: {
             type: 'element',
             name: 'ul',
-            attrs: [ { type: 'attribute', name: 'class', value: 'badges' } ],
+            attrs: {
+                class: { type: 'attribute', name: 'class', value: 'badges' }
+            },
             children: []
         },
         other: {
             type: 'element',
             name: 'ul',
-            attrs: [ { type: 'attribute', name: 'class', value: 'badges' } ],
+            attrs: {
+                class: { type: 'attribute', name: 'class', value: 'badges' }
+            },
             children: []
         },
         currentTree: [],

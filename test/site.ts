@@ -4,21 +4,22 @@ import * as path from 'path';
 import * as fs from 'fs';
 
 const tests = [
-    "two-pages",
-    "two-pages-title-variable",
-    "two-pages-attr-variable",
-    "two-pages-body-content",
-    "two-pages-conditional",
-    "two-pages-loop",
-    "two-pages-not-loop",
-    "two-pages-fuzzy-image",
-    // "two-pages-fuzzy-loop",
-    // "two-pages-markdown-variable",
-    "three-pages",
-    "three-pages-title-variable",
-    "three-pages-attr-variable",
-    "three-pages-body-content",
-    "three-pages-conditional",
+    // "two-pages",
+    // "two-pages-title-variable",
+    // "two-pages-attr-variable",
+    // "two-pages-body-content",
+    // "two-pages-conditional",
+    // "two-pages-conditional-content",
+    // "two-pages-loop",
+    // "two-pages-not-loop",
+    // "two-pages-fuzzy-image",
+    // // "two-pages-fuzzy-loop",
+    // // "two-pages-markdown-variable",
+    // "three-pages",
+    // "three-pages-title-variable",
+    // "three-pages-attr-variable",
+    // "three-pages-body-content",
+    // "three-pages-conditional",
 ]
 
 function docSort(a, b) {

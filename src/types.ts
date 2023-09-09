@@ -14,6 +14,11 @@ export interface ASTCommentNode {
     value: string;
 }
 
+export interface ASTCDataNode {
+    type: 'cdata';
+    value: string;
+}
+
 export interface ASTVariableNode {
     type: 'variable';
     reference: string;
@@ -22,7 +27,7 @@ export interface ASTVariableNode {
 export interface ASTConditionalNode {
     type: 'conditional';
     reference: string;
-    child: ASTNode;
+    child: ASTBasicNode;
 }
 
 export interface ASTDoctypeNode {
@@ -66,9 +71,11 @@ export interface ASTLoopNode {
 export interface ASTElementNode {
     type: 'element';
     name: string;
-    attrs: ASTAttribute[];
+    attrs: ASTAttributeList;
     children: ASTNode[]
 }
 
 export type ASTAttribute = ASTVariableAttribute | ASTStaticAttribute | ASTConditionalAttribute;
-export type ASTNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTVariableNode | ASTConditionalNode | ASTContentNode | ASTCommentNode | ASTMarkdownNode | ASTLoopNode;
+export type ASTBasicNode = ASTTextNode | ASTDoctypeNode | ASTElementNode | ASTCommentNode | ASTCDataNode;
+export type ASTNode = ASTBasicNode | ASTVariableNode | ASTConditionalNode | ASTContentNode | ASTMarkdownNode | ASTLoopNode;
+export type ASTAttributeList = Record<string, ASTAttribute>;

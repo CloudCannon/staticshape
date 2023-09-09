@@ -1,14 +1,12 @@
 import { Attribute, Element, Node } from 'angular-html-parser/lib/compiler/src/ml_parser/ast';
-import { DocumentConfig } from '../document';
 import {
     ASTElementNode,
     ASTAttribute,
     ASTNode,
-    ASTStaticAttribute
+    ASTAttributeList
 } from '../types'
 import { invalidLoopTags } from './loops';
 import { getClassList, isAttrEquivalent } from './node-helper';
-import { attrsToObject } from './attrsToObject';
 import { nodeEquivalencyScore, isBestMatch, loopThreshold } from './node-equivalency';
 
 export function getElementSignature(element: Element) {
@@ -45,30 +43,6 @@ export function getElementSignature(element: Element) {
     return `${element.name}${classes}`;
 }
 
-function isSelector(element: any, selector: string) {
-    if (selector.startsWith('#')) {
-        const id = element.attrs?.find((attr : ASTStaticAttribute) => attr.name === 'id');
-
-        if (!id) {
-            return false;
-        }
-
-        return id.value === selector.substring(1);
-    }
-
-    if (selector.startsWith('.')) {
-        const classList = getClassList(element);
-
-        if (classList.length === 0) {
-            return false;
-        }
-
-        return classList.includes(selector.substring(1));
-    }
-    // TODO support more than just a tag selector
-    return element.name === selector;
-}
-
 export function formatNode(node : Node): ASTNode {
     if (node.type === 'text') {
         return {
@@ -95,27 +69,30 @@ export function formatNode(node : Node): ASTNode {
     return {
         type: 'element',
         name: element.name,
-        attrs: element.attrs.map((attr : Attribute) : ASTAttribute => ({
-            type: 'attribute',
-            name: attr.name,
-            value: attr.value,
-        })) || [],
+        attrs: (element.attrs || []).reduce((attrs: Record<string, ASTAttribute>, attr : Attribute) : Record<string, ASTAttribute> => {
+            attrs[attr.name] = {
+                type: 'attribute',
+                name: attr.name,
+                value: attr.value,
+            }
+            return attrs;
+        }, {}),
         children: []
     }
 }
 
-export function printAstTree(element: Node) : ASTNode {
+export function printAstTree(depth: number, data : Record<string, any>, element: Node) : ASTNode {
     const node = formatNode(element);
     if (element.type === 'element') {
         for (let i = 0; i < element.children?.length; i++) {
             const childNode = element.children?.[i];
-            (node as ASTElementNode).children.push(printAstTree(childNode));
+            (node as ASTElementNode).children.push(printAstTree(depth + 1, data, childNode));
         }
     }
     return node;
 }
 
-export function generateAstDiff(config: DocumentConfig, depth: number, firstData : Record<string, any>, secondData : Record<string, any>, firstNode: Node, secondNode: Node, parentNode: Element | null) : ASTNode {
+export function generateAstDiff(depth: number, firstData : Record<string, any>, secondData : Record<string, any>, firstNode: Node, secondNode: Node, parentNode: Element | null) : ASTNode {
     const typesMatch = firstNode.type === secondNode.type;
     if (!typesMatch) {
         throw new Error(`Mismatched node types ${firstNode.type}, ${secondNode.type}`);
@@ -153,21 +130,12 @@ export function generateAstDiff(config: DocumentConfig, depth: number, firstData
     }
 
     const node = formatNode(firstNode) as ASTElementNode;
-    if (config.content?.selector && isSelector(firstNode, config.content?.selector)) {
-        firstData['@pageContent'] = (printAstTree(firstNode) as ASTElementNode).children || [];
-        secondData['@pageContent'] = (printAstTree(secondNode) as ASTElementNode).children || [];
-        node.children.push({
-            type: 'content'
-        })
-        return node;
-    }
-
     node.attrs = mergeAttrs(firstData, secondData, firstNode, secondNode);
-    node.children = mergeChildren(config, depth + 1, firstData, secondData, firstNode, secondNode);
+    node.children = mergeChildren(depth + 1, firstData, secondData, firstNode, secondNode);
     return node;
 }
 
-export function mergeAttrs(firstData : Record<string, any>, secondData : Record<string, any>, firstElement: Element, secondElement: Element) : ASTAttribute[] {
+export function mergeAttrs(firstData : Record<string, any>, secondData : Record<string, any>, firstElement: Element, secondElement: Element) : ASTAttributeList {
     const firstAttrs = attrsToObject(firstElement.attrs);
     const secondAttrs = attrsToObject(secondElement.attrs);
     const combined = {} as Record<string, ASTAttribute>;
@@ -230,10 +198,10 @@ export function mergeAttrs(firstData : Record<string, any>, secondData : Record<
         }
     });
 
-    return Object.values(combined);
+    return combined;
 }
 
-function findRepeatedIndex(config: DocumentConfig, current: Element, remainingNodes: Node[]) : number {
+function findRepeatedIndex(current: Element, remainingNodes: Node[]) : number {
     let matchFound = false;
     for (let i = 0; i < remainingNodes.length; i++) {
         const node = remainingNodes[i];
@@ -243,9 +211,6 @@ function findRepeatedIndex(config: DocumentConfig, current: Element, remainingNo
                 return i - 1;
             }
         } else if (node.type === 'element') {
-            if (config.content?.selector && isSelector(node, config.content?.selector)) {
-                return i - 1;
-            }
             const score = nodeEquivalencyScore(current, node);
             if (score <= loopThreshold) {
                 return i - 1;
@@ -299,7 +264,7 @@ function buildLoop(firstEls: Element[], secondEls: Element[], parentElement: Ele
     } : null;
 }
 
-export function mergeChildren(config: DocumentConfig, depth: number, firstData : Record<string, any>, secondData : Record<string, any>, firstElement: Element, secondElement: Element) : ASTNode[] {
+export function mergeChildren(depth: number, firstData : Record<string, any>, secondData : Record<string, any>, firstElement: Element, secondElement: Element) : ASTNode[] {
     let firstPointer = 0;
     let secondPointer = 0;
 
@@ -317,7 +282,7 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
             merged.push({
                 type: 'conditional',
                 reference: variableName,
-                child: printAstTree(node)
+                child: printAstTree(depth + 1, firstData, node)
             });
         }
     }
@@ -335,8 +300,8 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
                 const firstRemainingNodes = firstTree.slice(firstPointer);
                 const secondRemainingNodes = secondTree.slice(secondPointer);
 
-                const firstIndex = findRepeatedIndex(config, current, firstRemainingNodes);
-                const secondIndex = findRepeatedIndex(config, current, secondRemainingNodes);
+                const firstIndex = findRepeatedIndex(current, firstRemainingNodes);
+                const secondIndex = findRepeatedIndex(current, secondRemainingNodes);
 
                 if (firstIndex > 0 || secondIndex > 0) {
                     const firstEls = [
@@ -368,7 +333,7 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
             }
         }
 
-        merged.push(generateAstDiff(config, depth + 1, firstData, secondData, current, other, firstElement));
+        merged.push(generateAstDiff(depth + 1, firstData, secondData, current, other, firstElement));
     }
 
     while (firstPointer < firstTree.length && secondPointer < secondTree.length) {
@@ -385,7 +350,6 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
             if (isBestMatch(firstNode, secondNode, firstTree.slice(firstPointer + 1), secondTree.slice(secondPointer))) {
                 addComparisonNode(firstNode, secondNode);
             } else {
-                // console.log('First no match', formatNode(firstNode));
                 addConditionalNode(firstNode, firstData, secondData);
                 firstPointer += 1;
             }
@@ -393,7 +357,6 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
             if (isBestMatch(secondNode, firstNode, secondTree.slice(secondPointer + 1), firstTree.slice(firstPointer))) {
                 addComparisonNode(firstNode, secondNode);
             } else {
-                // console.log('Second no match', formatNode(secondNode));
                 addConditionalNode(secondNode, secondData, firstData);
                 secondPointer += 1;
             }
@@ -401,13 +364,11 @@ export function mergeChildren(config: DocumentConfig, depth: number, firstData :
     }
 
     while (firstPointer < firstTree.length) {
-        console.log('First Remaining');
         addConditionalNode(firstTree[firstPointer], firstData, secondData)
         firstPointer += 1;
     }
 
     while (secondPointer < secondTree.length) {
-        console.log('First Remaining');
         addConditionalNode(secondTree[secondPointer], secondData, firstData)
         secondPointer += 1;
     }

@@ -6,7 +6,7 @@
     {
         "type": "element",
         "name": "html",
-        "attrs": [],
+        "attrs": {},
         "children": [
             {
                 "type": "text",
@@ -15,7 +15,7 @@
             {
                 "type": "element",
                 "name": "head",
-                "attrs": [],
+                "attrs": {},
                 "children": [
                     {
                         "type": "text",
@@ -24,7 +24,7 @@
                     {
                         "type": "element",
                         "name": "title",
-                        "attrs": [],
+                        "attrs": {},
                         "children": [
                             {
                                 "type": "variable",
@@ -42,18 +42,18 @@
                         "child": {
                             "type": "element",
                             "name": "meta",
-                            "attrs": [
-                                {
+                            "attrs": {
+                                "name": {
                                     "type": "attribute",
                                     "name": "name",
                                     "value": "description"
                                 },
-                                {
+                                "content": {
                                     "type": "attribute",
                                     "name": "content",
                                     "value": "Home"
                                 }
-                            ],
+                            },
                             "children": []
                         }
                     },
@@ -70,7 +70,7 @@
             {
                 "type": "element",
                 "name": "body",
-                "attrs": [],
+                "attrs": {},
                 "children": [
                     {
                         "type": "text",
@@ -79,7 +79,7 @@
                     {
                         "type": "element",
                         "name": "h1",
-                        "attrs": [],
+                        "attrs": {},
                         "children": [
                             {
                                 "type": "variable",

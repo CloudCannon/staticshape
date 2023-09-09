@@ -1,0 +1,129 @@
+{
+    "staticFiles": [],
+    "collections": {
+        "pages": {
+            "pages": [
+                {
+                    "pathname": "about.html",
+                    "content": [],
+                    "data": {
+                        "title": "About | Test"
+                    }
+                },
+                {
+                    "pathname": "index.html",
+                    "content": [
+                        {
+                            "type": "text",
+                            "value": "\n\t\t"
+                        },
+                        {
+                            "type": "element",
+                            "name": "h1",
+                            "attrs": [],
+                            "children": [
+                                {
+                                    "type": "text",
+                                    "value": "Home"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "text",
+                            "value": "\n\t"
+                        }
+                    ],
+                    "data": {
+                        "title": "Home | Test"
+                    }
+                }
+            ],
+            "layout": {
+                "tree": [
+                    {
+                        "type": "doctype",
+                        "value": "html"
+                    },
+                    {
+                        "type": "element",
+                        "name": "html",
+                        "attrs": [],
+                        "children": [
+                            {
+                                "type": "text",
+                                "value": "\n\t"
+                            },
+                            {
+                                "type": "element",
+                                "name": "head",
+                                "attrs": [],
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
+                                        "type": "element",
+                                        "name": "title",
+                                        "attrs": [],
+                                        "children": [
+                                            {
+                                                "type": "variable",
+                                                "reference": "title"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "value": "\n\t"
+                            },
+                            {
+                                "type": "element",
+                                "name": "body",
+                                "attrs": [],
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
+                                        "reference": "show-div.content",
+                                        "type": "conditional",
+                                        "child": {
+                                            "type": "element",
+                                            "name": "div",
+                                            "attrs": [{
+                                                "type": "attribute",
+                                                "name": "class",
+                                                "value": "content"
+                                            }],
+                                            "children": [
+                                                {
+                                                    "type": "content"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "value": "\n"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

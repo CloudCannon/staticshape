@@ -2,7 +2,7 @@
     {
         "type": "element",
         "name": "p",
-        "attrs": [],
+        "attrs": {},
         "children": [
             {
                 "type": "variable",

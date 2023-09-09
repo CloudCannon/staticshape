@@ -1,7 +1,6 @@
 import { distance, closest } from 'fastest-levenshtein';
-import { Node, Element, Attribute } from 'angular-html-parser/lib/compiler/src/ml_parser/ast';
-import { attrsToObject } from './attrsToObject';
 import { normalizeClassList } from './node-helper';
+import { ASTAttributeList, ASTElementNode, ASTNode } from '../types';
 
 export const loopThreshold = 0.85;
 
@@ -48,36 +47,40 @@ export function arrayEquivalencyScore(first : string[], second: string[]) : numb
     return score / max;
 }
 
-export function attributesEquivalencyScore(first : Attribute[], second: Attribute[]) : number {
-    const firstAttrs = attrsToObject(first);
-    const secondAttrs = attrsToObject(second);
-
+export function attributesEquivalencyScore(firstAttrs : ASTAttributeList, secondAttrs: ASTAttributeList) : number {
     let max = 0;
     let score = 0;
     Object.keys(firstAttrs).forEach((attrName) => {
-        max += 1;
+        const firstAttr = firstAttrs[attrName];
+        const secondAttr = secondAttrs[attrName];
+        if (!secondAttrs[attrName]) {
+            max += 1;
+            return;
+        }
+
+        max += 2;
+        score += 1;
+        if (firstAttr.type !== 'attribute' || secondAttr.type !== 'attribute') {
+            console.warn('non-static attr comparison not implemented', firstAttr, secondAttr)
+            return;
+        }
 
         if (attrName === 'class') {
             score += arrayEquivalencyScore(
-                normalizeClassList(firstAttrs[attrName].value),
-                normalizeClassList(secondAttrs[attrName]?.value || ''),
+                normalizeClassList(firstAttr.value),
+                normalizeClassList(secondAttr.value || ''),
             );
         } else {
             score += textEquivalencyScore(
-                firstAttrs[attrName].value,
-                secondAttrs[attrName]?.value || ''
+                firstAttr.value,
+                secondAttr.value || ''
             );
         }
-
-        if (secondAttrs[attrName]) {
-            max += 1;
-            score += 1;
-        }
     });
+
     Object.keys(secondAttrs).forEach((attrName) => {
         if (!firstAttrs[attrName]) {
             max += 1;
-            score += textEquivalencyScore('', secondAttrs[attrName].value);
         }
     });
 
@@ -90,7 +93,7 @@ export function attributesEquivalencyScore(first : Attribute[], second: Attribut
     return score / max;
 }
 
-export function elementEquivalencyScore(first : Element, second: Element) : number {
+export function elementEquivalencyScore(first : ASTElementNode, second: ASTElementNode) : number {
     if (first.name !== second.name) {
         return 0;
     }
@@ -100,7 +103,7 @@ export function elementEquivalencyScore(first : Element, second: Element) : numb
     return (1 + attrsScores) / 2;
 }
 
-export function nodeEquivalencyScore(first : Node, second: Node) : number {
+export function nodeEquivalencyScore(first : ASTNode, second: ASTNode) : number {
     if (first.type === 'element' && second.type === 'element') {
         if (first.name !== second.name) {
             return 0;
@@ -110,14 +113,16 @@ export function nodeEquivalencyScore(first : Node, second: Node) : number {
 
     if ((first.type === 'text' && second.type === 'text')
         || (first.type === 'comment' && second.type === 'comment')
-        || (first.type === 'docType' && second.type === 'docType')) {
+        || (first.type === 'doctype' && second.type === 'doctype')
+        || (first.type === 'cdata' && second.type === 'cdata')) {
         return (1 + textEquivalencyScore(second.value, first.value)) / 2;
     }
 
+    console.warn(`${first.type} an ${first.type} comparison, not yet implemented`);
     return 0;
 }
 
-export const isBestMatch = (current : Node, other : Node, currentTree: Node[], otherTree: Node[]) => {
+export const isBestMatch = (current : ASTNode, other : ASTNode, currentTree: ASTNode[], otherTree: ASTNode[]) => {
     const score = nodeEquivalencyScore(current, other);
     if (score === 0) {
         return false;

@@ -1,4 +1,4 @@
-import { ASTAttribute, ASTNode } from "./types";
+import { ASTAttribute, ASTAttributeList, ASTNode } from "./types";
 
 interface LayoutOptions {
     tree: ASTNode[]
@@ -42,22 +42,13 @@ function isEquivalent(first: ASTNode, second: ASTNode) : boolean {
     return true;
 }
 
-function attrsToObject(attrs: ASTAttribute[]): Record<string, ASTAttribute> {
-    return attrs.reduce((memo : Record<string, ASTAttribute>, attr : ASTAttribute) : Record<string, ASTAttribute> => {
-        memo[attr.name] = attr;
-        return memo;
-    }, {})
-}
-
-function mergeAttributes(first: ASTAttribute[], second: ASTAttribute[]) : ASTAttribute[] {
-    const firstAttrs = attrsToObject(first || []);
-    const secondAttrs = attrsToObject(second || []);
-    const merged = [] as ASTAttribute[];
+function mergeAttributes(firstAttrs: ASTAttributeList, secondAttrs: ASTAttributeList) : ASTAttributeList {
+    const merged = {} as ASTAttributeList;
 
     Object.keys(firstAttrs).forEach((attrName) => {
         if (!secondAttrs[attrName]) {
             if (firstAttrs[attrName].type === 'conditional-attribute') {
-                merged.push(firstAttrs[attrName]);
+                merged[attrName] = firstAttrs[attrName];
             } else {
                 console.log('unhandled extra attr', attrName, firstAttrs, secondAttrs)
             }
@@ -65,16 +56,16 @@ function mergeAttributes(first: ASTAttribute[], second: ASTAttribute[]) : ASTAtt
         }
 
         if (firstAttrs[attrName].type === 'variable-attribute') {
-            merged.push(firstAttrs[attrName]);
+            merged[attrName] = firstAttrs[attrName];
         } else {
-            merged.push(secondAttrs[attrName]);
+            merged[attrName] = secondAttrs[attrName];
         }
         delete secondAttrs[attrName];
     });
 
     Object.keys(secondAttrs).forEach((attrName) => {
         if (secondAttrs[attrName].type === 'conditional-attribute') {
-            merged.push(secondAttrs[attrName]);
+            merged[attrName] = secondAttrs[attrName];
         } else {
             console.log('unhandled extra attr', attrName, secondAttrs, firstAttrs)
         }
