@@ -85,7 +85,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "title"
+                                                "reference": [
+                                                    "title"
+                                                ]
                                             }
                                         ]
                                     },

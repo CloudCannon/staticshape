@@ -63,7 +63,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "title"
+                                                "reference": [
+                                                    "title"
+                                                ]
                                             }
                                         ]
                                     },
@@ -93,7 +95,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "h1"
+                                                "reference": [
+                                                    "h1"
+                                                ]
                                             }
                                         ]
                                     },
@@ -112,7 +116,9 @@
                                             },
                                             {
                                                 "type": "loop",
-                                                "reference": "div.block_items",
+                                                "reference": [
+                                                    "div.block_items"
+                                                ],
                                                 "template": {
                                                     "type": "element",
                                                     "name": "div",
@@ -126,7 +132,9 @@
                                                     "children": [
                                                         {
                                                             "type": "variable",
-                                                            "reference": "div.block"
+                                                            "reference": [
+                                                                "div.block"
+                                                            ]
                                                         }
                                                     ]
                                                 }

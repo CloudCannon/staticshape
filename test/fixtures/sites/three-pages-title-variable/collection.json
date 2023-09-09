@@ -55,7 +55,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "title"
+                                                "reference": [
+                                                    "title"
+                                                ]
                                             }
                                         ]
                                     },
@@ -85,7 +87,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "h1"
+                                                "reference": [
+                                                    "h1"
+                                                ]
                                             }
                                         ]
                                     },

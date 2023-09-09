@@ -8,7 +8,7 @@
                     "content": [],
                     "data": {
                         "title": "Home | Test",
-                        "show-meta_description": true,
+                        "show_meta_description": true,
                         "h1": "Home"
                     }
                 },
@@ -17,7 +17,7 @@
                     "content": [],
                     "data": {
                         "title": "Test",
-                        "show-meta_description": false,
+                        "show_meta_description": false,
                         "h1": "About"
                     }
                 }
@@ -49,7 +49,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "title"
+                                                "reference": [
+                                                    "title"
+                                                ]
                                             }
                                         ]
                                     },
@@ -59,7 +61,9 @@
                                     },
                                     {
                                         "type": "conditional",
-                                        "reference": "show-meta_description",
+                                        "reference": [
+                                            "show_meta_description"
+                                        ],
                                         "child": {
                                             "type": "element",
                                             "name": "meta",
@@ -104,7 +108,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "h1"
+                                                "reference": [
+                                                    "h1"
+                                                ]
                                             }
                                         ]
                                     },

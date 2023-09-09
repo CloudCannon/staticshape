@@ -69,7 +69,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "title"
+                                                "reference": [
+                                                    "title"
+                                                ]
                                             }
                                         ]
                                     },
@@ -93,7 +95,9 @@
                                         "value": "\n\t\t"
                                     },
                                     {
-                                        "reference": "show-div.content",
+                                        "reference": [
+                                            "show-div.content"
+                                        ],
                                         "type": "conditional",
                                         "child": {
                                             "type": "element",

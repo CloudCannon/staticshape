@@ -10,7 +10,9 @@
                     "content": [],
                     "data": {
                         "title": "Goose Owner",
-                        "img_alt": "Our goose"
+                        "img": {
+                            "alt": "Our goose"
+                        }
                     }
                 },
                 {
@@ -18,7 +20,9 @@
                     "content": [],
                     "data": {
                         "title": "Goose Admirer",
-                        "img_alt": "Their goose"
+                        "img": {
+                            "alt": "Their goose"
+                        }
                     }
                 }
             ],
@@ -49,7 +53,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "title"
+                                                "reference": [
+                                                    "title"
+                                                ]
                                             }
                                         ]
                                     },
@@ -84,7 +90,10 @@
                                             "alt": {
                                                 "type": "variable-attribute",
                                                 "name": "alt",
-                                                "reference": "img_alt"
+                                                "reference": [
+                                                    "img",
+                                                    "alt"
+                                                ]
                                             }
                                         },
                                         "children": []

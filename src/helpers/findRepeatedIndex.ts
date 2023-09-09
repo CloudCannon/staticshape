@@ -1,12 +1,6 @@
 import { ASTElementNode, ASTNode } from '../types';
 import { nodeEquivalencyScore, loopThreshold } from './node-equivalency';
 
-export const invalidLoopTags: Record<string, boolean> = {
-	link: true,
-	meta: true,
-	script: true
-};
-
 export function findRepeatedIndex(current: ASTElementNode, remainingNodes: ASTNode[]): number {
 	let matchFound = false;
 	for (let i = 0; i < remainingNodes.length; i++) {

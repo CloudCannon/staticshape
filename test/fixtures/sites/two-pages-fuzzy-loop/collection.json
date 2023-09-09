@@ -67,7 +67,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "title"
+                                                "reference": [
+                                                    "title"
+                                                ]
                                             }
                                         ]
                                     },
@@ -97,7 +99,9 @@
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "h2"
+                                                "reference": [
+                                                    "h2"
+                                                ]
                                             }
                                         ]
                                     },
@@ -122,7 +126,9 @@
                                             },
                                             {
                                                 "type": "loop",
-                                                "reference": "li.badge.badge-orange_items",
+                                                "reference": [
+                                                    "li.badge.badge-orange_items"
+                                                ],
                                                 "template": {
                                                     "type": "element",
                                                     "name": "li",
@@ -130,13 +136,17 @@
                                                         "class": {
                                                             "type": "variable-attribute",
                                                             "name": "class",
-                                                            "reference": "li.badge.badge-orange_class"
+                                                            "reference": [
+                                                                "li.badge.badge-orange_class"
+                                                            ]
                                                         }
                                                     },
                                                     "children": [
                                                         {
                                                             "type": "variable",
-                                                            "reference": "li.badge.badge-orange"
+                                                            "reference": [
+                                                                "li.badge.badge-orange"
+                                                            ]
                                                         }
                                                     ]
                                                 }
