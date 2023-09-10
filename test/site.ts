@@ -2,13 +2,14 @@ import test, { ExecutionContext } from 'ava';
 import Site from '../src/site';
 import * as path from 'path';
 import * as fs from 'fs';
+import { CollectionResponse } from '../src/collection';
 
-function sortCollectionPages(collections) {
+function sortCollectionPages(collections: Record<string, CollectionResponse>) {
 	Object.keys(collections).forEach((key) => {
 		const collection = collections[key];
 		collection.pages = collection.pages.sort((a, b) => {
-			const nameA = a.pathname || a.id;
-			const nameB = b.pathname || b.id;
+			const nameA = a.pathname;
+			const nameB = b.pathname;
 			if (nameA < nameB) {
 				return -1;
 			}

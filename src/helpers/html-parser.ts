@@ -24,12 +24,18 @@ const nodeTypes = {
 	11: 'DOCUMENT_FRAGMENT_NODE'
 } as Record<number, string>;
 
+export interface PageContentsConfig {
+	selector?: string;
+	afterSelector?: string;
+	beforeSelector?: string;
+}
+
 class htmlProcessor {
-	contentsSelector: string | null;
+	contentsConfig: PageContentsConfig | null;
 	contents: ASTNode[];
 
-	constructor(contentsSelector?: string) {
-		this.contentsSelector = contentsSelector || null;
+	constructor(contentsConfig?: PageContentsConfig) {
+		this.contentsConfig = contentsConfig || null;
 		this.contents = [];
 	}
 
@@ -74,16 +80,70 @@ class htmlProcessor {
 		}
 
 		let children = [] as ASTNode[];
+		let pageContents = [] as ASTNode[];
+
+		let readingPageContents = false;
+		if (this.contentsConfig?.selector && element.matches(this.contentsConfig?.selector)) {
+			readingPageContents = true;
+			children.push({ type: 'content' });
+		}
 		for (const node of element.childNodes) {
-			children.push(this.formatNode(node));
+			const formattedNode = this.formatNode(node);
+
+			const type = nodeTypes[node.nodeType];
+			if (type === 'element') {
+				const element = node as HTMLElement;
+				if (
+					readingPageContents &&
+					this.contentsConfig?.beforeSelector &&
+					element.matches(this.contentsConfig?.beforeSelector)
+				) {
+					readingPageContents = false;
+					const lastItem = pageContents[pageContents.length - 1];
+					if (lastItem?.type === 'text' && !lastItem.value.trim()) {
+						children.push({ ...lastItem });
+						lastItem.value = '\n';
+					}
+				}
+			}
+
+			if (readingPageContents) {
+				if (
+					formattedNode.type === 'text' &&
+					!formattedNode.value.trim() &&
+					pageContents.length === 0
+				) {
+					children.splice(children.length - 1, 0, formattedNode);
+				} else {
+					pageContents.push(formattedNode);
+				}
+			} else {
+				children.push(formattedNode);
+			}
+
+			if (type === 'element') {
+				const element = node as HTMLElement;
+				if (
+					!readingPageContents &&
+					this.contentsConfig?.afterSelector &&
+					element.matches(this.contentsConfig?.afterSelector)
+				) {
+					readingPageContents = true;
+					children.push({ type: 'content' });
+				}
+			}
 		}
 
-		if (this.contentsSelector && element.matches(this.contentsSelector)) {
+		if (pageContents.length > 0) {
 			if (this.contents.length > 0) {
 				throw new Error('Duplicate contents parent found');
 			}
-			this.contents = children;
-			children = [{ type: 'content' }];
+			const lastItem = pageContents[pageContents.length - 1];
+			if (lastItem?.type === 'text' && !lastItem.value.trim()) {
+				children.push({ ...lastItem });
+				lastItem.value = '\n';
+			}
+			this.contents = pageContents;
 		}
 
 		return {
@@ -101,7 +161,7 @@ interface HTMLProcessorResponse {
 }
 
 export default function htmlToAST(html: string, config: DocumentConfig): HTMLProcessorResponse {
-	const processor = new htmlProcessor(config.content?.selector);
+	const processor = new htmlProcessor(config.content);
 	const layout = processor.parse(html);
 
 	return {

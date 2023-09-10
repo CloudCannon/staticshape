@@ -4,6 +4,16 @@ import { ASTAttributeList, ASTElementNode, ASTNode } from '../types';
 
 export const loopThreshold = 0.85;
 
+function diffScore(score: number, max: number) {
+	if (max === 0) {
+		return 1;
+	}
+	if (score === 0) {
+		return 0;
+	}
+	return score / max;
+}
+
 export function textEquivalencyScore(first: string | null, second: string | null): number {
 	second = second || '';
 	first = first || '';
@@ -44,20 +54,36 @@ export function arrayEquivalencyScore(first: string[], second: string[]): number
 			score += textEquivalencyScore(str, closestMatch);
 		}
 	}
-	return score / max;
+	return diffScore(score, max);
 }
 
 export function attributesEquivalencyScore(
 	firstAttrs: ASTAttributeList,
 	secondAttrs: ASTAttributeList
 ): number {
+	const firstId = firstAttrs['id'];
+	const secondId = secondAttrs['id'];
+	if (
+		(firstId || secondId) &&
+		(!firstId || firstId.type === 'attribute') &&
+		(!secondId || secondId.type === 'attribute') &&
+		firstId?.value !== secondId?.value
+	) {
+		return 0;
+	}
+
 	let max = 0;
 	let score = 0;
 	Object.keys(firstAttrs).forEach((attrName) => {
 		const firstAttr = firstAttrs[attrName];
 		const secondAttr = secondAttrs[attrName];
-		if (!secondAttrs[attrName]) {
+		if (!secondAttr) {
 			max += 1;
+			return;
+		}
+
+		if (!firstAttr) {
+			console.log(firstAttrs, secondAttrs, attrName);
 			return;
 		}
 
@@ -84,13 +110,7 @@ export function attributesEquivalencyScore(
 		}
 	});
 
-	if (max === 0) {
-		return 1;
-	}
-	if (score === 0) {
-		return 0;
-	}
-	return score / max;
+	return diffScore(score, max);
 }
 
 export function elementEquivalencyScore(first: ASTElementNode, second: ASTElementNode): number {
@@ -99,8 +119,23 @@ export function elementEquivalencyScore(first: ASTElementNode, second: ASTElemen
 	}
 
 	const attrsScores = attributesEquivalencyScore(first.attrs, second.attrs);
-	// TODO children scores
-	return (1 + attrsScores) / 2;
+	const childScores = childEquivalencyScore(first.children, second.children);
+	return (1 + attrsScores + childScores) / 3;
+}
+
+export function childEquivalencyScore(firstTree: ASTNode[], secondTree: ASTNode[]): number {
+	const max = Math.max(firstTree.length, secondTree.length);
+	let score = 0;
+	for (let i = 0; i < max; i++) {
+		const node = firstTree[i];
+		const other = secondTree[i];
+
+		// TODO best match comparison
+		if (node && other) {
+			score += nodeEquivalencyScore(node, other);
+		}
+	}
+	return diffScore(score, max);
 }
 
 export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
@@ -112,6 +147,14 @@ export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
 		return nodeEquivalencyScore(first.child, second);
 	}
 
+	if (second.type === 'loop') {
+		return nodeEquivalencyScore(first, second.template);
+	}
+
+	if (first.type === 'loop') {
+		return nodeEquivalencyScore(first.template, second);
+	}
+
 	if (
 		(first.type === 'text' && second.type === 'variable') ||
 		(second.type === 'text' && first.type === 'variable')
@@ -119,7 +162,10 @@ export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
 		return 1;
 	}
 
-	if (first.type === 'variable' && second.type === 'variable') {
+	if (
+		(first.type === 'variable' && second.type === 'variable') ||
+		(first.type === 'markdown-variable' && second.type === 'markdown-variable')
+	) {
 		return first.reference === second.reference ? 1 : 0.5;
 	}
 
@@ -145,7 +191,8 @@ export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
 
 	if (
 		!(first.type === 'text' && second.type === 'element') &&
-		!(first.type === 'element' && second.type === 'text')
+		!(first.type === 'element' && second.type === 'text') &&
+		first.type === second.type
 	) {
 		console.warn(`${first.type} and ${second.type} comparison, not yet implemented`);
 	}

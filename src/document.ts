@@ -2,7 +2,7 @@ import Page from './page';
 import Layout from './layout';
 
 import { mergeTree } from './helpers/dom-diff';
-import htmlToAST from './helpers/html-parser';
+import htmlToAST, { PageContentsConfig } from './helpers/html-parser';
 import { ASTNode } from './types';
 import Data from './helpers/Data';
 
@@ -12,12 +12,8 @@ export interface ASTTree {
 	layout: Layout;
 }
 
-export interface DocumentContentConfig {
-	selector: string;
-}
-
 export interface DocumentConfig {
-	content?: DocumentContentConfig;
+	content?: PageContentsConfig;
 }
 
 export interface DocumentOptions {

@@ -7,7 +7,7 @@ interface PageOptions {
 	content: ASTNode[];
 }
 
-interface PageJSON {
+export interface PageJSON {
 	pathname: string;
 	data: Hash;
 	content: ASTNode[];

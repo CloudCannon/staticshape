@@ -22,7 +22,7 @@
     "publish": "npm run build && np",
     "test": "c8 ava",
     "build": "tsc",
-    "start": "tsc > /dev/null || node --experimental-specifier-resolution=node lib/index.js",
+    "start": "tsc && node --experimental-specifier-resolution=node lib/index.js",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' 'test/**/*.ts' --write"
   },
   "devDependencies": {

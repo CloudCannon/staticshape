@@ -60,42 +60,88 @@ export function diffNodes(
 	parentElements: ASTElementNode[]
 ): ASTNode {
 	const typesMatch = firstNode.type === secondNode.type;
-	if (!typesMatch) {
-		throw new Error(`Mismatched node types ${firstNode.type}, ${secondNode.type}`);
+	if (typesMatch) {
+		switch (firstNode.type) {
+			case 'content':
+			case 'variable':
+			case 'markdown-variable':
+			case 'conditional':
+			case 'loop':
+				return firstNode;
+			case 'comment':
+			case 'cdata':
+			case 'text':
+			case 'doctype':
+				return diffBasicNode(
+					firstData,
+					secondData,
+					firstNode,
+					secondNode as ASTValueNode,
+					parentElements
+				);
+			case 'element':
+				if (firstNode.name === 'svg') {
+					// TODO handle SVGs as HTML variables
+					return firstNode;
+				}
+				return diffElementNode(
+					depth,
+					firstData,
+					secondData,
+					firstNode,
+					secondNode as ASTElementNode,
+					parentElements
+				);
+
+			default:
+				break;
+		}
+
+		console.log(`Unknown node type ${secondNode.type}`, secondNode, firstNode);
 	}
 
-	switch (firstNode.type) {
-		case 'content':
-		case 'variable':
-		case 'markdown-variable':
-			return firstNode;
-		case 'comment':
-		case 'cdata':
-		case 'text':
-		case 'doctype':
-			return diffBasicNode(
-				firstData,
-				secondData,
-				firstNode,
-				secondNode as ASTValueNode,
-				parentElements
-			);
-		case 'element':
-			return diffElementNode(
-				depth,
-				firstData,
-				secondData,
-				firstNode,
-				secondNode as ASTElementNode,
-				parentElements
-			);
-
-		default:
-			break;
+	if (
+		secondNode.type === 'text' &&
+		(firstNode.type === 'variable' ||
+			firstNode.type === 'conditional' ||
+			firstNode.type === 'loop')
+	) {
+		return firstNode;
 	}
 
-	console.log(`Unknown node type ${secondNode.type}`, secondNode, firstNode);
-	throw new Error(`Unknown node type ${secondNode.type}`);
+	if (
+		firstNode.type === 'text' &&
+		(secondNode.type === 'variable' ||
+			secondNode.type === 'conditional' ||
+			secondNode.type === 'loop')
+	) {
+		return secondNode;
+	}
+
+	if (
+		secondNode.type === 'element' &&
+		firstNode.type === 'conditional'
+		// ( || firstNode.type === 'loop')
+	) {
+		return firstNode;
+	}
+
+	if (
+		firstNode.type === 'element' &&
+		secondNode.type === 'conditional'
+		// ( || secondNode.type === 'loop')
+	) {
+		return secondNode;
+	}
+
+	const score = nodeEquivalencyScore(firstNode, secondNode);
+	console.log(`Cannot diff nodes ${firstNode.type} and ${secondNode.type}`);
+	console.log(firstNode, secondNode, score);
+
+	return {
+		type: 'comment',
+		value: `Cannot diff nodes ${firstNode.type} and ${secondNode.type}`
+	};
 }
 
 export function mergeAttrs(
@@ -114,6 +160,10 @@ export function mergeAttrs(
 	Object.keys(firstAttrs).forEach((attrName) => {
 		const firstAttr = firstAttrs[attrName];
 		const secondAttr = secondAttrs[attrName];
+		if (!firstAttr) {
+			console.log(firstAttrs, secondAttrs, attrName);
+			return;
+		}
 		if (firstAttr.type !== 'attribute') {
 			combined[attrName] = firstAttr;
 			return firstAttr;
@@ -158,6 +208,10 @@ export function mergeAttrs(
 		if (!combined[attrName]) {
 			return;
 		}
+		if (!secondAttr) {
+			console.log(firstAttrs, secondAttrs, attrName);
+			return;
+		}
 
 		if (secondAttr?.type !== 'attribute') {
 			combined[attrName] = secondAttr;
@@ -189,45 +243,91 @@ interface Loop {
 	template: ASTNode;
 }
 
+interface LoopElements {
+	el: ASTElementNode;
+	dataSource: Data[];
+}
+
+interface LoopState {
+	template: ASTNode;
+	blocks: Data[];
+	base: Data;
+}
+
 function buildLoop(
 	firstEls: ASTElementNode[],
 	secondEls: ASTElementNode[],
 	parentElements: ASTElementNode[]
 ): Loop | null {
-	const base = firstEls[0];
-	let baseData = new Data([], {});
+	const firstItems = [] as Data[];
+	const secondItems = [] as Data[];
+	const elements: LoopElements[] = [
+		...firstEls.map((el) => ({
+			el,
+			dataSource: firstItems
+		})),
+		...secondEls.map((el) => ({
+			el,
+			dataSource: secondItems
+		}))
+	];
 
-	const firstItems: Data[] = [];
-	const secondItems: Data[] = [];
-
-	// TODO merge template and data like with Page and Layout
-	let template = null;
-	for (let i = 1; i < firstEls.length; i++) {
-		const other = firstEls[i];
-		const newBaseData = new Data([], {});
-		const otherData = new Data([], {});
-		template = diffNodes(0, newBaseData, otherData, base, other, [...parentElements, base]);
-
-		baseData = newBaseData;
-		firstItems.push(otherData);
+	if (elements.length < 2) {
+		throw new Error('Loop must contain more than 1 element');
 	}
 
-	for (let i = 0; i < secondEls.length; i++) {
-		const other = secondEls[i];
+	const base = elements[0];
+	let current: LoopState | null = null;
+	for (let i = 1; i < elements.length; i++) {
+		const loopEl = elements[i];
 		const newBaseData = new Data([], {});
 		const otherData = new Data([], {});
-		template = diffNodes(0, newBaseData, otherData, base, other, [...parentElements, base]);
-		baseData = newBaseData;
-		secondItems.push(otherData);
-	}
+		const template = diffNodes(0, newBaseData, otherData, base.el, loopEl.el, parentElements);
+		loopEl.dataSource.push(otherData);
 
-	return template
-		? {
+		if (current === null) {
+			current = {
 				template,
-				firstItems: [baseData, ...firstItems],
-				secondItems
-		  }
-		: null;
+				blocks: [otherData],
+				base: newBaseData
+			};
+		} else {
+			// Merge the bases
+			const mergedBase: Data = current.base.merge(newBaseData);
+
+			// Merge current blocks with the new base
+			const oldBlocks: Data[] = current.blocks.map((block) => block.merge(newBaseData));
+
+			// Merge the new block with the old base
+			const newBlock = otherData.merge(current.base);
+
+			// Merge the two templates
+			const merged = diffNodes(
+				0,
+				newBaseData,
+				otherData,
+				current.template,
+				template,
+				parentElements
+			);
+			current = {
+				template: merged,
+				blocks: [...oldBlocks, newBlock],
+				base: mergedBase
+			};
+		}
+	}
+
+	if (current === null) {
+		throw new Error('Loop did not produce a template');
+	}
+
+	base.dataSource.push(current.base);
+	return {
+		firstItems,
+		secondItems,
+		template: current.template
+	};
 }
 
 export function mergeTree(
@@ -289,12 +389,21 @@ export function mergeTree(
 				const secondIndex = findRepeatedIndex(current, secondRemainingNodes);
 
 				if (firstIndex > 0 || secondIndex > 0) {
-					const firstEls = [current, ...firstRemainingNodes.slice(0, firstIndex)].filter(
-						(node) => node.type === 'element'
-					) as ASTElementNode[];
-					const secondEls = [other, ...secondRemainingNodes.slice(0, secondIndex)].filter(
-						(node) => node.type === 'element'
-					) as ASTElementNode[];
+					const firstEls = [
+						current,
+						...firstRemainingNodes.slice(0, firstIndex + 1)
+					].filter((node) => node.type === 'element') as ASTElementNode[];
+					const secondEls = [
+						other,
+						...secondRemainingNodes.slice(0, secondIndex + 1)
+					].filter((node) => node.type === 'element') as ASTElementNode[];
+					console.log(
+						{ firstIndex, secondIndex },
+						firstRemainingNodes,
+						secondRemainingNodes,
+						firstEls,
+						secondEls
+					);
 
 					const loopData = buildLoop(firstEls, secondEls, parentElements);
 					if (loopData) {
@@ -334,20 +443,7 @@ export function mergeTree(
 
 		const equivalency = nodeEquivalencyScore(firstNode, secondNode);
 		if (equivalency === 1) {
-			if (firstNode.type === 'variable' || firstNode.type === 'conditional') {
-				firstPointer += 1;
-				secondPointer += 1;
-				merged.push(firstNode);
-			} else if (secondNode.type === 'variable' || secondNode.type === 'conditional') {
-				firstPointer += 1;
-				secondPointer += 1;
-				merged.push(secondNode);
-			} else {
-				// } else if (firstNode.type === 'element' && secondNode.type === 'element') {
-				addComparisonNode(firstNode, secondNode);
-				// }
-				// merged.push(firstNode);
-			}
+			addComparisonNode(firstNode, secondNode);
 		} else if (firstRemaining > secondRemaining) {
 			if (
 				isBestMatch(

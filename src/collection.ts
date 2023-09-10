@@ -1,5 +1,7 @@
 import File from './file';
-import Document, { DocumentContentConfig } from './document';
+import { PageContentsConfig } from './helpers/html-parser';
+import Document from './document';
+import { PageJSON } from './page';
 
 export interface CollectionOptions {
 	name: string;
@@ -7,11 +9,11 @@ export interface CollectionOptions {
 	only?: string[] | null | void;
 	include?: string[] | null | void;
 	exclude?: string[] | null | void;
-	content?: DocumentContentConfig;
+	content?: PageContentsConfig;
 }
 
 export interface CollectionResponse {
-	pages: object[];
+	pages: PageJSON[];
 	layout: object;
 }
 

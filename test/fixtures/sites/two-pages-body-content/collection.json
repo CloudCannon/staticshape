@@ -7,10 +7,6 @@
                     "pathname": "about.html",
                     "content": [
                         {
-                            "type": "text",
-                            "value": "\n\t\t"
-                        },
-                        {
                             "type": "element",
                             "name": "h1",
                             "attrs": {},
@@ -23,7 +19,7 @@
                         },
                         {
                             "type": "text",
-                            "value": "\n\t\n"
+                            "value": "\n"
                         }
                     ],
                     "data": {
@@ -33,10 +29,6 @@
                 {
                     "pathname": "index.html",
                     "content": [
-                        {
-                            "type": "text",
-                            "value": "\n\t\t"
-                        },
                         {
                             "type": "element",
                             "name": "h1",
@@ -50,7 +42,7 @@
                         },
                         {
                             "type": "text",
-                            "value": "\n\t\n"
+                            "value": "\n"
                         }
                     ],
                     "data": {
@@ -107,7 +99,15 @@
                                 "attrs": {},
                                 "children": [
                                     {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
                                         "type": "content"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\n"
                                     }
                                 ]
                             }

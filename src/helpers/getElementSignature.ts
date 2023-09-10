@@ -33,10 +33,10 @@ export function getElementSignature(element: ASTElementNode) {
 
 	const id = getAttributeSignature(element.attrs['id']);
 	if (id) {
-		return `#${id}`;
+		return `${element.name}_${id}`;
 	}
 
 	const classList = getClassList(element);
-	const classes = classList.length > 0 ? `.${classList.join('.')}` : '';
+	const classes = classList.length > 0 ? `_${classList.join('_')}` : '';
 	return `${element.name}${classes}`;
 }

@@ -9,9 +9,9 @@
                     "data": {
                         "title": "Home | Test",
                         "h1": "Home",
-                        "div.block_items": [
+                        "div_block_items": [
                             {
-                              "div.block": "Home first item"
+                            "div_block": "Home first item"
                             }
                         ]
                     }
@@ -22,15 +22,15 @@
                     "data": {
                         "title": "About | Test",
                         "h1": "About",
-                        "div.block_items": [
+                        "div_block_items": [
                             {
-                              "div.block": "About first item"
+                            "div_block": "About first item"
                             },
                             {
-                              "div.block": "About second item"
+                            "div_block": "About second item"
                             },
                             {
-                              "div.block": "About third item"
+                            "div_block": "About third item"
                             }
                         ]
                     }
@@ -117,7 +117,7 @@
                                             {
                                                 "type": "loop",
                                                 "reference": [
-                                                    "div.block_items"
+                                                    "div_block_items"
                                                 ],
                                                 "template": {
                                                     "type": "element",
@@ -133,7 +133,7 @@
                                                         {
                                                             "type": "variable",
                                                             "reference": [
-                                                                "div.block"
+                                                                "div_block"
                                                             ]
                                                         }
                                                     ]

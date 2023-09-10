@@ -67,15 +67,19 @@ export default class HugoExportEngine extends ExportEngine {
 	}
 
 	renderVariable(node: ASTVariableNode): string {
-		return `{{ .Params.${node.reference} }}`;
+		return `{{ .Params.${node.reference.join('.')} }}`;
 	}
 
 	renderConditional(node: ASTConditionalNode): string {
-		return `{{ if .Params.${node.reference} }}${this.renderASTNode(node.child)}{{ end }}`;
+		return `{{ if .Params.${node.reference.join('.')} }}${this.renderASTNode(
+			node.child
+		)}{{ end }}`;
 	}
 
 	renderLoop(node: ASTLoopNode): string {
-		return `{{ range .Params.${node.reference} }}${this.renderASTNode(node.template)}{{ end }}`;
+		return `{{ range .Params.${node.reference.join('.')} }}${this.renderASTNode(
+			node.template
+		)}{{ end }}`;
 	}
 
 	renderContent(_node: ASTContentNode): string {
@@ -84,10 +88,12 @@ export default class HugoExportEngine extends ExportEngine {
 	}
 
 	renderVariableAttribute(attr: ASTVariableAttribute | ASTConditionalAttribute): string {
-		return [attr.name, `"{{ .Params.${attr.reference} }}"`].join('=');
+		return [attr.name, `"{{ .Params.${attr.reference.join('.')} }}"`].join('=');
 	}
 
 	renderConditionalAttribute(attr: ASTConditionalAttribute): string {
-		return `{{ if .Params.${attr.reference} }}${this.renderVariableAttribute(attr)}{{ end }}`;
+		return `{{ if .Params.${attr.reference.join('.')} }}${this.renderVariableAttribute(
+			attr
+		)}{{ end }}`;
 	}
 }

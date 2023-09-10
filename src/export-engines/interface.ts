@@ -97,7 +97,7 @@ export default class ExportEngine {
 	}
 
 	renderAttributes(attrMap: ASTAttributeList): string {
-		const attrs = Object.values(attrMap);
+		const attrs = Object.values(attrMap).filter((attr) => !!attr);
 		if (attrs.length === 0) {
 			return '';
 		}

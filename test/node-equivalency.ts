@@ -138,7 +138,7 @@ test('a to a[target] comparison', (t: ExecutionContext) =>
 		currentTree: [],
 		otherTree: [],
 		isBestMatch: true,
-		score: 0.85
+		score: 0.9
 	}));
 
 test('li.badge.badge-green to li.badge.badge-navy comparison', (t: ExecutionContext) =>
@@ -170,7 +170,7 @@ test('li.badge.badge-green to li.badge.badge-navy comparison', (t: ExecutionCont
 		currentTree: [],
 		otherTree: [],
 		isBestMatch: true,
-		score: 0.97
+		score: 0.98
 	}));
 
 test('img - different alt', (t: ExecutionContext) =>

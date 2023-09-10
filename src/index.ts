@@ -79,6 +79,11 @@ const outputPath = await p.text({
 			if (!stat.isDirectory()) {
 				return `${sourcePath} is not a directory`;
 			}
+
+			const files = fs.readdirSync(absoluteOutputPath);
+			if (files.length > 0) {
+				return `${absoluteOutputPath} is not an empty directory`;
+			}
 		} catch (error: any) {
 			if (error.code !== 'ENOENT') {
 				return error.message;
@@ -94,19 +99,6 @@ if (p.isCancel(outputPath)) {
 
 const absoluteOutputPath = path.resolve(outputPath);
 p.log.success(`Input set to ${absoluteOutputPath}`);
-
-try {
-	const files = await fs.promises.readdir(absoluteOutputPath);
-	if (files.length > 0) {
-		p.cancel(`${sourcePath} is not an empty directory`);
-		process.exit(1);
-	}
-} catch (error: any) {
-	if (error.code !== 'ENOENT') {
-		p.cancel(error.message);
-		process.exit(0);
-	}
-}
 
 const exportEngine = await p.select({
 	message: 'What SSG would you like to use?',
