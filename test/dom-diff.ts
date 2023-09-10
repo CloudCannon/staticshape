@@ -17,11 +17,18 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 	const primaryData = new Data([], {});
 	const secondaryData = new Data([], {});
 
-	const tree = mergeTree(0, primaryData, secondaryData, def.primary, def.secondary, []);
+	const tree = mergeTree(0, primaryData, secondaryData, def.primary, def.secondary, [
+		{
+			type: 'element',
+			name: 'div',
+			attrs: {},
+			children: def.primary
+		}
+	]);
 
 	t.deepEqual(tree, def.merged);
-	t.deepEqual(primaryData, def.expectedPrimaryData || {});
-	t.deepEqual(secondaryData, def.expectedSecondaryData || {});
+	t.deepEqual(primaryData.toJSON(), def.expectedPrimaryData || {});
+	t.deepEqual(secondaryData.toJSON(), def.expectedSecondaryData || {});
 }
 
 test('no diff', (t: ExecutionContext) =>

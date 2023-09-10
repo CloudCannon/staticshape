@@ -1,5 +1,6 @@
 import { ASTNode } from './types';
-import { mergeTree } from './helpers/dom-merge';
+import { mergeTree } from './helpers/dom-diff';
+import Data from './helpers/Data';
 
 interface LayoutOptions {
 	tree: ASTNode[];
@@ -13,9 +14,12 @@ export default class Layout {
 	}
 
 	merge(other: Layout): Layout {
+		const firstData = new Data([], {});
+		const secondData = new Data([], {});
+
 		return new Layout({
 			...this.options,
-			tree: mergeTree(this.options.tree, other.options.tree)
+			tree: mergeTree(0, firstData, secondData, this.options.tree, other.options.tree, [])
 		});
 	}
 

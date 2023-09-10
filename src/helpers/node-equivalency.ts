@@ -64,7 +64,7 @@ export function attributesEquivalencyScore(
 		max += 2;
 		score += 1;
 		if (firstAttr.type !== 'attribute' || secondAttr.type !== 'attribute') {
-			console.warn('non-static attr comparison not implemented', firstAttr, secondAttr);
+			score += 1;
 			return;
 		}
 
@@ -143,7 +143,12 @@ export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
 		return (1 + textEquivalencyScore(second.value, first.value)) / 2;
 	}
 
-	console.warn(`${first.type} and ${second.type} comparison, not yet implemented`);
+	if (
+		!(first.type === 'text' && second.type === 'element') &&
+		!(first.type === 'element' && second.type === 'text')
+	) {
+		console.warn(`${first.type} and ${second.type} comparison, not yet implemented`);
+	}
 	return 0;
 }
 

@@ -42,6 +42,7 @@ export default class Document {
 	}
 
 	diff(other: Document): ASTTree {
+		this.data = new Data([], {});
 		const tree = mergeTree(0, this.data, other.data, this.layout, other.layout, []);
 
 		return {

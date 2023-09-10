@@ -1,5 +1,12 @@
-import { ASTElementNode } from '../types';
+import { ASTAttribute, ASTElementNode } from '../types';
 import { getClassList } from './node-helper';
+
+function getAttributeSignature(attr: ASTAttribute | undefined): string | null {
+	if (attr?.type === 'attribute') {
+		return attr.value?.trim();
+	}
+	return null;
+}
 
 export function getElementSignature(element: ASTElementNode) {
 	if (element.name === 'meta') {
@@ -10,10 +17,10 @@ export function getElementSignature(element: ASTElementNode) {
 
 		return [
 			element.name,
-			nameAttr?.value ||
-				propertyAttr?.value ||
-				httpEquivAttr?.value ||
-				charsetAttr?.value ||
+			getAttributeSignature(nameAttr) ||
+				getAttributeSignature(propertyAttr) ||
+				getAttributeSignature(httpEquivAttr) ||
+				getAttributeSignature(charsetAttr) ||
 				'unknown'
 		].join('_');
 	}
@@ -21,10 +28,10 @@ export function getElementSignature(element: ASTElementNode) {
 	if (element.name === 'link') {
 		const relAttr = element.attrs['rel'];
 
-		return [element.name, relAttr?.value || 'unknown'].join('_');
+		return [element.name, getAttributeSignature(relAttr) || 'unknown'].join('_');
 	}
 
-	const id = element.attrs['id']?.value?.trim();
+	const id = getAttributeSignature(element.attrs['id']);
 	if (id) {
 		return `#${id}`;
 	}

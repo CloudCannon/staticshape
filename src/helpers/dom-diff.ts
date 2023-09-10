@@ -66,6 +66,8 @@ export function diffNodes(
 
 	switch (firstNode.type) {
 		case 'content':
+		case 'variable':
+		case 'markdown-variable':
 			return firstNode;
 		case 'comment':
 		case 'cdata':
@@ -92,6 +94,7 @@ export function diffNodes(
 			break;
 	}
 
+	console.log(`Unknown node type ${secondNode.type}`, secondNode, firstNode);
 	throw new Error(`Unknown node type ${secondNode.type}`);
 }
 
@@ -109,8 +112,20 @@ export function mergeAttrs(
 	const firstAttrsData = firstData.createSubdata(variableName);
 	const secondAttrsData = secondData.createSubdata(variableName);
 	Object.keys(firstAttrs).forEach((attrName) => {
-		if (!secondAttrs[attrName]) {
-			firstAttrsData.set(attrName, firstAttrs[attrName].value);
+		const firstAttr = firstAttrs[attrName];
+		const secondAttr = secondAttrs[attrName];
+		if (firstAttr.type !== 'attribute') {
+			combined[attrName] = firstAttr;
+			return firstAttr;
+		}
+
+		if (secondAttr?.type !== 'attribute') {
+			combined[attrName] = secondAttr;
+			return secondAttr;
+		}
+
+		if (!secondAttr) {
+			firstAttrsData.set(attrName, firstAttr.value);
 			secondAttrsData.set(attrName, null);
 			combined[attrName] = {
 				type: 'conditional-attribute',
@@ -120,15 +135,15 @@ export function mergeAttrs(
 			return;
 		}
 
-		if (isAttrEquivalent(attrName, firstAttrs[attrName], secondAttrs[attrName])) {
+		if (isAttrEquivalent(attrName, firstAttr, secondAttr)) {
 			combined[attrName] = {
 				type: 'attribute',
 				name: attrName,
-				value: secondAttrs[attrName].value
+				value: secondAttr.value
 			};
 		} else {
-			firstAttrsData.set(attrName, firstAttrs[attrName].value);
-			secondAttrsData.set(attrName, secondAttrs[attrName].value);
+			firstAttrsData.set(attrName, firstAttr.value);
+			secondAttrsData.set(attrName, secondAttr.value);
 			combined[attrName] = {
 				type: 'variable-attribute',
 				name: attrName,
@@ -138,13 +153,20 @@ export function mergeAttrs(
 	});
 
 	Object.keys(secondAttrs).forEach((attrName) => {
+		const firstAttr = firstAttrs[attrName];
+		const secondAttr = secondAttrs[attrName];
 		if (!combined[attrName]) {
 			return;
 		}
 
-		if (!firstAttrs[attrName]) {
+		if (secondAttr?.type !== 'attribute') {
+			combined[attrName] = secondAttr;
+			return secondAttr;
+		}
+
+		if (!firstAttr) {
 			firstAttrsData.set(attrName, null);
-			secondAttrsData.set(attrName, secondAttrs[attrName].value);
+			secondAttrsData.set(attrName, secondAttr.value);
 			combined[attrName] = {
 				type: 'conditional-attribute',
 				name: attrName,
@@ -173,10 +195,10 @@ function buildLoop(
 	parentElements: ASTElementNode[]
 ): Loop | null {
 	const base = firstEls[0];
-	let baseData = {};
+	let baseData = new Data([], {});
 
-	const firstItems = [] as Data[];
-	const secondItems = [] as Data[];
+	const firstItems: Data[] = [];
+	const secondItems: Data[] = [];
 
 	// TODO merge template and data like with Page and Layout
 	let template = null;
@@ -225,12 +247,19 @@ export function mergeTree(
 			merged.push(node);
 		} else if (node.type === 'content') {
 			merged.push(node);
+		} else if (
+			node.type === 'conditional' ||
+			node.type === 'variable' ||
+			node.type === 'markdown-variable' ||
+			node.type === 'loop'
+		) {
+			merged.push(node);
 		} else {
-			const variableName = firstData.getVariableName(
-				[...parentElements, node as ASTElementNode],
-				'show',
-				''
-			);
+			const parents = [...parentElements];
+			if (node.type === 'element') {
+				parents.push(node);
+			}
+			const variableName = firstData.getVariableName(parents, 'show', '');
 			firstData.set(variableName, true);
 			secondData.set(variableName, false);
 			merged.push({
@@ -305,7 +334,20 @@ export function mergeTree(
 
 		const equivalency = nodeEquivalencyScore(firstNode, secondNode);
 		if (equivalency === 1) {
-			addComparisonNode(firstNode, secondNode);
+			if (firstNode.type === 'variable' || firstNode.type === 'conditional') {
+				firstPointer += 1;
+				secondPointer += 1;
+				merged.push(firstNode);
+			} else if (secondNode.type === 'variable' || secondNode.type === 'conditional') {
+				firstPointer += 1;
+				secondPointer += 1;
+				merged.push(secondNode);
+			} else {
+				// } else if (firstNode.type === 'element' && secondNode.type === 'element') {
+				addComparisonNode(firstNode, secondNode);
+				// }
+				// merged.push(firstNode);
+			}
 		} else if (firstRemaining > secondRemaining) {
 			if (
 				isBestMatch(

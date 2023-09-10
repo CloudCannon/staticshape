@@ -56,7 +56,6 @@ export default class Data {
 	}
 
 	versionedVarableName(variableName: string): string {
-		console.log(variableName, Object.keys(this.data));
 		if (!this.hasKey(variableName)) {
 			return variableName;
 		}

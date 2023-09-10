@@ -77,6 +77,7 @@ export default class Collection {
 		}
 
 		const baseDoc = documents[0];
+
 		let current = baseDoc.diff(documents[1]);
 		this.debug.base = baseDoc.debug();
 		this.debug.rounds.push({
