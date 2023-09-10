@@ -55,7 +55,6 @@ test('two-pages-title-variable', (t: ExecutionContext) => runTest(t, 'two-pages-
 test('two-pages-attr-variable', (t: ExecutionContext) => runTest(t, 'two-pages-attr-variable'));
 test('two-pages-body-content', (t: ExecutionContext) => runTest(t, 'two-pages-body-content'));
 test('two-pages-conditional', (t: ExecutionContext) => runTest(t, 'two-pages-conditional'));
-// test('two-pages-conditional-content', (t: ExecutionContext) => runTest(t, 'two-pages-conditional-content'));
 test('two-pages-loop', (t: ExecutionContext) => runTest(t, 'two-pages-loop'));
 test('two-pages-not-loop', (t: ExecutionContext) => runTest(t, 'two-pages-not-loop'));
 // test('two-pages-fuzzy-image', (t: ExecutionContext) => runTest(t, 'two-pages-fuzzy-image'));

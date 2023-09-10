@@ -1,7 +1,12 @@
 import { ASTElementNode, ASTNode, ASTAttributeList, ASTValueNode } from '../types';
 import { invalidLoopTags, findRepeatedIndex } from './loops';
 import { isAttrEquivalent } from './node-helper';
-import { nodeEquivalencyScore, isBestMatch, loopThreshold } from './node-equivalency';
+import {
+	nodeEquivalencyScore,
+	isBestMatch,
+	loopThreshold,
+	nodeTreeEquivalencyScore
+} from './node-equivalency';
 import Data from './Data';
 
 export function diffBasicNode(
@@ -115,6 +120,14 @@ export function diffNodes(
 			secondNode.type === 'conditional' ||
 			secondNode.type === 'loop')
 	) {
+		return secondNode;
+	}
+
+	if (firstNode.type === 'conditional' && secondNode.type === 'loop') {
+		return secondNode;
+	}
+
+	if (firstNode.type === 'loop' && secondNode.type === 'conditional') {
 		return secondNode;
 	}
 
@@ -322,7 +335,7 @@ function buildLoop(
 		throw new Error('Loop did not produce a template');
 	}
 
-	base.dataSource.push(current.base);
+	base.dataSource.unshift(current.base);
 	return {
 		firstItems,
 		secondItems,
@@ -389,43 +402,40 @@ export function mergeTree(
 				const secondIndex = findRepeatedIndex(current, secondRemainingNodes);
 
 				if (firstIndex > 0 || secondIndex > 0) {
-					const firstEls = [
-						current,
-						...firstRemainingNodes.slice(0, firstIndex + 1)
-					].filter((node) => node.type === 'element') as ASTElementNode[];
-					const secondEls = [
-						other,
-						...secondRemainingNodes.slice(0, secondIndex + 1)
-					].filter((node) => node.type === 'element') as ASTElementNode[];
-					console.log(
-						{ firstIndex, secondIndex },
-						firstRemainingNodes,
-						secondRemainingNodes,
-						firstEls,
-						secondEls
-					);
+					const firstEls = [current, ...firstRemainingNodes.slice(0, firstIndex)].filter(
+						(node) => node.type === 'element'
+					) as ASTElementNode[];
+					const secondEls = [other, ...secondRemainingNodes.slice(0, secondIndex)].filter(
+						(node) => node.type === 'element'
+					) as ASTElementNode[];
 
-					const loopData = buildLoop(firstEls, secondEls, parentElements);
-					if (loopData) {
-						const { firstItems, secondItems, template } = loopData;
-						const variableName = firstData.getVariableName([current], '', 'items');
-						firstData.set(
-							variableName,
-							firstItems.map((item: Data) => item.toJSON())
-						);
-						secondData.set(
-							variableName,
-							secondItems.map((item: Data) => item.toJSON())
-						);
+					const isExactMatch =
+						firstEls.length === secondEls.length &&
+						nodeTreeEquivalencyScore(firstEls, secondEls) === 1;
 
-						merged.push({
-							type: 'loop',
-							reference: firstData.getChain(variableName),
-							template
-						});
-						firstPointer += firstIndex;
-						secondPointer += secondIndex;
-						return;
+					if (!isExactMatch) {
+						const loopData = buildLoop(firstEls, secondEls, parentElements);
+						if (loopData) {
+							const { firstItems, secondItems, template } = loopData;
+							const variableName = firstData.getVariableName([current], '', 'items');
+							firstData.set(
+								variableName,
+								firstItems.map((item: Data) => item.toJSON())
+							);
+							secondData.set(
+								variableName,
+								secondItems.map((item: Data) => item.toJSON())
+							);
+
+							merged.push({
+								type: 'loop',
+								reference: firstData.getChain(variableName),
+								template
+							});
+							firstPointer += firstIndex;
+							secondPointer += secondIndex;
+							return;
+						}
 					}
 				}
 			}

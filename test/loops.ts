@@ -81,5 +81,5 @@ test('no diff', (t: ExecutionContext) =>
 				value: '\n\t\t\t'
 			}
 		],
-		index: 3
+		index: 4
 	}));

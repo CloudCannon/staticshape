@@ -2,7 +2,7 @@ import { distance, closest } from 'fastest-levenshtein';
 import { normalizeClassList } from './node-helper';
 import { ASTAttributeList, ASTElementNode, ASTNode } from '../types';
 
-export const loopThreshold = 0.85;
+export const loopThreshold = 0.9;
 
 function diffScore(score: number, max: number) {
 	if (max === 0) {
@@ -119,11 +119,11 @@ export function elementEquivalencyScore(first: ASTElementNode, second: ASTElemen
 	}
 
 	const attrsScores = attributesEquivalencyScore(first.attrs, second.attrs);
-	const childScores = childEquivalencyScore(first.children, second.children);
+	const childScores = nodeTreeEquivalencyScore(first.children, second.children);
 	return (1 + attrsScores + childScores) / 3;
 }
 
-export function childEquivalencyScore(firstTree: ASTNode[], secondTree: ASTNode[]): number {
+export function nodeTreeEquivalencyScore(firstTree: ASTNode[], secondTree: ASTNode[]): number {
 	const max = Math.max(firstTree.length, secondTree.length);
 	let score = 0;
 	for (let i = 0; i < max; i++) {
