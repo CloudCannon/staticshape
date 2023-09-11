@@ -16,6 +16,7 @@ export function nodeDebugString(node: ASTNode, depth = 0, maxDepth = 1): string 
 			return `${node.type}: ${JSON.stringify(node.value)}`;
 		case 'element':
 			let attrs = Object.values(node.attrs)
+				.filter((attr) => !!attr)
 				.map((attr) => {
 					if (attr.type === 'attribute') {
 						return `${attr.name}=${JSON.stringify(attr.value)}`;

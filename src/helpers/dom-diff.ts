@@ -10,6 +10,7 @@ import {
 import Data from './Data';
 import { nodeDebugString } from './debug-helper';
 import { findEndOfMarkdownIndex, isMarkdownElement, markdownify } from './markdown';
+import { booleanAttributes } from './attributes';
 
 export function diffBasicNode(
 	firstData: Data,
@@ -181,6 +182,17 @@ export function mergeAttrs(
 		if (secondAttr?.type !== 'attribute') {
 			combined[attrName] = secondAttr;
 			return secondAttr;
+		}
+
+		if (booleanAttributes[attrName]) {
+			firstData.set(variableName, !!firstAttr);
+			secondData.set(variableName, !!secondAttr);
+			combined[attrName] = {
+				type: 'conditional-attribute',
+				name: attrName,
+				reference: firstData.getChain(variableName)
+			};
+			return;
 		}
 
 		if (!secondAttr) {

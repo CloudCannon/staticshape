@@ -2,6 +2,7 @@ import { distance, closest } from 'fastest-levenshtein';
 import { normalizeClassList } from './node-helper';
 import { ASTAttributeList, ASTElementNode, ASTNode } from '../types';
 import { nodeDebugString, nodeListDebugString } from './debug-helper';
+import { booleanAttributes } from './attributes';
 
 export const loopThreshold = 0.85;
 
@@ -69,6 +70,12 @@ export function attributesEquivalencyScore(
 		const secondAttr = secondAttrs[attrName];
 		if (!secondAttr) {
 			max += 1;
+			return;
+		}
+
+		if (booleanAttributes[attrName]) {
+			max += 1;
+			score += 1;
 			return;
 		}
 
