@@ -17,25 +17,13 @@ export interface CollectionResponse {
 	layout: object;
 }
 
-export interface CollectionDebug {
-	base: object | null;
-	rounds: object[];
-	files: string[];
-}
-
 export default class Collection {
 	options: CollectionOptions;
 	files: File[];
-	debug: CollectionDebug;
 
 	constructor(files: File[], options: CollectionOptions) {
 		this.files = files;
 		this.options = options;
-		this.debug = {
-			base: null,
-			files: [],
-			rounds: []
-		};
 	}
 
 	async build(): Promise<CollectionResponse> {
@@ -59,7 +47,6 @@ export default class Collection {
 			return pathname.startsWith(this.options.subPath);
 		});
 
-		this.debug.files = collectionFiles.map((file) => file.name());
 		const documents = await Promise.all(
 			collectionFiles.map(async (file) => {
 				const html = await file.read();
@@ -79,14 +66,12 @@ export default class Collection {
 		}
 
 		const baseDoc = documents[0];
-
+		console.error(`Comparing ${baseDoc.pathname} and ${documents[1].pathname}`);
+		console.error(JSON.stringify(documents[0].layout));
+		console.error(JSON.stringify(documents[1].layout));
 		let current = baseDoc.diff(documents[1]);
-		this.debug.base = baseDoc.debug();
-		this.debug.rounds.push({
-			doc: documents[1].debug(),
-			result: current
-		});
 		for (let i = 2; i < documents.length; i++) {
+			console.error(`Comparing ${baseDoc.pathname} and ${documents[i].pathname}`);
 			const next = baseDoc.diff(documents[i]);
 
 			// Merge the next and current bases
@@ -106,12 +91,6 @@ export default class Collection {
 				pages: [...oldPages, ...newPages],
 				layout
 			};
-
-			this.debug.rounds.push({
-				doc: documents[i].debug(),
-				result: next,
-				current
-			});
 		}
 
 		return {

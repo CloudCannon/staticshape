@@ -58,7 +58,9 @@
                         "children": [
                             {
                                 "type": "variable",
-                                "reference": "h1"
+                                "reference": [
+                                    "h1"
+                                ]
                             }
                         ]
                     },

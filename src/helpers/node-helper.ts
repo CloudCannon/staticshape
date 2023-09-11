@@ -1,4 +1,4 @@
-import { ASTElementNode, ASTStaticAttribute } from '../types';
+import { ASTElementNode, ASTNode, ASTStaticAttribute } from '../types';
 
 export function normalizeClassList(value: string) {
 	const classList = (value || '')
@@ -37,4 +37,17 @@ export function isAttrEquivalent(
 	}
 
 	return first.value === second.value;
+}
+export function findLastNonWhitespaceIndex(nodes: ASTNode[]): number {
+	for (let i = nodes.length - 1; i >= 0; i--) {
+		const node = nodes[i];
+
+		if (node.type === 'text' && node.value.trim()) {
+			return i;
+		} else if (node.type === 'element') {
+			return i;
+		}
+	}
+
+	return -1;
 }

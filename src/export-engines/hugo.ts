@@ -4,11 +4,11 @@ import {
 	ASTConditionalNode,
 	ASTContentNode,
 	ASTLoopNode,
-	ASTNode,
+	ASTMarkdownNode,
 	ASTVariableAttribute,
 	ASTVariableNode
 } from '../types';
-import ExportEngine, { FileExport } from './interface';
+import HtmlExportEngine, { FileExport } from './html';
 import { dump } from 'js-yaml';
 
 function renderFrontMatter(data: Record<string, any>) {
@@ -18,7 +18,7 @@ function renderFrontMatter(data: Record<string, any>) {
 	})}---`;
 }
 
-export default class HugoExportEngine extends ExportEngine {
+export default class HugoExportEngine extends HtmlExportEngine {
 	staticDirectory(): string {
 		return 'static';
 	}
@@ -68,6 +68,10 @@ export default class HugoExportEngine extends ExportEngine {
 
 	renderVariable(node: ASTVariableNode): string {
 		return `{{ .Params.${node.reference.join('.')} }}`;
+	}
+
+	renderMarkdownVariable(node: ASTMarkdownNode): string {
+		return `{{ .Params.${node.reference.join('.')} | markdownify }}`;
 	}
 
 	renderConditional(node: ASTConditionalNode): string {

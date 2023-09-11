@@ -9,7 +9,7 @@
                     "data": {
                         "title": "Home | Test",
                         "h1": "Home",
-                        "div_block_items": [
+                        "div_items": [
                             {
                             "div_block": "Home first item"
                             }
@@ -22,7 +22,7 @@
                     "data": {
                         "title": "About | Test",
                         "h1": "About",
-                        "div_block_items": [
+                        "div_items": [
                             {
                             "div_block": "About first item"
                             },
@@ -117,7 +117,7 @@
                                             {
                                                 "type": "loop",
                                                 "reference": [
-                                                    "div_block_items"
+                                                    "div_items"
                                                 ],
                                                 "template": {
                                                     "type": "element",

@@ -8,6 +8,8 @@ import {
 	nodeTreeEquivalencyScore
 } from './node-equivalency';
 import Data from './Data';
+import { nodeDebugString } from './debug-helper';
+import { findEndOfMarkdownIndex, isMarkdownElement, markdownify } from './markdown';
 
 export function diffBasicNode(
 	firstData: Data,
@@ -31,7 +33,6 @@ export function diffBasicNode(
 }
 
 export function diffElementNode(
-	depth: number,
 	firstData: Data,
 	secondData: Data,
 	firstElement: ASTElementNode,
@@ -46,7 +47,6 @@ export function diffElementNode(
 	const node = structuredClone(firstElement) as ASTElementNode;
 	node.attrs = mergeAttrs(firstData, secondData, firstElement, secondElement);
 	node.children = mergeTree(
-		depth + 1,
 		firstData,
 		secondData,
 		firstElement.children,
@@ -57,7 +57,6 @@ export function diffElementNode(
 }
 
 export function diffNodes(
-	depth: number,
 	firstData: Data,
 	secondData: Data,
 	firstNode: ASTNode,
@@ -90,7 +89,6 @@ export function diffNodes(
 					return firstNode;
 				}
 				return diffElementNode(
-					depth,
 					firstData,
 					secondData,
 					firstNode,
@@ -167,10 +165,8 @@ export function mergeAttrs(
 	const secondAttrs = secondElement.attrs;
 	const combined = {} as ASTAttributeList;
 
-	const variableName = firstData.getVariableName([firstElement]);
-	const firstAttrsData = firstData.createSubdata(variableName);
-	const secondAttrsData = secondData.createSubdata(variableName);
 	Object.keys(firstAttrs).forEach((attrName) => {
+		const variableName = firstData.getVariableName([firstElement], '', attrName);
 		const firstAttr = firstAttrs[attrName];
 		const secondAttr = secondAttrs[attrName];
 		if (!firstAttr) {
@@ -188,12 +184,12 @@ export function mergeAttrs(
 		}
 
 		if (!secondAttr) {
-			firstAttrsData.set(attrName, firstAttr.value);
-			secondAttrsData.set(attrName, null);
+			firstData.set(variableName, firstAttr.value);
+			secondData.set(variableName, null);
 			combined[attrName] = {
 				type: 'conditional-attribute',
 				name: attrName,
-				reference: firstAttrsData.getChain(attrName)
+				reference: firstData.getChain(variableName)
 			};
 			return;
 		}
@@ -205,17 +201,18 @@ export function mergeAttrs(
 				value: secondAttr.value
 			};
 		} else {
-			firstAttrsData.set(attrName, firstAttr.value);
-			secondAttrsData.set(attrName, secondAttr.value);
+			firstData.set(variableName, firstAttr.value);
+			secondData.set(variableName, secondAttr.value);
 			combined[attrName] = {
 				type: 'variable-attribute',
 				name: attrName,
-				reference: firstAttrsData.getChain(attrName)
+				reference: firstData.getChain(variableName)
 			};
 		}
 	});
 
 	Object.keys(secondAttrs).forEach((attrName) => {
+		const variableName = firstData.getVariableName([firstElement], '', attrName);
 		const firstAttr = firstAttrs[attrName];
 		const secondAttr = secondAttrs[attrName];
 		if (!combined[attrName]) {
@@ -232,20 +229,15 @@ export function mergeAttrs(
 		}
 
 		if (!firstAttr) {
-			firstAttrsData.set(attrName, null);
-			secondAttrsData.set(attrName, secondAttr.value);
+			firstData.set(variableName, null);
+			secondData.set(variableName, secondAttr.value);
 			combined[attrName] = {
 				type: 'conditional-attribute',
 				name: attrName,
-				reference: firstAttrsData.getChain(attrName)
+				reference: firstData.getChain(variableName)
 			};
 		}
 	});
-
-	if (!secondAttrsData.empty()) {
-		firstData.set(variableName, firstAttrsData.data);
-		secondData.set(variableName, secondAttrsData.data);
-	}
 
 	return combined;
 }
@@ -295,7 +287,7 @@ function buildLoop(
 		const loopEl = elements[i];
 		const newBaseData = new Data([], {});
 		const otherData = new Data([], {});
-		const template = diffNodes(0, newBaseData, otherData, base.el, loopEl.el, parentElements);
+		const template = diffNodes(newBaseData, otherData, base.el, loopEl.el, parentElements);
 		loopEl.dataSource.push(otherData);
 
 		if (current === null) {
@@ -316,7 +308,6 @@ function buildLoop(
 
 			// Merge the two templates
 			const merged = diffNodes(
-				0,
 				newBaseData,
 				otherData,
 				current.template,
@@ -344,18 +335,18 @@ function buildLoop(
 }
 
 export function mergeTree(
-	depth: number,
 	firstData: Data,
 	secondData: Data,
 	firstTree: ASTNode[],
 	secondTree: ASTNode[],
-	parentElements: ASTElementNode[]
+	parentElements: ASTElementNode[] = []
 ): ASTNode[] {
 	const merged = [] as ASTNode[];
 	let firstPointer = 0;
 	let secondPointer = 0;
 
 	const addConditionalNode = (node: ASTNode, firstData: Data, secondData: Data) => {
+		console.error(nodeDebugString(node));
 		if (node.type === 'text' && !node.value.trim()) {
 			merged.push(node);
 		} else if (node.type === 'content') {
@@ -383,114 +374,140 @@ export function mergeTree(
 		}
 	};
 
-	const addComparisonNode = (current: ASTNode, other: ASTNode) => {
-		firstPointer += 1;
-		secondPointer += 1;
+	while (firstPointer < firstTree.length && secondPointer < secondTree.length) {
+		const firstRemaining = firstTree.length - firstPointer;
+		const secondRemaining = secondTree.length - secondPointer;
 
-		if (
-			current.type === 'element' &&
-			other.type === 'element' &&
-			!invalidLoopTags[current.name] &&
-			!invalidLoopTags[other.name]
-		) {
-			const score = nodeEquivalencyScore(current, other);
-			if (score > loopThreshold) {
+		const current = firstTree[firstPointer];
+		const other = secondTree[secondPointer];
+
+		if (current.type === 'element' && other.type === 'element') {
+			if (isMarkdownElement(current) && isMarkdownElement(other)) {
 				const firstRemainingNodes = firstTree.slice(firstPointer);
 				const secondRemainingNodes = secondTree.slice(secondPointer);
 
-				const firstIndex = findRepeatedIndex(current, firstRemainingNodes);
-				const secondIndex = findRepeatedIndex(current, secondRemainingNodes);
+				const firstIndexes = findEndOfMarkdownIndex(firstRemainingNodes);
+				const secondIndexes = findEndOfMarkdownIndex(secondRemainingNodes);
+				const firstEls = firstRemainingNodes
+					.slice(0, firstIndexes.lastElIndex + 1)
+					.filter((node) => node.type === 'element') as ASTElementNode[];
+				const secondEls = secondRemainingNodes
+					.slice(0, secondIndexes.lastElIndex + 1)
+					.filter((node) => node.type === 'element') as ASTElementNode[];
+				const variableName = firstData.getVariableName(parentElements, '', 'markdown');
+				firstData.set(variableName, markdownify(firstEls));
+				secondData.set(variableName, markdownify(secondEls));
+				merged.push({
+					type: 'markdown-variable',
+					reference: firstData.getChain(variableName)
+				});
 
-				if (firstIndex > 0 || secondIndex > 0) {
-					const firstEls = [current, ...firstRemainingNodes.slice(0, firstIndex)].filter(
-						(node) => node.type === 'element'
-					) as ASTElementNode[];
-					const secondEls = [other, ...secondRemainingNodes.slice(0, secondIndex)].filter(
-						(node) => node.type === 'element'
-					) as ASTElementNode[];
+				firstPointer += firstIndexes.lastElIndex + 1;
+				secondPointer += secondIndexes.lastElIndex + 1;
+				continue;
+			}
 
-					const isExactMatch =
-						firstEls.length === secondEls.length &&
-						nodeTreeEquivalencyScore(firstEls, secondEls) === 1;
+			if (!invalidLoopTags[current.name] && !invalidLoopTags[other.name]) {
+				const score = nodeEquivalencyScore(current, other);
+				if (score > loopThreshold) {
+					const firstRemainingNodes = firstTree.slice(firstPointer);
+					const secondRemainingNodes = secondTree.slice(secondPointer);
 
-					if (!isExactMatch) {
-						const loopData = buildLoop(firstEls, secondEls, parentElements);
-						if (loopData) {
-							const { firstItems, secondItems, template } = loopData;
-							const variableName = firstData.getVariableName([current], '', 'items');
-							firstData.set(
-								variableName,
-								firstItems.map((item: Data) => item.toJSON())
-							);
-							secondData.set(
-								variableName,
-								secondItems.map((item: Data) => item.toJSON())
-							);
+					const firstIndex = findRepeatedIndex(firstRemainingNodes);
+					const secondIndex = findRepeatedIndex(secondRemainingNodes);
+					if (firstIndex > 0 || secondIndex > 0) {
+						const firstEls = firstRemainingNodes
+							.slice(0, firstIndex + 1)
+							.filter((node) => node.type === 'element') as ASTElementNode[];
+						const secondEls = secondRemainingNodes
+							.slice(0, secondIndex + 1)
+							.filter((node) => node.type === 'element') as ASTElementNode[];
 
-							merged.push({
-								type: 'loop',
-								reference: firstData.getChain(variableName),
-								template
-							});
-							firstPointer += firstIndex;
-							secondPointer += secondIndex;
-							return;
+						if (firstEls.length + secondEls.length > 2) {
+							const isExactMatch =
+								firstEls.length === secondEls.length &&
+								nodeTreeEquivalencyScore(firstEls, secondEls) === 1;
+
+							if (!isExactMatch) {
+								const loopData = buildLoop(firstEls, secondEls, parentElements);
+								if (loopData) {
+									const { firstItems, secondItems, template } = loopData;
+									const variableName = firstData.getVariableName(
+										parentElements,
+										'',
+										'items'
+									);
+									firstData.set(
+										variableName,
+										firstItems.map((item: Data) => item.toJSON())
+									);
+									secondData.set(
+										variableName,
+										secondItems.map((item: Data) => item.toJSON())
+									);
+
+									console.error('🔄 Added loop', nodeDebugString(template));
+									merged.push({
+										type: 'loop',
+										reference: firstData.getChain(variableName),
+										template
+									});
+									firstPointer += firstIndex + 1;
+									secondPointer += secondIndex + 1;
+									continue;
+								}
+							}
 						}
+						console.error(
+							'🔂 Not enough loop elements',
+							score,
+							nodeDebugString(current, 0, 0),
+							'vs',
+							nodeDebugString(other, 0, 0)
+						);
+					} else {
+						console.error(
+							'🔂 Not enough loop nodes',
+							score,
+							nodeDebugString(current, 0, 0),
+							'vs',
+							nodeDebugString(other, 0, 0)
+						);
 					}
 				}
 			}
 		}
 
-		merged.push(diffNodes(depth + 1, firstData, secondData, current, other, parentElements));
-	};
+		if (isBestMatch(firstTree.slice(firstPointer), secondTree.slice(secondPointer))) {
+			console.error(
+				'👀 Comparing nodes',
+				nodeDebugString(current, 0, 0),
+				'vs',
+				nodeDebugString(other, 0, 0)
+			);
 
-	while (firstPointer < firstTree.length && secondPointer < secondTree.length) {
-		const firstRemaining = firstTree.length - firstPointer;
-		const secondRemaining = secondTree.length - secondPointer;
-
-		const firstNode = firstTree[firstPointer];
-		const secondNode = secondTree[secondPointer];
-
-		const equivalency = nodeEquivalencyScore(firstNode, secondNode);
-		if (equivalency === 1) {
-			addComparisonNode(firstNode, secondNode);
+			merged.push(diffNodes(firstData, secondData, current, other, parentElements));
+			firstPointer += 1;
+			secondPointer += 1;
 		} else if (firstRemaining > secondRemaining) {
-			if (
-				isBestMatch(
-					firstNode,
-					secondNode,
-					firstTree.slice(firstPointer + 1),
-					secondTree.slice(secondPointer)
-				)
-			) {
-				addComparisonNode(firstNode, secondNode);
-			} else {
-				addConditionalNode(firstNode, firstData, secondData);
-				firstPointer += 1;
-			}
+			console.error(`? Conditional first weighted [${firstRemaining}, ${secondRemaining}]`);
+			addConditionalNode(current, firstData, secondData);
+			firstPointer += 1;
 		} else {
-			if (
-				isBestMatch(
-					secondNode,
-					firstNode,
-					secondTree.slice(secondPointer + 1),
-					firstTree.slice(firstPointer)
-				)
-			) {
-				addComparisonNode(firstNode, secondNode);
-			} else {
-				addConditionalNode(secondNode, secondData, firstData);
-				secondPointer += 1;
-			}
+			console.error(`? Conditional second weighted [${firstRemaining}, ${secondRemaining}]`);
+			addConditionalNode(other, secondData, firstData);
+			secondPointer += 1;
 		}
 	}
 
 	while (firstPointer < firstTree.length) {
+		console.error('? Conditional first remaining');
 		addConditionalNode(firstTree[firstPointer], firstData, secondData);
 		firstPointer += 1;
 	}
 
 	while (secondPointer < secondTree.length) {
+		console.error('? Conditional second remaining');
 		addConditionalNode(secondTree[secondPointer], secondData, firstData);
 		secondPointer += 1;
 	}

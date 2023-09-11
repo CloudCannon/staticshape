@@ -5,8 +5,8 @@
         "attrs": {},
         "children": [
             {
-                "type": "variable",
-                "reference": "h1"
+                "type": "text",
+                "value": "Secondary"
             }
         ]
     }

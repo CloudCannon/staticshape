@@ -1,8 +1,9 @@
 import { distance, closest } from 'fastest-levenshtein';
 import { normalizeClassList } from './node-helper';
 import { ASTAttributeList, ASTElementNode, ASTNode } from '../types';
+import { nodeDebugString, nodeListDebugString } from './debug-helper';
 
-export const loopThreshold = 0.9;
+export const loopThreshold = 0.85;
 
 function diffScore(score: number, max: number) {
 	if (max === 0) {
@@ -61,17 +62,6 @@ export function attributesEquivalencyScore(
 	firstAttrs: ASTAttributeList,
 	secondAttrs: ASTAttributeList
 ): number {
-	const firstId = firstAttrs['id'];
-	const secondId = secondAttrs['id'];
-	if (
-		(firstId || secondId) &&
-		(!firstId || firstId.type === 'attribute') &&
-		(!secondId || secondId.type === 'attribute') &&
-		firstId?.value !== secondId?.value
-	) {
-		return 0;
-	}
-
 	let max = 0;
 	let score = 0;
 	Object.keys(firstAttrs).forEach((attrName) => {
@@ -199,21 +189,43 @@ export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
 	return 0;
 }
 
-export const isBestMatch = (
-	current: ASTNode,
-	other: ASTNode,
-	currentTree: ASTNode[],
-	otherTree: ASTNode[]
-) => {
+export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[]) => {
+	const current = currentTree[0];
+	const other = otherTree[0];
 	const score = nodeEquivalencyScore(current, other);
 	if (score === 0) {
 		return false;
 	}
+	if (score === 1) {
+		return true;
+	}
 
-	for (let i = 0; i < currentTree.length; i++) {
+	for (let i = 1; i < currentTree.length; i++) {
 		const currentAlternative = currentTree[i];
 
 		let alternativeScore = nodeEquivalencyScore(currentAlternative, other);
+		console.error(
+			'Compare current alternatives',
+			nodeDebugString(currentAlternative, 0, 0),
+			'vs',
+			nodeDebugString(other, 0, 0),
+			alternativeScore
+		);
+		if (alternativeScore > score) {
+			return false;
+		}
+	}
+	for (let i = 1; i < otherTree.length; i++) {
+		const otherAlternative = otherTree[i];
+
+		let alternativeScore = nodeEquivalencyScore(otherAlternative, current);
+		console.error(
+			'Compare other alternatives',
+			nodeDebugString(otherAlternative, 0, 0),
+			'vs',
+			nodeDebugString(current, 0, 0),
+			alternativeScore
+		);
 		if (alternativeScore > score) {
 			return false;
 		}

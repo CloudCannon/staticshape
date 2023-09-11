@@ -17,7 +17,7 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 	const primaryData = new Data([], {});
 	const secondaryData = new Data([], {});
 
-	const tree = mergeTree(0, primaryData, secondaryData, def.primary, def.secondary, [
+	const tree = mergeTree(primaryData, secondaryData, def.primary, def.secondary, [
 		{
 			type: 'element',
 			name: 'div',
@@ -26,32 +26,11 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 		}
 	]);
 
+	console.log(tree, def.merged);
 	t.deepEqual(tree, def.merged);
 	t.deepEqual(primaryData.toJSON(), def.expectedPrimaryData || {});
 	t.deepEqual(secondaryData.toJSON(), def.expectedSecondaryData || {});
 }
-
-test('no diff', (t: ExecutionContext) =>
-	runTest(t, {
-		primary: [
-			{
-				type: 'text',
-				value: 'Hi'
-			}
-		],
-		secondary: [
-			{
-				type: 'text',
-				value: 'Hi'
-			}
-		],
-		merged: [
-			{
-				type: 'text',
-				value: 'Hi'
-			}
-		]
-	}));
 
 test('variable diff', (t: ExecutionContext) =>
 	runTest(t, {

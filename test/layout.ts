@@ -26,6 +26,7 @@ async function runTest(t: ExecutionContext, testName: string) {
 
 	const forwards = a.merge(b);
 
+	console.log(JSON.stringify(forwards.options.tree));
 	t.deepEqual(forwards.options.tree, expected);
 
 	const backwards = b.merge(a);
@@ -33,6 +34,9 @@ async function runTest(t: ExecutionContext, testName: string) {
 	t.deepEqual(backwards.options.tree, expected);
 }
 
-test('variable', (t: ExecutionContext) => runTest(t, 'variable'));
 test('conditional', (t: ExecutionContext) => runTest(t, 'conditional'));
 test('conditional-whitespace', (t: ExecutionContext) => runTest(t, 'conditional-whitespace'));
+test('loop', (t: ExecutionContext) => runTest(t, 'loop'));
+test('no-diff', (t: ExecutionContext) => runTest(t, 'no-diff'));
+test('text-to-text', (t: ExecutionContext) => runTest(t, 'text-to-text'));
+test('variable-to-text', (t: ExecutionContext) => runTest(t, 'variable-to-text'));

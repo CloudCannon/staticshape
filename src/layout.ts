@@ -19,7 +19,7 @@ export default class Layout {
 
 		return new Layout({
 			...this.options,
-			tree: mergeTree(0, firstData, secondData, this.options.tree, other.options.tree, [])
+			tree: mergeTree(firstData, secondData, this.options.tree, other.options.tree)
 		});
 	}
 

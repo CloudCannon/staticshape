@@ -28,7 +28,9 @@
                         "children": [
                             {
                                 "type": "variable",
-                                "reference": "title"
+                                "reference": [
+                                    "title"
+                                ]
                             }
                         ]
                     },
@@ -38,7 +40,9 @@
                     },
                     {
                         "type": "conditional",
-                        "reference": "show_meta_description",
+                        "reference": [
+                            "show_meta_description"
+                        ],
                         "child": {
                             "type": "element",
                             "name": "meta",
@@ -83,7 +87,9 @@
                         "children": [
                             {
                                 "type": "variable",
-                                "reference": "h1"
+                                "reference": [
+                                    "h1"
+                                ]
                             }
                         ]
                     },

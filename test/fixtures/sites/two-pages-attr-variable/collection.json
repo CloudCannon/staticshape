@@ -10,9 +10,7 @@
                     "content": [],
                     "data": {
                         "title": "Goose Owner",
-                        "img": {
-                            "alt": "Our goose"
-                        }
+                        "img_alt": "Our goose"
                     }
                 },
                 {
@@ -20,9 +18,7 @@
                     "content": [],
                     "data": {
                         "title": "Goose Admirer",
-                        "img": {
-                            "alt": "Their goose"
-                        }
+                        "img_alt": "Their goose"
                     }
                 }
             ],
@@ -91,8 +87,7 @@
                                                 "type": "variable-attribute",
                                                 "name": "alt",
                                                 "reference": [
-                                                    "img",
-                                                    "alt"
+                                                    "img_alt"
                                                 ]
                                             }
                                         },

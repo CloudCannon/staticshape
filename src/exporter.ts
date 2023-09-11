@@ -1,7 +1,7 @@
 import File from './file';
 import * as path from 'path';
 import HugoExportEngine from './export-engines/hugo';
-import ExportEngine, { FileExport } from './export-engines/interface';
+import HtmlExportEngine, { FileExport } from './export-engines/html';
 import { SiteResponse } from './site';
 import Layout from './layout';
 import Page from './page';
@@ -17,7 +17,7 @@ interface ExporterOptions {
 
 export default class Exporter {
 	options: ExporterOptions;
-	engine: ExportEngine;
+	engine: HtmlExportEngine;
 	constructor(options: ExporterOptions) {
 		this.options = options;
 		this.engine = this.getExportEngine();
@@ -99,7 +99,7 @@ export default class Exporter {
 		);
 	}
 
-	getExportEngine(): ExportEngine {
+	getExportEngine(): HtmlExportEngine {
 		const options = {
 			sourceBasePath: this.options.sourceBasePath,
 			exportBasePath: this.options.exportBasePath,

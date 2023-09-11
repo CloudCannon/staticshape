@@ -1,13 +1,13 @@
 [
     {
         "type": "element",
-        "name": "p",
+        "name": "h1",
         "attrs": {},
         "children": [
             {
                 "type": "variable",
                 "reference": [
-                    "p"
+                    "h1"
                 ]
             }
         ]

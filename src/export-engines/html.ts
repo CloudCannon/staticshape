@@ -3,7 +3,6 @@ import Layout from '../layout';
 import Page from '../page';
 import { SiteResponse } from '../site';
 import {
-	ASTAttribute,
 	ASTConditionalNode,
 	ASTContentNode,
 	ASTDoctypeNode,
@@ -16,7 +15,8 @@ import {
 	ASTConditionalAttribute,
 	ASTStaticAttribute,
 	ASTLoopNode,
-	ASTAttributeList
+	ASTAttributeList,
+	ASTMarkdownNode
 } from '../types';
 
 interface ExportEngineOptions {
@@ -30,10 +30,10 @@ export interface FileExport {
 	contents: string;
 }
 
-export default class ExportEngine {
-	options: ExportEngineOptions;
-	constructor(options: ExportEngineOptions) {
-		this.options = options;
+export default class HtmlExportEngine {
+	options: ExportEngineOptions | null;
+	constructor(options?: ExportEngineOptions) {
+		this.options = options ?? null;
 	}
 
 	staticDirectory(): string {
@@ -49,17 +49,17 @@ export default class ExportEngine {
 	}
 
 	exportLayout(
-		layout: Layout,
-		collection: CollectionResponse,
-		collectionKey: string
+		_layout: Layout,
+		_collection: CollectionResponse,
+		_collectionKey: string
 	): FileExport {
 		throw new Error('Not yet implemented');
 	}
 
 	exportCollectionItem(
-		item: Page,
-		collection: CollectionResponse,
-		collectionKey: string
+		_item: Page,
+		_collection: CollectionResponse,
+		_collectionKey: string
 	): FileExport {
 		throw new Error('Not yet implemented');
 	}
@@ -80,6 +80,8 @@ export default class ExportEngine {
 				return this.renderComment(node);
 			case 'variable':
 				return this.renderVariable(node);
+			case 'markdown-variable':
+				return this.renderMarkdownVariable(node);
 			case 'conditional':
 				return this.renderConditional(node);
 			case 'loop':
@@ -119,11 +121,11 @@ export default class ExportEngine {
 		return [attr.name, `"${attr.value}"`].join('=');
 	}
 
-	renderVariableAttribute(attr: ASTVariableAttribute | ASTConditionalAttribute): string {
+	renderVariableAttribute(_attr: ASTVariableAttribute | ASTConditionalAttribute): string {
 		throw new Error('Not yet implemented');
 	}
 
-	renderConditionalAttribute(attr: ASTConditionalAttribute): string {
+	renderConditionalAttribute(_attr: ASTConditionalAttribute): string {
 		throw new Error('Not yet implemented');
 	}
 
@@ -147,19 +149,23 @@ export default class ExportEngine {
 		return `<!-- ${text.value} -->`;
 	}
 
-	renderVariable(node: ASTVariableNode): string {
+	renderVariable(_node: ASTVariableNode): string {
 		throw new Error('Variable render not yet implemented');
 	}
 
-	renderConditional(node: ASTConditionalNode): string {
+	renderMarkdownVariable(_node: ASTMarkdownNode): string {
+		throw new Error('Markdown render not yet implemented');
+	}
+
+	renderConditional(_node: ASTConditionalNode): string {
 		throw new Error('Conditional render not yet implemented');
 	}
 
-	renderLoop(node: ASTLoopNode): string {
+	renderLoop(_node: ASTLoopNode): string {
 		throw new Error('Loop render not yet implemented');
 	}
 
-	renderContent(node: ASTContentNode): string {
+	renderContent(_node: ASTContentNode): string {
 		throw new Error('Content render not yet implemented');
 	}
 }

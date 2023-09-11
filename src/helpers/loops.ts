@@ -9,9 +9,10 @@ export const invalidLoopTags: Record<string, boolean> = {
 	path: true
 };
 
-export function findRepeatedIndex(current: ASTElementNode, remainingNodes: ASTNode[]): number {
+export function findRepeatedIndex(remainingNodes: ASTNode[]): number {
 	let lastValidIndex = 0;
-	for (let i = 0; i < remainingNodes.length; i++) {
+	const current = remainingNodes[0];
+	for (let i = 1; i < remainingNodes.length; i++) {
 		const node = remainingNodes[i];
 
 		if (node.type === 'text') {
@@ -23,7 +24,7 @@ export function findRepeatedIndex(current: ASTElementNode, remainingNodes: ASTNo
 			if (score <= loopThreshold) {
 				break;
 			}
-			lastValidIndex = i + 1;
+			lastValidIndex = i;
 		}
 	}
 

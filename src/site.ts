@@ -1,5 +1,5 @@
 import Directory from './directory';
-import Collection, { CollectionResponse, CollectionOptions, CollectionDebug } from './collection';
+import Collection, { CollectionResponse, CollectionOptions } from './collection';
 
 interface SiteOptions {
 	basePath: string;
@@ -15,11 +15,9 @@ export interface SiteResponse {
 
 export default class Site {
 	options: SiteOptions;
-	debug: Record<string, CollectionDebug>;
 
 	constructor(options: SiteOptions) {
 		this.options = options;
-		this.debug = {};
 	}
 
 	async build(): Promise<SiteResponse> {
@@ -39,7 +37,6 @@ export default class Site {
 			const collectionResponse = await collection.build();
 
 			collections[config.name] = collectionResponse;
-			this.debug[config.name] = collection.debug;
 		}
 
 		const staticFiles = files

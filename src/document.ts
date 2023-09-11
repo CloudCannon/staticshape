@@ -39,7 +39,7 @@ export default class Document {
 
 	diff(other: Document): ASTTree {
 		this.data = new Data([], {});
-		const tree = mergeTree(0, this.data, other.data, this.layout, other.layout, []);
+		const tree = mergeTree(this.data, other.data, this.layout, other.layout);
 
 		return {
 			base: new Page({
@@ -57,14 +57,6 @@ export default class Document {
 			layout: new Layout({
 				tree: tree
 			})
-		};
-	}
-
-	debug() {
-		return {
-			pathname: this.pathname,
-			layout: this.layout,
-			contents: this.contents
 		};
 	}
 }
