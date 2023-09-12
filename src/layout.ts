@@ -1,16 +1,22 @@
 import { ASTNode } from './types';
 import { mergeTree } from './helpers/dom-diff';
 import Data from './helpers/Data';
+import { Logger } from './logger';
 
 interface LayoutOptions {
+	logger?: Logger;
+	tree: ASTNode[];
+}
+interface LayoutJSON {
 	tree: ASTNode[];
 }
 
 export default class Layout {
-	options: LayoutOptions;
+	logger?: Logger;
+	tree: ASTNode[];
 
 	constructor(options: LayoutOptions) {
-		this.options = options;
+		this.tree = options.tree;
 	}
 
 	merge(other: Layout): Layout {
@@ -18,12 +24,14 @@ export default class Layout {
 		const secondData = new Data([], {});
 
 		return new Layout({
-			...this.options,
-			tree: mergeTree(firstData, secondData, this.options.tree, other.options.tree)
+			logger: this.logger,
+			tree: mergeTree(firstData, secondData, this.tree, other.tree, [], this.logger)
 		});
 	}
 
-	toJSON(): object {
-		return this.options;
+	toJSON(): LayoutJSON {
+		return {
+			tree: this.tree
+		};
 	}
 }

@@ -26,12 +26,11 @@ async function runTest(t: ExecutionContext, testName: string) {
 
 	const forwards = a.merge(b);
 
-	console.log(JSON.stringify(forwards.options.tree));
-	t.deepEqual(forwards.options.tree, expected);
+	t.deepEqual(forwards.tree, expected);
 
 	const backwards = b.merge(a);
 
-	t.deepEqual(backwards.options.tree, expected);
+	t.deepEqual(backwards.tree, expected);
 }
 
 test('conditional', (t: ExecutionContext) => runTest(t, 'conditional'));

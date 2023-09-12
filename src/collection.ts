@@ -2,8 +2,10 @@ import File from './file';
 import { PageContentsConfig } from './helpers/html-parser';
 import Document from './document';
 import { PageJSON } from './page';
+import { Logger } from './logger';
+import slugify from 'slugify';
 
-export interface CollectionOptions {
+export interface CollectionConfig {
 	name: string;
 	subPath: string;
 	only?: string[] | null | void;
@@ -12,51 +14,57 @@ export interface CollectionOptions {
 	content?: PageContentsConfig;
 }
 
+export interface CollectionOptions {
+	logger?: Logger;
+}
+
 export interface CollectionResponse {
 	pages: PageJSON[];
 	layout: object;
 }
 
 export default class Collection {
-	options: CollectionOptions;
+	content?: PageContentsConfig;
+	logger?: Logger;
 	files: File[];
 
-	constructor(files: File[], options: CollectionOptions) {
-		this.files = files;
-		this.options = options;
-	}
+	constructor(files: File[], config: CollectionConfig, options: CollectionOptions) {
+		this.logger = options.logger;
+		this.content = config.content;
 
-	async build(): Promise<CollectionResponse> {
-		const collectionFiles = this.files.filter((file) => {
+		this.files = files.filter((file) => {
 			if (!file.isHtml()) {
 				return false;
 			}
 
 			const { pathname } = file.options;
-			if (this.options.only) {
-				return this.options.only.includes(pathname);
+			if (config.only) {
+				return config.only.includes(pathname);
 			}
-			if (this.options.include?.includes(pathname)) {
+			if (config.include?.includes(pathname)) {
 				return true;
 			}
 
-			if (this.options.exclude?.includes(pathname)) {
+			if (config.exclude?.includes(pathname)) {
 				return false;
 			}
 
-			return pathname.startsWith(this.options.subPath);
+			return pathname.startsWith(config.subPath);
 		});
+	}
 
+	async build(): Promise<CollectionResponse> {
 		const documents = await Promise.all(
-			collectionFiles.map(async (file) => {
+			this.files.map(async (file) => {
 				const html = await file.read();
 
 				return new Document({
 					pathname: file.name(),
 					content: html,
 					config: {
-						content: this.options.content
-					}
+						content: this.content
+					},
+					logger: this.logger
 				});
 			})
 		);
@@ -66,13 +74,27 @@ export default class Collection {
 		}
 
 		const baseDoc = documents[0];
-		console.error(`Comparing ${baseDoc.pathname} and ${documents[1].pathname}`);
-		console.error(JSON.stringify(documents[0].layout));
-		console.error(JSON.stringify(documents[1].layout));
 		let current = baseDoc.diff(documents[1]);
+		await this.logger?.writeLog(
+			`base-${slugify(baseDoc.pathname)}.json`,
+			JSON.stringify(baseDoc.layout, null, '\t')
+		);
+		await this.logger?.writeLog(
+			`${slugify(documents[1].pathname)}.json`,
+			JSON.stringify(documents[1].layout, null, '\t')
+		);
+		await this.logger?.writeLog('layout.json', JSON.stringify(current.layout.tree, null, '\t'));
 		for (let i = 2; i < documents.length; i++) {
-			console.error(`Comparing ${baseDoc.pathname} and ${documents[i].pathname}`);
+			await this.logger?.rotateLog();
 			const next = baseDoc.diff(documents[i]);
+			await this.logger?.writeLog(
+				`${slugify(documents[i].pathname)}.json`,
+				JSON.stringify(documents[1].layout, null, '\t')
+			);
+			await this.logger?.writeLog(
+				'merged.json',
+				JSON.stringify(next.layout.tree, null, '\t')
+			);
 
 			// Merge the next and current bases
 			const base = current.base.merge(next.base);
@@ -85,6 +107,10 @@ export default class Collection {
 
 			// Merge the next and current layouts
 			const layout = current.layout.merge(next.layout);
+			await this.logger?.writeLog(
+				'layout.json',
+				JSON.stringify(current.layout.tree, null, '\t')
+			);
 
 			current = {
 				base,
@@ -92,6 +118,7 @@ export default class Collection {
 				layout
 			};
 		}
+		await this.logger?.rotateLog();
 
 		return {
 			pages: [current.base.toJSON(), ...current.pages.map((page) => page.toJSON())],

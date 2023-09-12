@@ -3,8 +3,9 @@ import { normalizeClassList } from './node-helper';
 import { ASTAttributeList, ASTElementNode, ASTNode } from '../types';
 import { nodeDebugString, nodeListDebugString } from './debug-helper';
 import { booleanAttributes } from './attributes';
+import { Logger } from '../logger';
 
-export const loopThreshold = 0.85;
+export const loopThreshold = 0.89;
 
 function diffScore(score: number, max: number) {
 	if (max === 0) {
@@ -80,7 +81,6 @@ export function attributesEquivalencyScore(
 		}
 
 		if (!firstAttr) {
-			console.log(firstAttrs, secondAttrs, attrName);
 			return;
 		}
 
@@ -196,7 +196,7 @@ export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
 	return 0;
 }
 
-export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[]) => {
+export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[], logger?: Logger) => {
 	const current = currentTree[0];
 	const other = otherTree[0];
 	const score = nodeEquivalencyScore(current, other);
@@ -211,7 +211,7 @@ export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[]) => {
 		const currentAlternative = currentTree[i];
 
 		let alternativeScore = nodeEquivalencyScore(currentAlternative, other);
-		console.error(
+		logger?.log(
 			'Compare current alternatives',
 			nodeDebugString(currentAlternative, 0, 0),
 			'vs',
@@ -226,7 +226,7 @@ export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[]) => {
 		const otherAlternative = otherTree[i];
 
 		let alternativeScore = nodeEquivalencyScore(otherAlternative, current);
-		console.error(
+		logger?.log(
 			'Compare other alternatives',
 			nodeDebugString(otherAlternative, 0, 0),
 			'vs',

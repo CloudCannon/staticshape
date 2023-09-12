@@ -4,6 +4,7 @@ import Data from './Data';
 import { findEndOfMarkdownIndex, isMarkdownElement, markdownify } from './markdown';
 import { diffNodes } from './dom-diff';
 import { nodeDebugString } from './debug-helper';
+import { Logger } from '../logger';
 
 export const editableAttrs: Record<string, boolean> = {
 	href: true,
@@ -13,9 +14,12 @@ export const editableAttrs: Record<string, boolean> = {
 	title: true
 };
 
-export function convertAttrsToVariables(data: Data, element: ASTElementNode): ASTAttributeList {
+export function convertAttrsToVariables(
+	data: Data,
+	element: ASTElementNode,
+	logger?: Logger
+): ASTAttributeList {
 	const converted = {} as ASTAttributeList;
-	console.log(element.attrs);
 	Object.keys(element.attrs).forEach((attrName) => {
 		const attr = element.attrs[attrName];
 		if (attr && attr.type === 'attribute' && editableAttrs[attrName]) {
@@ -101,28 +105,32 @@ function buildLoop(elements: ASTElementNode[], parentElements: ASTElementNode[])
 export function convertElementToComponent(
 	data: Data,
 	element: ASTElementNode,
-	parentElements: ASTElementNode[] = []
+	parentElements: ASTElementNode[] = [],
+	logger?: Logger
 ): ASTElementNode {
-	console.log('convertElementToComponent', nodeDebugString(element, 0, 0));
 	return {
 		type: 'element',
 		name: element.name,
-		attrs: convertAttrsToVariables(data, element),
-		children: convertTreeToComponents(data, element.children, [...parentElements, element])
+		attrs: convertAttrsToVariables(data, element, logger),
+		children: convertTreeToComponents(
+			data,
+			element.children,
+			[...parentElements, element],
+			logger
+		)
 	};
 }
 
 export function convertTreeToComponents(
 	data: Data,
 	tree: ASTNode[],
-	parentElements: ASTElementNode[] = []
+	parentElements: ASTElementNode[] = [],
+	logger?: Logger
 ): ASTNode[] {
 	const converted = [] as ASTNode[];
 	let index = 0;
-	console.log(index, tree.length);
 	while (index < tree.length) {
 		const node = tree[index];
-		console.log(index, nodeDebugString(node, 0, 0));
 		if (node.type === 'element') {
 			if (isMarkdownElement(node)) {
 				const remainingNodes = tree.slice(index);
@@ -172,7 +180,7 @@ export function convertTreeToComponents(
 				}
 			}
 
-			converted.push(convertElementToComponent(data, node, parentElements));
+			converted.push(convertElementToComponent(data, node, parentElements, logger));
 			index += 1;
 		} else if (node.type === 'text' && node.value.trim()) {
 			const variableName = data.getVariableName(parentElements);

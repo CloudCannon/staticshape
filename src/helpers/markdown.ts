@@ -4,6 +4,10 @@ import { findLastNonWhitespaceIndex } from './node-helper';
 import * as Turndown from 'turndown';
 const TurndownService = (Turndown as any).default;
 
+export const invalidLoopParentTags: Record<string, boolean> = {
+	body: true
+};
+
 const listTags: Record<string, boolean> = {
 	ul: true,
 	ol: true

@@ -1,4 +1,4 @@
-import { ASTElementNode, ASTNode } from '../types';
+import { ASTNode } from '../types';
 import { nodeEquivalencyScore, loopThreshold } from './node-equivalency';
 
 export const invalidLoopTags: Record<string, boolean> = {
@@ -21,7 +21,7 @@ export function findRepeatedIndex(remainingNodes: ASTNode[]): number {
 			}
 		} else if (node.type === 'element') {
 			const score = nodeEquivalencyScore(current, node);
-			if (score <= loopThreshold) {
+			if (score < loopThreshold) {
 				break;
 			}
 			lastValidIndex = i;

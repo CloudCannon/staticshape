@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import Site from './site';
 import Exporter, { Engine } from './exporter';
+import { Logger } from './logger';
 
 p.intro(`Welcome to the static to ssg`);
 
@@ -136,7 +137,8 @@ s.stop(`Loaded ${absoluteConfigPath}`);
 s.start(`Building site`);
 const site = new Site({
 	basePath: absoluteSourcePath,
-	...config
+	...config,
+	logger: new Logger()
 });
 
 const siteResponse = await site.build();
