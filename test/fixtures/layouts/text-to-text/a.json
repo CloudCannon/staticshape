@@ -2,11 +2,11 @@
     {
         "type": "element",
         "name": "h1",
-        "attrs": [],
+        "attrs": {},
         "children": [
             {
                 "type": "text",
-                "value": "Should be ignored"
+                "value": "Primary"
             }
         ]
     }

@@ -1,40 +1,42 @@
-import { ASTNode } from "./types";
+import { ASTNode } from './types';
+import Data, { Hash } from './helpers/Data';
 
 interface PageOptions {
-    pathname: string,
-    data: Record<string, any>;
-    content: ASTNode[];
+	pathname: string;
+	data: Data;
+	content: ASTNode[];
 }
 
-function mergeData(data: Record<string, any>, other : Record<string, any>) {
-    const clone = structuredClone(data);
-    Object.keys(other).forEach((key) => {
-        if (!clone[key]) {
-            clone[key] = other[key];
-        }
-
-        if (typeof clone[key] === 'object' && other[key]) {
-            mergeData(clone[key], other[key])
-        }
-    });
-    return clone;
+export interface PageJSON {
+	pathname: string;
+	data: Hash;
+	content: ASTNode[];
 }
 
 export default class Page {
-    options: PageOptions;
+	pathname: string;
+	data: Data;
+	content: ASTNode[];
 
-    constructor(options: PageOptions) {
-        this.options = options;
-    }
+	constructor(options: PageOptions) {
+		this.pathname = options.pathname;
+		this.data = options.data;
+		this.content = options.content;
+	}
 
-    merge(other: Page) : Page {
-        return new Page({
-            ...this.options,
-            data: mergeData(this.options.data, other.options.data)
-        });
-    }
+	merge(other: Page): Page {
+		return new Page({
+			pathname: this.pathname,
+			data: this.data.merge(other.data),
+			content: this.content
+		});
+	}
 
-    toJSON() : object {
-        return this.options;
-    }
+	toJSON(): PageJSON {
+		return {
+			pathname: this.pathname,
+			data: this.data.toJSON(),
+			content: this.content
+		};
+	}
 }

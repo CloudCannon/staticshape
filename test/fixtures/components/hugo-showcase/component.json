@@ -1,0 +1,298 @@
+{
+	"type": "element",
+	"name": "div",
+	"attrs": {
+		"class": {
+			"type": "attribute",
+			"name": "class",
+			"value": "w-100 ph4 ph5-ns pb5 pb6-ns pt1 pt3-ns"
+		}
+	},
+	"children": [
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "element",
+			"name": "article",
+			"attrs": {
+				"class": {
+					"type": "attribute",
+					"name": "class",
+					"value": "cf pa3 pa4-m pa4-l nested-copy-line-height nested-img"
+				}
+			},
+			"children": [
+				{
+					"type": "text",
+					"value": "\n\t\t"
+				},
+				{
+					"type": "element",
+					"name": "h1",
+					"attrs": {
+						"class": {
+							"type": "attribute",
+							"name": "class",
+							"value": "primary-color-dark"
+						}
+					},
+					"children": [
+						{
+							"type": "variable",
+							"reference": [
+								"h1_primary-color-dark"
+							]
+						}
+					]
+				},
+				{
+					"type": "text",
+					"value": "\n\t\t"
+				},
+				{
+					"type": "element",
+					"name": "div",
+					"attrs": {
+						"class": {
+							"type": "attribute",
+							"name": "class",
+							"value": "nested-copy-line-height"
+						}
+					},
+					"children": []
+				},
+				{
+					"type": "text",
+					"value": "\n\t"
+				}
+			]
+		},
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "element",
+			"name": "section",
+			"attrs": {
+				"class": {
+					"type": "attribute",
+					"name": "class",
+					"value": "flex-ns flex-wrap justify-between w-100 v-top"
+				}
+			},
+			"children": [
+				{
+					"type": "text",
+					"value": "\n\t\t"
+				},
+				{
+					"type": "loop",
+					"reference": [
+						"section_flex-ns_flex-wrap_justify-between_v-top_w-100_items"
+					],
+					"template": {
+						"type": "element",
+						"name": "a",
+						"attrs": {
+							"href": {
+								"type": "variable-attribute",
+								"name": "href",
+								"reference": [
+									"a_b--moon-gray_ba_bg-animate_bg-white_db_flex-auto-ns_hover-bg-near-white_mb3_mr3_w-100_w-30-l_href"
+								]
+							},
+							"class": {
+								"type": "attribute",
+								"name": "class",
+								"value": "b--moon-gray ba bg-animate bg-white db flex-auto-ns hover-bg-near-white mb3 mr3 w-100 w-30-l"
+							},
+							"style": {
+								"type": "attribute",
+								"name": "style",
+								"value": "max-width: 1024px"
+							}
+						},
+						"children": [
+							{
+								"type": "text",
+								"value": "\n\t\t\t"
+							},
+							{
+								"type": "element",
+								"name": "div",
+								"attrs": {
+									"class": {
+										"type": "attribute",
+										"name": "class",
+										"value": "flex flex-column black h-100 mb2 pa3 pa4-l"
+									}
+								},
+								"children": [
+									{
+										"type": "text",
+										"value": "\n\t\t\t\t"
+									},
+									{
+										"type": "element",
+										"name": "img",
+										"attrs": {
+											"src": {
+												"type": "attribute",
+												"name": "src",
+												"value": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwMCIgaGVpZ2h0PSI5MDAiIHZpZXdCb3g9IjAgMCAxNjAwIDkwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHRpdGxlPlJlY3RhbmdsZTwvdGl0bGU+PGRlc2M+Q3JlYXRlZCB3aXRoIFNrZXRjaC48L2Rlc2M+PGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHJlY3QgaWQ9IlJlY3RhbmdsZSIgeD0iMCIgeT0iMCIgd2lkdGg9IjE2MDAiIGhlaWdodD0iOTAwIi8+PC9nPjwvc3ZnPg=="
+											},
+											"data-sizes": {
+												"type": "attribute",
+												"name": "data-sizes",
+												"value": "auto"
+											},
+											"data-srcset": {
+												"type": "variable-attribute",
+												"name": "data-srcset",
+												"reference": [
+													"img_grow_img_lazyautosizes_lazyloaded_data-srcset"
+												]
+											},
+											"data-bg": {
+												"type": "variable-attribute",
+												"name": "data-bg",
+												"reference": [
+													"img_grow_img_lazyautosizes_lazyloaded_data-bg"
+												]
+											},
+											"class": {
+												"type": "attribute",
+												"name": "class",
+												"value": "grow img lazyautosizes lazyloaded"
+											},
+											"style": {
+												"type": "variable-attribute",
+												"name": "style",
+												"reference": [
+													"img_grow_img_lazyautosizes_lazyloaded_style"
+												]
+											},
+											"sizes": {
+												"type": "variable-attribute",
+												"name": "sizes",
+												"reference": [
+													"img_grow_img_lazyautosizes_lazyloaded_sizes"
+												]
+											},
+											"srcset": {
+												"type": "variable-attribute",
+												"name": "srcset",
+												"reference": [
+													"img_grow_img_lazyautosizes_lazyloaded_srcset"
+												]
+											}
+										},
+										"children": []
+									},
+									{
+										"type": "text",
+										"value": "\n\t\t\t\t"
+									},
+									{
+										"type": "element",
+										"name": "div",
+										"attrs": {
+											"style": {
+												"type": "attribute",
+												"name": "style",
+												"value": "margin-top: auto"
+											}
+										},
+										"children": [
+											{
+												"type": "text",
+												"value": "\n\t\t\t\t\t"
+											},
+											{
+												"type": "element",
+												"name": "h2",
+												"attrs": {
+													"class": {
+														"type": "attribute",
+														"name": "class",
+														"value": "dib f3 mt4"
+													}
+												},
+												"children": [
+													{
+														"type": "variable",
+														"reference": [
+															"h2_dib_f3_mt4"
+														]
+													}
+												]
+											},
+											{
+												"type": "text",
+												"value": "\n\t\t\t\t"
+											}
+										]
+									},
+									{
+										"type": "text",
+										"value": "\n\t\t\t"
+									}
+								]
+							}
+						]
+					}
+				},
+				{
+					"type": "text",
+					"value": "\n\t"
+				}
+			]
+		},
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "element",
+			"name": "div",
+			"attrs": {
+				"class": {
+					"type": "attribute",
+					"name": "class",
+					"value": "nested-list-reset nested-links"
+				}
+			},
+			"children": []
+		},
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "element",
+			"name": "div",
+			"attrs": {
+				"class": {
+					"type": "attribute",
+					"name": "class",
+					"value": "dib f3 mt4"
+				}
+			},
+			"children": [
+				{
+					"type": "variable",
+					"reference": [
+						"div_dib_f3_mt4"
+					]
+				}
+			]
+		},
+		{
+			"type": "text",
+			"value": "\n"
+		}
+	]
+}

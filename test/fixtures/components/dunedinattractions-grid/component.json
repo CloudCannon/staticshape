@@ -1,0 +1,205 @@
+{
+	"type": "element",
+	"name": "div",
+	"attrs": {
+		"class": {
+			"type": "attribute",
+			"name": "class",
+			"value": "attractions grid vertical-flow"
+		}
+	},
+	"children": [
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "loop",
+			"reference": [
+				"div_attractions_grid_vertical-flow_items"
+			],
+			"template": {
+				"type": "element",
+				"name": "a",
+				"attrs": {
+					"class": {
+						"type": "attribute",
+						"name": "class",
+						"value": "attraction"
+					},
+					"href": {
+						"type": "variable-attribute",
+						"name": "href",
+						"reference": [
+							"a_attraction_href"
+						]
+					}
+				},
+				"children": [
+					{
+						"type": "text",
+						"value": "\n\t\t"
+					},
+					{
+						"type": "element",
+						"name": "div",
+						"attrs": {
+							"class": {
+								"type": "attribute",
+								"name": "class",
+								"value": "attraction-image"
+							}
+						},
+						"children": [
+							{
+								"type": "text",
+								"value": "\n\t\t\t"
+							},
+							{
+								"type": "element",
+								"name": "img",
+								"attrs": {
+									"alt": {
+										"type": "variable-attribute",
+										"name": "alt",
+										"reference": [
+											"img_alt"
+										]
+									},
+									"height": {
+										"type": "attribute",
+										"name": "height",
+										"value": "500"
+									},
+									"loading": {
+										"type": "attribute",
+										"name": "loading",
+										"value": "lazy"
+									},
+									"src": {
+										"type": "variable-attribute",
+										"name": "src",
+										"reference": [
+											"img_src"
+										]
+									},
+									"width": {
+										"type": "attribute",
+										"name": "width",
+										"value": "700"
+									}
+								},
+								"children": []
+							},
+							{
+								"type": "text",
+								"value": "\n\t\t"
+							}
+						]
+					},
+					{
+						"type": "text",
+						"value": "\n\n\t\t"
+					},
+					{
+						"type": "element",
+						"name": "div",
+						"attrs": {
+							"class": {
+								"type": "attribute",
+								"name": "class",
+								"value": "attraction-details"
+							}
+						},
+						"children": [
+							{
+								"type": "text",
+								"value": "\n\t\t\t"
+							},
+							{
+								"type": "markdown-variable",
+								"reference": [
+									"div_attraction-details_markdown"
+								]
+							},
+							{
+								"type": "text",
+								"value": "\n\n\t\t\t"
+							},
+							{
+								"type": "element",
+								"name": "ul",
+								"attrs": {
+									"class": {
+										"type": "attribute",
+										"name": "class",
+										"value": "badges"
+									}
+								},
+								"children": [
+									{
+										"type": "text",
+										"value": "\n\t\t\t\t"
+									},
+									{
+										"type": "loop",
+										"reference": [
+											"ul_badges_items"
+										],
+										"template": {
+											"type": "element",
+											"name": "li",
+											"attrs": {
+												"class": {
+													"type": "variable-attribute",
+													"name": "class",
+													"reference": [
+														"li_badge_badge-blue_class"
+													]
+												}
+											},
+											"children": [
+												{
+													"type": "variable",
+													"reference": [
+														"li_badge_badge-blue"
+													]
+												}
+											]
+										}
+									},
+									{
+										"type": "text",
+										"value": "\n\t\t\t"
+									}
+								]
+							},
+							{
+								"type": "text",
+								"value": "\n\n\t\t\t"
+							},
+							{
+								"type": "markdown-variable",
+								"reference": [
+									"div_attraction-details_markdown_0"
+								]
+							},
+							{
+								"type": "text",
+								"value": "\n\t\t"
+							}
+						]
+					},
+					{
+						"type": "text",
+						"value": "\n\t"
+					}
+				]
+			}
+		},
+		{
+			"type": "text",
+			"value": "\n"
+		}
+	]
+}

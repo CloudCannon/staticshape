@@ -7,13 +7,9 @@
                     "pathname": "about.html",
                     "content": [
                         {
-                            "type": "text",
-                            "value": "\n\t\t"
-                        },
-                        {
                             "type": "element",
                             "name": "h1",
-                            "attrs": [],
+                            "attrs": {},
                             "children": [
                                 {
                                     "type": "text",
@@ -23,7 +19,7 @@
                         },
                         {
                             "type": "text",
-                            "value": "\n\t"
+                            "value": "\n"
                         }
                     ],
                     "data": {
@@ -34,13 +30,9 @@
                     "pathname": "contact.html",
                     "content": [
                         {
-                            "type": "text",
-                            "value": "\n\t\t"
-                        },
-                        {
                             "type": "element",
                             "name": "h1",
-                            "attrs": [],
+                            "attrs": {},
                             "children": [
                                 {
                                     "type": "text",
@@ -50,7 +42,7 @@
                         },
                         {
                             "type": "text",
-                            "value": "\n\t"
+                            "value": "\n"
                         }
                     ],
                     "data": {
@@ -61,13 +53,9 @@
                     "pathname": "index.html",
                     "content": [
                         {
-                            "type": "text",
-                            "value": "\n\t\t"
-                        },
-                        {
                             "type": "element",
                             "name": "h1",
-                            "attrs": [],
+                            "attrs": {},
                             "children": [
                                 {
                                     "type": "text",
@@ -77,7 +65,7 @@
                         },
                         {
                             "type": "text",
-                            "value": "\n\t"
+                            "value": "\n"
                         }
                     ],
                     "data": {
@@ -94,16 +82,12 @@
                     {
                         "type": "element",
                         "name": "html",
-                        "attrs": [],
+                        "attrs": {},
                         "children": [
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
                             {
                                 "type": "element",
                                 "name": "head",
-                                "attrs": [],
+                                "attrs": {},
                                 "children": [
                                     {
                                         "type": "text",
@@ -112,11 +96,13 @@
                                     {
                                         "type": "element",
                                         "name": "title",
-                                        "attrs": [],
+                                        "attrs": {},
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "title"
+                                                "reference": [
+                                                    "title"
+                                                ]
                                             }
                                         ]
                                     },
@@ -133,16 +119,20 @@
                             {
                                 "type": "element",
                                 "name": "body",
-                                "attrs": [],
+                                "attrs": {},
                                 "children": [
                                     {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
                                         "type": "content"
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\n"
                                     }
                                 ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n"
                             }
                         ]
                     }

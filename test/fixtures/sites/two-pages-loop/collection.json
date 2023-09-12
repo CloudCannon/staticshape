@@ -1,0 +1,160 @@
+{
+    "staticFiles": [],
+    "collections": {
+        "pages": {
+            "pages": [
+                {
+                    "pathname": "index.html",
+                    "content": [],
+                    "data": {
+                        "title": "Home | Test",
+                        "h1": "Home",
+                        "div_items": [
+                            {
+                            "div_block": "Home first item"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "pathname": "about.html",
+                    "content": [],
+                    "data": {
+                        "title": "About | Test",
+                        "h1": "About",
+                        "div_items": [
+                            {
+                            "div_block": "About first item"
+                            },
+                            {
+                            "div_block": "About second item"
+                            },
+                            {
+                            "div_block": "About third item"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "layout": {
+                "tree": [
+                    {
+                        "type": "doctype",
+                        "value": "html"
+                    },
+                    {
+                        "type": "element",
+                        "name": "html",
+                        "attrs": {},
+                        "children": [
+                            {
+                                "type": "element",
+                                "name": "head",
+                                "attrs": {},
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
+                                        "type": "element",
+                                        "name": "title",
+                                        "attrs": {},
+                                        "children": [
+                                            {
+                                                "type": "variable",
+                                                "reference": [
+                                                    "title"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "value": "\n\t"
+                            },
+                            {
+                                "type": "element",
+                                "name": "body",
+                                "attrs": {},
+                                "children": [
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
+                                        "type": "element",
+                                        "name": "h1",
+                                        "attrs": {},
+                                        "children": [
+                                            {
+                                                "type": "variable",
+                                                "reference": [
+                                                    "h1"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\t"
+                                    },
+                                    {
+                                        "type": "element",
+                                        "name": "div",
+                                        "attrs": {},
+                                        "children": [
+                                            {
+                                                "type": "text",
+                                                "value": "\n\t\t\t"
+                                            },
+                                            {
+                                                "type": "loop",
+                                                "reference": [
+                                                    "div_items"
+                                                ],
+                                                "template": {
+                                                    "type": "element",
+                                                    "name": "div",
+                                                    "attrs": {
+                                                        "class": {
+                                                            "type": "attribute",
+                                                            "name": "class",
+                                                            "value": "block"
+                                                        }
+                                                    },
+                                                    "children": [
+                                                        {
+                                                            "type": "variable",
+                                                            "reference": [
+                                                                "div_block"
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            {
+                                                "type": "text",
+                                                "value": "\n\t\t"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "text",
+                                        "value": "\n\t\n"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,15 +1,19 @@
 [
     {
         "type": "conditional",
-        "reference": "h1",
+        "reference": [
+            "h1"
+        ],
         "child": {
             "type": "element",
             "name": "h1",
-            "attrs": [],
+            "attrs": {},
             "children": [
                 {
                     "type": "variable",
-                    "reference": "h1"
+                    "reference": [
+                        "h1"
+                    ]
                 }
             ]
         }
@@ -17,11 +21,13 @@
     {
         "type": "element",
         "name": "p",
-        "attrs": [],
+        "attrs": {},
         "children": [
             {
                 "type": "variable",
-                "reference": "p"
+                "reference": [
+                    "p"
+                ]
             }
         ]
     }

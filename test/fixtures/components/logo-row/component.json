@@ -1,0 +1,110 @@
+{
+	"type": "element",
+	"name": "div",
+	"attrs": {
+		"class": {
+			"type": "attribute",
+			"name": "class",
+			"value": "md:flex justify-between flex-wrap gap-4 logo-ticker-Vli6fD9QnHgFOSC1LE0O"
+		}
+	},
+	"children": [
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "loop",
+			"reference": [
+				"div_flex-wrap_gap-4_justify-between_logo-ticker-Vli6fD9QnHgFOSC1LE0O_md:flex_items"
+			],
+			"template": {
+				"type": "element",
+				"name": "div",
+				"attrs": {
+					"class": {
+						"type": "variable-attribute",
+						"name": "class",
+						"reference": [
+							"div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class"
+						]
+					},
+					"title": {
+						"type": "attribute",
+						"name": "title",
+						"value": ""
+					}
+				},
+				"children": [
+					{
+						"type": "text",
+						"value": "\n\t\t"
+					},
+					{
+						"type": "element",
+						"name": "img",
+						"attrs": {
+							"alt": {
+								"type": "attribute",
+								"name": "alt",
+								"value": ""
+							},
+							"class": {
+								"type": "attribute",
+								"name": "class",
+								"value": "mx-auto h-8 w-full"
+							},
+							"data-cms-original-src": {
+								"type": "variable-attribute",
+								"name": "data-cms-original-src",
+								"reference": [
+									"img_h-8_mx-auto_w-full_data-cms-original-src"
+								]
+							},
+							"decoding": {
+								"type": "attribute",
+								"name": "decoding",
+								"value": "async"
+							},
+							"height": {
+								"type": "variable-attribute",
+								"name": "height",
+								"reference": [
+									"img_h-8_mx-auto_w-full_height"
+								]
+							},
+							"loading": {
+								"type": "attribute",
+								"name": "loading",
+								"value": "lazy"
+							},
+							"src": {
+								"type": "variable-attribute",
+								"name": "src",
+								"reference": [
+									"img_h-8_mx-auto_w-full_src"
+								]
+							},
+							"width": {
+								"type": "variable-attribute",
+								"name": "width",
+								"reference": [
+									"img_h-8_mx-auto_w-full_width"
+								]
+							}
+						},
+						"children": []
+					},
+					{
+						"type": "text",
+						"value": "\n\t"
+					}
+				]
+			}
+		},
+		{
+			"type": "text",
+			"value": "\n"
+		}
+	]
+}

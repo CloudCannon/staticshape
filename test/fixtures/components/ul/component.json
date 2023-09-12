@@ -1,0 +1,34 @@
+{
+	"type": "element",
+	"name": "ul",
+	"attrs": {},
+	"children": [
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "loop",
+			"reference": [
+				"ul_items"
+			],
+			"template": {
+				"type": "element",
+				"name": "li",
+				"attrs": {},
+				"children": [
+					{
+						"type": "variable",
+						"reference": [
+							"li"
+						]
+					}
+				]
+			}
+		},
+		{
+			"type": "text",
+			"value": "\n"
+		}
+	]
+}

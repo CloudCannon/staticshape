@@ -8,7 +8,7 @@
                     "content": [],
                     "data": {
                         "title": "Home | Test",
-                        "show-meta_description": true,
+                        "show_meta_description": true,
                         "h1": "Home"
                     }
                 },
@@ -17,7 +17,7 @@
                     "content": [],
                     "data": {
                         "title": "Test",
-                        "show-meta_description": false,
+                        "show_meta_description": false,
                         "h1": "About"
                     }
                 }
@@ -31,16 +31,12 @@
                     {
                         "type": "element",
                         "name": "html",
-                        "attrs": [],
+                        "attrs": {},
                         "children": [
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
                             {
                                 "type": "element",
                                 "name": "head",
-                                "attrs": [],
+                                "attrs": {},
                                 "children": [
                                     {
                                         "type": "text",
@@ -49,11 +45,13 @@
                                     {
                                         "type": "element",
                                         "name": "title",
-                                        "attrs": [],
+                                        "attrs": {},
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "title"
+                                                "reference": [
+                                                    "title"
+                                                ]
                                             }
                                         ]
                                     },
@@ -63,22 +61,24 @@
                                     },
                                     {
                                         "type": "conditional",
-                                        "reference": "show-meta_description",
+                                        "reference": [
+                                            "show_meta_description"
+                                        ],
                                         "child": {
                                             "type": "element",
                                             "name": "meta",
-                                            "attrs": [
-                                                {
+                                            "attrs": {
+                                                "name": {
                                                     "type": "attribute",
                                                     "name": "name",
                                                     "value": "description"
                                                 },
-                                                {
+                                                "content": {
                                                     "type": "attribute",
                                                     "name": "content",
                                                     "value": "Home"
                                                 }
-                                            ],
+                                            },
                                             "children": []
                                         }
                                     },
@@ -95,7 +95,7 @@
                             {
                                 "type": "element",
                                 "name": "body",
-                                "attrs": [],
+                                "attrs": {},
                                 "children": [
                                     {
                                         "type": "text",
@@ -104,23 +104,21 @@
                                     {
                                         "type": "element",
                                         "name": "h1",
-                                        "attrs": [],
+                                        "attrs": {},
                                         "children": [
                                             {
                                                 "type": "variable",
-                                                "reference": "h1"
+                                                "reference": [
+                                                    "h1"
+                                                ]
                                             }
                                         ]
                                     },
                                     {
                                         "type": "text",
-                                        "value": "\n\t"
+                                        "value": "\n\t\n"
                                     }
                                 ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n"
                             }
                         ]
                     }
