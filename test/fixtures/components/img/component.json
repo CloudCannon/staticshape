@@ -1,0 +1,28 @@
+{
+	"type": "element",
+	"name": "img",
+	"attrs": {
+		"src": {
+			"type": "variable-attribute",
+			"name": "src",
+			"reference": [
+				"img_src"
+			]
+		},
+		"alt": {
+			"type": "variable-attribute",
+			"name": "alt",
+			"reference": [
+				"img_alt"
+			]
+		},
+		"title": {
+			"type": "variable-attribute",
+			"name": "title",
+			"reference": [
+				"img_title"
+			]
+		}
+	},
+	"children": []
+}

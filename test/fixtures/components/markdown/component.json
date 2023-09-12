@@ -1,0 +1,21 @@
+{
+	"type": "element",
+	"name": "div",
+	"attrs": {},
+	"children": [
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "markdown-variable",
+			"reference": [
+				"div_markdown"
+			]
+		},
+		{
+			"type": "text",
+			"value": "\n"
+		}
+	]
+}
