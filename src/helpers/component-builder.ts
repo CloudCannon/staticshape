@@ -45,10 +45,6 @@ interface LoopState {
 }
 
 function buildLoop(elements: ASTElementNode[], parentElements: ASTElementNode[]): Loop | null {
-	if (elements.length < 2) {
-		throw new Error('Loop must contain more than 1 element');
-	}
-
 	const data = [] as Data[];
 	const base = elements[0];
 	let current: LoopState | null = null;

@@ -58,4 +58,4 @@ test('img', (t: ExecutionContext) => runTest(t, 'img'));
 test('markdown', (t: ExecutionContext) => runTest(t, 'markdown'));
 test('logo-row', (t: ExecutionContext) => runTest(t, 'logo-row'));
 test('dunedinattractions-grid', (t: ExecutionContext) => runTest(t, 'dunedinattractions-grid'));
-test.only('hugo-showcase', (t: ExecutionContext) => runTest(t, 'hugo-showcase'));
+test('hugo-showcase', (t: ExecutionContext) => runTest(t, 'hugo-showcase'));
