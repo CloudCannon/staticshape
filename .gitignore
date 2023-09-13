@@ -130,6 +130,6 @@ dist
 .pnp.*
 
 lib
-_output
+_output*
 .export-debug.json
 .debug/*

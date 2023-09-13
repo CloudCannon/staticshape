@@ -138,7 +138,7 @@ s.start(`Building site`);
 const site = new Site({
 	basePath: absoluteSourcePath,
 	...config,
-	logger: new Logger()
+	logger: new Logger(absoluteOutputPath)
 });
 
 const siteResponse = await site.build();

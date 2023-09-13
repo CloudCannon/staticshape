@@ -24,10 +24,14 @@ export class Logger {
 	level: Level;
 	logs: string[];
 	round: number;
-	constructor(level: Level = 3) {
+	namespace: string;
+	outputPath: string;
+	constructor(outputPath: string, level: Level = 3) {
+		this.outputPath = outputPath;
 		this.level = level;
 		this.logs = [];
 		this.round = 1;
+		this.namespace = 'init';
 	}
 
 	addLog(levelName: string, ...messages: loggableObjects[]) {
@@ -54,6 +58,11 @@ export class Logger {
 		this.addLog('error', ...messages);
 	}
 
+	async setNamespace(namespace: string) {
+		await this.rotateLog();
+		this.namespace = namespace;
+	}
+
 	async rotateLog() {
 		if (this.logs.length > 0) {
 			await this.writeLog('logs.txt', this.logs.join('\n'));
@@ -63,7 +72,13 @@ export class Logger {
 	}
 
 	async writeLog(filename: string, contents: string) {
-		const logFilename = path.join('.debug', this.round.toString(), filename);
+		const logFilename = path.join(
+			this.outputPath,
+			'.debug',
+			this.namespace,
+			this.round.toString(),
+			filename
+		);
 		await fs.promises.mkdir(path.dirname(logFilename), { recursive: true });
 		await fs.promises.writeFile(logFilename, contents);
 	}

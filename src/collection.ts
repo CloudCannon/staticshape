@@ -91,11 +91,8 @@ export default class Collection {
 				`${slugify(documents[i].pathname)}.json`,
 				JSON.stringify(documents[1].layout, null, '\t')
 			);
-			await this.logger?.writeLog(
-				'merged.json',
-				JSON.stringify(next.layout.tree, null, '\t')
-			);
-
+			await this.logger?.writeLog('diffed.json', JSON.stringify(next, null, '\t'));
+			this.logger?.log(`Comparing layouts`);
 			// Merge the next and current bases
 			const base = current.base.merge(next.base);
 
@@ -107,10 +104,7 @@ export default class Collection {
 
 			// Merge the next and current layouts
 			const layout = current.layout.merge(next.layout);
-			await this.logger?.writeLog(
-				'layout.json',
-				JSON.stringify(current.layout.tree, null, '\t')
-			);
+			await this.logger?.writeLog('merged.json', JSON.stringify(current, null, '\t'));
 
 			current = {
 				base,
