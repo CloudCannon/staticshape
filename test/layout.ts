@@ -25,12 +25,18 @@ async function runTest(t: ExecutionContext, testName: string) {
 	});
 
 	const forwards = a.merge(b);
-
 	t.deepEqual(forwards.tree, expected);
 
 	const backwards = b.merge(a);
-
 	t.deepEqual(backwards.tree, expected);
+	t.deepEqual(backwards.merge(a).tree, expected);
+	t.deepEqual(backwards.merge(b).tree, expected);
+	t.deepEqual(forwards.merge(a).tree, expected);
+	t.deepEqual(forwards.merge(b).tree, expected);
+	t.deepEqual(forwards.merge(backwards).tree, expected);
+	t.deepEqual(forwards.merge(forwards).tree, expected);
+	t.deepEqual(backwards.merge(forwards).tree, expected);
+	t.deepEqual(backwards.merge(backwards).tree, expected);
 }
 
 test('conditional', (t: ExecutionContext) => runTest(t, 'conditional'));

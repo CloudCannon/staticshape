@@ -13,23 +13,52 @@ interface TestDefinition {
 	expectedSecondaryContents?: ASTNode[];
 }
 
-async function runTest(t: ExecutionContext, def: TestDefinition) {
+function testTree(
+	t: ExecutionContext,
+	primary: ASTNode[],
+	secondary: ASTNode[],
+	merged: ASTNode[],
+	expectedPrimaryData?: Record<string, any>,
+	expectedSecondaryData?: Record<string, any>
+) {
 	const primaryData = new Data([], {});
 	const secondaryData = new Data([], {});
 
-	const tree = mergeTree(primaryData, secondaryData, def.primary, def.secondary, [
+	const tree = mergeTree(primaryData, secondaryData, primary, secondary, [
 		{
 			type: 'element',
 			name: 'div',
 			attrs: {},
-			children: def.primary
+			children: []
 		}
 	]);
 
-	console.log(tree, def.merged);
-	t.deepEqual(tree, def.merged);
-	t.deepEqual(primaryData.toJSON(), def.expectedPrimaryData || {});
-	t.deepEqual(secondaryData.toJSON(), def.expectedSecondaryData || {});
+	t.deepEqual(tree, merged);
+	t.deepEqual(primaryData.toJSON(), expectedPrimaryData || {});
+	t.deepEqual(secondaryData.toJSON(), expectedSecondaryData || {});
+	return tree;
+}
+
+async function runTest(t: ExecutionContext, def: TestDefinition) {
+	const forwards = testTree(
+		t,
+		def.primary,
+		def.secondary,
+		def.merged,
+		def.expectedPrimaryData,
+		def.expectedSecondaryData
+	);
+	const backwards = testTree(
+		t,
+		def.secondary,
+		def.primary,
+		def.merged,
+		def.expectedSecondaryData,
+		def.expectedPrimaryData
+	);
+	testTree(t, forwards, backwards, def.merged);
+	testTree(t, forwards, def.secondary, def.merged);
+	testTree(t, backwards, def.primary, def.merged);
 }
 
 test('variable diff', (t: ExecutionContext) =>

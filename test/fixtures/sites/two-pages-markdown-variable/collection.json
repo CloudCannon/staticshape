@@ -8,7 +8,8 @@
                     "content": [],
                     "data": {
                         "title": "Home | Test",
-                        "h1": "Home"
+                        "h1": "Home",
+                        "div_markdown": "## Home h2\n\nHome p"
                     }
                 },
                 {
@@ -16,7 +17,8 @@
                     "content": [],
                     "data": {
                         "title": "About | Test",
-                        "h1": "About"
+                        "h1": "About",
+                        "div_markdown": "## About h2\n\nAbout p"
                     }
                 }
             ],
@@ -31,10 +33,6 @@
                         "name": "html",
                         "attrs": {},
                         "children": [
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
                             {
                                 "type": "element",
                                 "name": "head",
@@ -99,22 +97,26 @@
                                         "attrs": {},
                                         "children": [
                                             {
+                                                "type": "text",
+                                                "value": "\n\t\t\t"
+                                            },
+                                            {
                                                 "type": "markdown-variable",
                                                 "reference": [
                                                     "div_markdown"
                                                 ]
+                                            },
+                                            {
+                                                "type": "text",
+                                                "value": "\n\t\t"
                                             }
                                         ]
                                     },
                                     {
                                         "type": "text",
-                                        "value": "\n\t"
+                                        "value": "\n\t\n"
                                     }
                                 ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n"
                             }
                         ]
                     }
