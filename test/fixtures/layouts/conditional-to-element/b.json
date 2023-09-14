@@ -1,0 +1,19 @@
+[
+	{
+		"type": "element",
+		"name": "meta",
+		"attrs": {
+			"name": {
+				"type": "attribute",
+				"name": "name",
+				"value": "description"
+			},
+			"content": {
+				"type": "attribute",
+				"name": "content",
+				"value": "Fixed"
+			}
+		},
+		"children": []
+	}
+]

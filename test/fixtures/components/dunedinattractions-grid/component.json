@@ -15,9 +15,7 @@
 		},
 		{
 			"type": "loop",
-			"reference": [
-				"div_attractions_grid_vertical-flow_items"
-			],
+			"reference": ["div_attractions_grid_vertical-flow_items"],
 			"template": {
 				"type": "element",
 				"name": "a",
@@ -30,9 +28,7 @@
 					"href": {
 						"type": "variable-attribute",
 						"name": "href",
-						"reference": [
-							"a_attraction_href"
-						]
+						"reference": ["a_attraction_href"]
 					}
 				},
 				"children": [
@@ -62,9 +58,7 @@
 									"alt": {
 										"type": "variable-attribute",
 										"name": "alt",
-										"reference": [
-											"img_alt"
-										]
+										"reference": ["img_alt"]
 									},
 									"height": {
 										"type": "attribute",
@@ -79,9 +73,7 @@
 									"src": {
 										"type": "variable-attribute",
 										"name": "src",
-										"reference": [
-											"img_src"
-										]
+										"reference": ["img_src"]
 									},
 									"width": {
 										"type": "attribute",
@@ -118,9 +110,7 @@
 							},
 							{
 								"type": "markdown-variable",
-								"reference": [
-									"div_attraction-details_markdown"
-								]
+								"reference": ["div_attraction-details_markdown"]
 							},
 							{
 								"type": "text",
@@ -143,9 +133,7 @@
 									},
 									{
 										"type": "loop",
-										"reference": [
-											"ul_badges_items"
-										],
+										"reference": ["ul_badges_items"],
 										"template": {
 											"type": "element",
 											"name": "li",
@@ -153,17 +141,13 @@
 												"class": {
 													"type": "variable-attribute",
 													"name": "class",
-													"reference": [
-														"li_badge_badge-blue_class"
-													]
+													"reference": ["li_badge_badge-blue_class"]
 												}
 											},
 											"children": [
 												{
 													"type": "variable",
-													"reference": [
-														"li_badge_badge-blue"
-													]
+													"reference": ["li_badge_badge-blue"]
 												}
 											]
 										}
@@ -180,9 +164,7 @@
 							},
 							{
 								"type": "markdown-variable",
-								"reference": [
-									"div_attraction-details_markdown_0"
-								]
+								"reference": ["div_attraction-details_markdown_0"]
 							},
 							{
 								"type": "text",

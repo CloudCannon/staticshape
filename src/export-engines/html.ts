@@ -1,5 +1,4 @@
 import { CollectionResponse } from '../collection';
-import Layout from '../layout';
 import Page from '../page';
 import { SiteResponse } from '../site';
 import {
@@ -50,7 +49,7 @@ export default class HtmlExportEngine {
 	}
 
 	exportLayout(
-		_layout: Layout,
+		_layout: ASTNode[],
 		_collection: CollectionResponse,
 		_collectionKey: string
 	): FileExport {

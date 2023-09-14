@@ -1,34 +1,28 @@
 [
-    {
-        "type": "conditional",
-        "reference": [
-            "h1"
-        ],
-        "child": {
-            "type": "element",
-            "name": "h1",
-            "attrs": {},
-            "children": [
-                {
-                    "type": "variable",
-                    "reference": [
-                        "h1"
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "type": "element",
-        "name": "p",
-        "attrs": {},
-        "children": [
-            {
-                "type": "variable",
-                "reference": [
-                    "p"
-                ]
-            }
-        ]
-    }
+	{
+		"type": "conditional",
+		"reference": ["h1"],
+		"child": {
+			"type": "element",
+			"name": "h1",
+			"attrs": {},
+			"children": [
+				{
+					"type": "variable",
+					"reference": ["h1"]
+				}
+			]
+		}
+	},
+	{
+		"type": "element",
+		"name": "p",
+		"attrs": {},
+		"children": [
+			{
+				"type": "variable",
+				"reference": ["p"]
+			}
+		]
+	}
 ]

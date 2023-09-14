@@ -1,138 +1,130 @@
 {
-    "staticFiles": [],
-    "collections": {
-        "pages": {
-            "pages": [
-                {
-                    "pathname": "index.html",
-                    "content": [],
-                    "data": {
-                        "title": "Home | Test",
-                        "show_meta_description": true,
-                        "h1_inline_markdown": "Home"
-                    }
-                },
-                {
-                    "pathname": "about.html",
-                    "content": [],
-                    "data": {
-                        "title": "Test",
-                        "show_meta_description": false,
-                        "h1_inline_markdown": "About"
-                    }
-                },
-                {
-                    "pathname": "contact.html",
-                    "content": [],
-                    "data": {
-                        "title": "Test",
-                        "show_meta_description": false,
-                        "h1_inline_markdown": "Contact"
-                    }
-                }
-            ],
-            "layout": {
-                "tree": [
-                    {
-                        "type": "doctype",
-                        "value": "html"
-                    },
-                    {
-                        "type": "element",
-                        "name": "html",
-                        "attrs": {},
-                        "children": [
-                            {
-                                "type": "element",
-                                "name": "head",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "title",
-                                        "attrs": {},
-                                        "children": [
-                                            {
-                                                "type": "variable",
-                                                "reference": [
-                                                    "title"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "conditional",
-                                        "reference": [
-                                            "show_meta_description"
-                                        ],
-                                        "child": {
-                                            "type": "element",
-                                            "name": "meta",
-                                            "attrs": {
-                                                "name": {
-                                                    "type": "attribute",
-                                                    "name": "name",
-                                                    "value": "description"
-                                                },
-                                                "content": {
-                                                    "type": "attribute",
-                                                    "name": "content",
-                                                    "value": "Home"
-                                                }
-                                            },
-                                            "children": []
-                                        }
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
-                            {
-                                "type": "element",
-                                "name": "body",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "h1",
-                                        "attrs": {},
-                                        "children": [
-                                            {
-                                                "type": "inline-markdown-variable",
-                                                "reference": [
-                                                    "h1_inline_markdown"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\n"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    }
+	"staticFiles": [],
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "index.html",
+					"content": [],
+					"data": {
+						"title": "Home | Test",
+						"meta_description": {},
+						"h1_inline_markdown": "Home"
+					}
+				},
+				{
+					"pathname": "about.html",
+					"content": [],
+					"data": {
+						"title": "Test",
+						"meta_description": null,
+						"h1_inline_markdown": "About"
+					}
+				},
+				{
+					"pathname": "contact.html",
+					"content": [],
+					"data": {
+						"title": "Test",
+						"meta_description": null,
+						"h1_inline_markdown": "Contact"
+					}
+				}
+			],
+			"layout": [
+				{
+					"type": "doctype",
+					"value": "html"
+				},
+				{
+					"type": "element",
+					"name": "html",
+					"attrs": {},
+					"children": [
+						{
+							"type": "element",
+							"name": "head",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "title",
+									"attrs": {},
+									"children": [
+										{
+											"type": "variable",
+											"reference": ["title"]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "conditional",
+									"reference": ["meta_description"],
+									"child": {
+										"type": "element",
+										"name": "meta",
+										"attrs": {
+											"name": {
+												"type": "attribute",
+												"name": "name",
+												"value": "description"
+											},
+											"content": {
+												"type": "attribute",
+												"name": "content",
+												"value": "Home"
+											}
+										},
+										"children": []
+									}
+								},
+								{
+									"type": "text",
+									"value": "\n\t"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n\t"
+						},
+						{
+							"type": "element",
+							"name": "body",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "h1",
+									"attrs": {},
+									"children": [
+										{
+											"type": "inline-markdown-variable",
+											"reference": ["h1_inline_markdown"]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t\n"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
 }

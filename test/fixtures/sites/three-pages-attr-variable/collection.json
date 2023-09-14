@@ -1,116 +1,108 @@
 {
-    "staticFiles": [
-        "assets/goose.jpg"
-    ],
-    "collections": {
-        "pages": {
-            "pages": [
-                {
-                    "pathname": "index.html",
-                    "content": [],
-                    "data": {
-                        "title": "Goose Owner",
-                        "img_alt": "Our goose"
-                    }
-                },
-                {
-                    "pathname": "about.html",
-                    "content": [],
-                    "data": {
-                        "title": "Goose Admirer",
-                        "img_alt": "Their goose"
-                    }
-                },
-                {
-                    "pathname": "contact.html",
-                    "content": [],
-                    "data": {
-                        "title": "Another Goose Admirer",
-                        "img_alt": "Their goose"
-                    }
-                }
-            ],
-            "layout": {
-                "tree": [
-                    {
-                        "type": "doctype",
-                        "value": "html"
-                    },
-                    {
-                        "type": "element",
-                        "name": "html",
-                        "attrs": {},
-                        "children": [
-                            {
-                                "type": "element",
-                                "name": "head",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "title",
-                                        "attrs": {},
-                                        "children": [
-                                            {
-                                                "type": "variable",
-                                                "reference": [
-                                                    "title"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
-                            {
-                                "type": "element",
-                                "name": "body",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "img",
-                                        "attrs": {
-                                            "src": {
-                                                "type": "attribute",
-                                                "name": "src",
-                                                "value": "assets/goose.jpg"
-                                            },
-                                            "alt": {
-                                                "type": "variable-attribute",
-                                                "name": "alt",
-                                                "reference": [
-                                                    "img_alt"
-                                                ]
-                                            }
-                                        },
-                                        "children": []
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\n"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    }
+	"staticFiles": ["assets/goose.jpg"],
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "index.html",
+					"content": [],
+					"data": {
+						"title": "Goose Owner",
+						"img_alt": "Our goose"
+					}
+				},
+				{
+					"pathname": "about.html",
+					"content": [],
+					"data": {
+						"title": "Goose Admirer",
+						"img_alt": "Their goose"
+					}
+				},
+				{
+					"pathname": "contact.html",
+					"content": [],
+					"data": {
+						"title": "Another Goose Admirer",
+						"img_alt": "Their goose"
+					}
+				}
+			],
+			"layout": [
+				{
+					"type": "doctype",
+					"value": "html"
+				},
+				{
+					"type": "element",
+					"name": "html",
+					"attrs": {},
+					"children": [
+						{
+							"type": "element",
+							"name": "head",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "title",
+									"attrs": {},
+									"children": [
+										{
+											"type": "variable",
+											"reference": ["title"]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n\t"
+						},
+						{
+							"type": "element",
+							"name": "body",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "img",
+									"attrs": {
+										"src": {
+											"type": "attribute",
+											"name": "src",
+											"value": "assets/goose.jpg"
+										},
+										"alt": {
+											"type": "variable-attribute",
+											"name": "alt",
+											"reference": ["img_alt"]
+										}
+									},
+									"children": []
+								},
+								{
+									"type": "text",
+									"value": "\n\t\n"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
 }

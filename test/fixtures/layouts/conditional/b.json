@@ -1,15 +1,13 @@
 [
-    {
-        "type": "element",
-        "name": "p",
-        "attrs": {},
-        "children": [
-            {
-                "type": "variable",
-                "reference": [
-                    "p"
-                ]
-            }
-        ]
-    }
+	{
+		"type": "element",
+		"name": "p",
+		"attrs": {},
+		"children": [
+			{
+				"type": "variable",
+				"reference": ["p"]
+			}
+		]
+	}
 ]

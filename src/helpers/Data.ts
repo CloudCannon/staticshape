@@ -82,14 +82,17 @@ export function getVariableNames(element: ASTElementNode): string[] {
 export type Hash = Record<string, any>;
 
 export function mergeHash(data: Hash, other: Hash) {
+	if (!data) {
+		return data;
+	}
 	const clone = structuredClone(data);
 	Object.keys(other).forEach((key) => {
-		if (!clone[key]) {
+		if (!(key in clone)) {
 			clone[key] = other[key];
 		}
 
 		if (typeof clone[key] === 'object' && other[key]) {
-			mergeHash(clone[key], other[key]);
+			clone[key] = mergeHash(clone[key], other[key]);
 		}
 	});
 	return clone;

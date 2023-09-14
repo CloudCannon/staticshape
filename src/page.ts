@@ -32,6 +32,14 @@ export default class Page {
 		});
 	}
 
+	mergeData(other: Data): Page {
+		return new Page({
+			pathname: this.pathname,
+			data: this.data.merge(other),
+			content: this.content
+		});
+	}
+
 	toJSON(): PageJSON {
 		return {
 			pathname: this.pathname,

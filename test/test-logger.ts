@@ -9,5 +9,8 @@ export class TestLogger extends Logger {
 		console.log(message);
 	}
 
-	async writeLog(_filename: string, _contents: string) {}
+	async writeLog(filename: string, contents: string) {
+		this.verbose(`🗃️ ${this.namespace} ${filename}`);
+		this.verbose(contents);
+	}
 }

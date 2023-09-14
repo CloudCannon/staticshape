@@ -1,50 +1,44 @@
 [
-    {
-        "type": "element",
-        "name": "ul",
-        "attrs": {
-            "class": {
-                "type": "attribute",
-                "name": "class",
-                "value": "badges"
-            }
-        },
-        "children": [
-            {
-                "type": "text",
-                "value": "\n              "
-            },
-            {
-                "type": "loop",
-                "reference": [
-                    "ul_badges_items"
-                ],
-                "template": {
-                    "type": "element",
-                    "name": "li",
-                    "attrs": {
-                        "class": {
-                            "type": "variable-attribute",
-                            "name": "class",
-                            "reference": [
-                                "li_badge_badge-blue_class"
-                            ]
-                        }
-                    },
-                    "children": [
-                        {
-                            "type": "variable",
-                            "reference": [
-                                "li_badge_badge-blue"
-                            ]
-                        }
-                    ]
-                }
-            },
-            {
-                "type": "text",
-                "value": "\n            "
-            }
-        ]
-    }
+	{
+		"type": "element",
+		"name": "ul",
+		"attrs": {
+			"class": {
+				"type": "attribute",
+				"name": "class",
+				"value": "badges"
+			}
+		},
+		"children": [
+			{
+				"type": "text",
+				"value": "\n              "
+			},
+			{
+				"type": "loop",
+				"reference": ["ul_badges_items"],
+				"template": {
+					"type": "element",
+					"name": "li",
+					"attrs": {
+						"class": {
+							"type": "variable-attribute",
+							"name": "class",
+							"reference": ["li_badge_badge-blue_class"]
+						}
+					},
+					"children": [
+						{
+							"type": "variable",
+							"reference": ["li_badge_badge-blue"]
+						}
+					]
+				}
+			},
+			{
+				"type": "text",
+				"value": "\n            "
+			}
+		]
+	}
 ]

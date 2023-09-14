@@ -6,6 +6,8 @@ import { booleanAttributes } from './attributes';
 import { Logger } from '../logger';
 
 export const loopThreshold = 0.89;
+// TODO: increase for mismatches
+export const minimumMatchThreshold = 0;
 
 function diffScore(score: number, max: number) {
 	if (max === 0) {
@@ -203,7 +205,7 @@ export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[], logger
 	const current = currentTree[0];
 	const other = otherTree[0];
 	const score = nodeEquivalencyScore(current, other);
-	if (score === 0) {
+	if (score <= minimumMatchThreshold) {
 		return false;
 	}
 	if (score === 1) {

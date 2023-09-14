@@ -202,7 +202,7 @@ test('conditional meta - no whitespace', (t: ExecutionContext) =>
 			},
 			{
 				type: 'conditional',
-				reference: ['show_meta_description'],
+				reference: ['meta_description'],
 				child: {
 					type: 'element',
 					name: 'meta',
@@ -224,11 +224,11 @@ test('conditional meta - no whitespace', (t: ExecutionContext) =>
 		],
 		expectedPrimaryData: {
 			title: 'Primary',
-			show_meta_description: false
+			meta_description: null
 		},
 		expectedSecondaryData: {
 			title: 'Secondary',
-			show_meta_description: true
+			meta_description: {}
 		}
 	}));
 
@@ -283,7 +283,7 @@ test('conditional meta - with whitespace', (t: ExecutionContext) =>
 			{ type: 'text', value: '\n\t\t' },
 			{
 				type: 'conditional',
-				reference: ['show_meta_description'],
+				reference: ['meta_description'],
 				child: {
 					type: 'element',
 					name: 'meta',
@@ -305,10 +305,10 @@ test('conditional meta - with whitespace', (t: ExecutionContext) =>
 			{ type: 'text', value: '\n\t' }
 		],
 		expectedPrimaryData: {
-			show_meta_description: false
+			meta_description: null
 		},
 		expectedSecondaryData: {
-			show_meta_description: true
+			meta_description: {}
 		}
 	}));
 
@@ -390,6 +390,125 @@ test('loop and element comparison', (t: ExecutionContext) =>
 		}
 	}));
 
+test('loop with same first item', (t: ExecutionContext) =>
+	runTest(t, {
+		primary: [
+			{
+				type: 'element',
+				name: 'li',
+				attrs: {
+					class: {
+						type: 'attribute',
+						name: 'class',
+						value: 'badge'
+					}
+				},
+				children: [
+					{
+						type: 'text',
+						value: 'beach'
+					}
+				]
+			},
+			{
+				type: 'element',
+				name: 'li',
+				attrs: {
+					class: {
+						type: 'attribute',
+						name: 'class',
+						value: 'badge'
+					}
+				},
+				children: [
+					{
+						type: 'text',
+						value: 'sand'
+					}
+				]
+			}
+		],
+		secondary: [
+			{
+				type: 'element',
+				name: 'li',
+				attrs: {
+					class: {
+						type: 'attribute',
+						name: 'class',
+						value: 'badge'
+					}
+				},
+				children: [
+					{
+						type: 'text',
+						value: 'beach'
+					}
+				]
+			},
+			{
+				type: 'element',
+				name: 'li',
+				attrs: {
+					class: {
+						type: 'attribute',
+						name: 'class',
+						value: 'badge'
+					}
+				},
+				children: [
+					{
+						type: 'text',
+						value: 'lava'
+					}
+				]
+			}
+		],
+		merged: [
+			{
+				type: 'loop',
+				reference: ['div_items'],
+				template: {
+					type: 'element',
+					name: 'li',
+					attrs: {
+						class: {
+							type: 'attribute',
+							name: 'class',
+							value: 'badge'
+						}
+					},
+					children: [
+						{
+							type: 'variable',
+							reference: ['li_badge']
+						}
+					]
+				}
+			}
+		],
+		expectedPrimaryData: {
+			div_items: [
+				{
+					li_badge: 'beach'
+				},
+				{
+					li_badge: 'sand'
+				}
+			]
+		},
+		expectedSecondaryData: {
+			div_items: [
+				{
+					li_badge: 'beach'
+				},
+				{
+					li_badge: 'lava'
+				}
+			]
+		}
+	}));
+
 test('loop template and element comparison', (t: ExecutionContext) =>
 	runTest(t, {
 		primary: [
@@ -453,5 +572,83 @@ test('loop template and element comparison', (t: ExecutionContext) =>
 		expectedSecondaryData: {
 			class_var: 'badge badge-blue',
 			text_var: 'beach'
+		}
+	}));
+test('conditional and element comparison', (t: ExecutionContext) =>
+	runTest(t, {
+		primary: [
+			{
+				type: 'conditional',
+				reference: ['meta_description_content'],
+				child: {
+					type: 'element',
+					name: 'meta',
+					attrs: {
+						name: {
+							type: 'attribute',
+							name: 'name',
+							value: 'description'
+						},
+						content: {
+							type: 'attribute',
+							name: 'content',
+							value: 'Home'
+						}
+					},
+					children: []
+				}
+			}
+		],
+		secondary: [
+			{
+				type: 'element',
+				name: 'meta',
+				attrs: {
+					name: {
+						type: 'attribute',
+						name: 'name',
+						value: 'description'
+					},
+					content: {
+						type: 'attribute',
+						name: 'content',
+						value: 'Staff'
+					}
+				},
+				children: []
+			}
+		],
+		merged: [
+			{
+				type: 'conditional',
+				reference: ['meta_description_content'],
+				child: {
+					type: 'element',
+					name: 'meta',
+					attrs: {
+						name: {
+							type: 'attribute',
+							name: 'name',
+							value: 'description'
+						},
+						content: {
+							type: 'variable-attribute',
+							name: 'content',
+							reference: ['meta_description_content']
+						}
+					},
+					children: []
+				}
+			}
+		],
+		expectedPrimaryData: {
+			meta_description_content: {
+				meta_description_content: 'Home'
+			}
+		},
+		expectedSecondaryData: {
+			meta_description_content: {
+				meta_description_content: 'Staff'
+			}
 		}
 	}));

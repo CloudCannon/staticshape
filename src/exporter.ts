@@ -3,7 +3,6 @@ import * as path from 'path';
 import HugoExportEngine from './export-engines/hugo';
 import HtmlExportEngine, { FileExport } from './export-engines/html';
 import { SiteResponse } from './site';
-import Layout from './layout';
 import Page from './page';
 
 export type Engine = 'hugo';
@@ -39,11 +38,7 @@ export default class Exporter {
 			const collection = collections[collectionKey];
 
 			const { layout, pages } = collection;
-			const layoutFile = this.engine.exportLayout(
-				layout as Layout,
-				collection,
-				collectionKey
-			);
+			const layoutFile = this.engine.exportLayout(layout, collection, collectionKey);
 			await this.writeFileExport(layoutFile);
 
 			for (let j = 0; j < pages.length; j++) {

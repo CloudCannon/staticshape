@@ -1,11 +1,11 @@
 {
-    "collectionsConfig": [
-        {
-            "name": "pages",
-            "subPath": "",
-            "content": {
-                "selector": ".content"
-            }
-        }
-    ]
+	"collectionsConfig": [
+		{
+			"name": "pages",
+			"subPath": "",
+			"content": {
+				"selector": ".content"
+			}
+		}
+	]
 }

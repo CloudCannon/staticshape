@@ -9,9 +9,7 @@
 		},
 		{
 			"type": "loop",
-			"reference": [
-				"ul_items"
-			],
+			"reference": ["ul_items"],
 			"template": {
 				"type": "element",
 				"name": "li",
@@ -19,9 +17,7 @@
 				"children": [
 					{
 						"type": "variable",
-						"reference": [
-							"li"
-						]
+						"reference": ["li"]
 					}
 				]
 			}

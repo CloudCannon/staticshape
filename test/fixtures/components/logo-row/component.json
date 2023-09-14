@@ -25,9 +25,7 @@
 					"class": {
 						"type": "variable-attribute",
 						"name": "class",
-						"reference": [
-							"div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class"
-						]
+						"reference": ["div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class"]
 					},
 					"title": {
 						"type": "attribute",
@@ -57,9 +55,7 @@
 							"data-cms-original-src": {
 								"type": "variable-attribute",
 								"name": "data-cms-original-src",
-								"reference": [
-									"img_h-8_mx-auto_w-full_data-cms-original-src"
-								]
+								"reference": ["img_h-8_mx-auto_w-full_data-cms-original-src"]
 							},
 							"decoding": {
 								"type": "attribute",
@@ -69,9 +65,7 @@
 							"height": {
 								"type": "variable-attribute",
 								"name": "height",
-								"reference": [
-									"img_h-8_mx-auto_w-full_height"
-								]
+								"reference": ["img_h-8_mx-auto_w-full_height"]
 							},
 							"loading": {
 								"type": "attribute",
@@ -81,16 +75,12 @@
 							"src": {
 								"type": "variable-attribute",
 								"name": "src",
-								"reference": [
-									"img_h-8_mx-auto_w-full_src"
-								]
+								"reference": ["img_h-8_mx-auto_w-full_src"]
 							},
 							"width": {
 								"type": "variable-attribute",
 								"name": "width",
-								"reference": [
-									"img_h-8_mx-auto_w-full_width"
-								]
+								"reference": ["img_h-8_mx-auto_w-full_width"]
 							}
 						},
 						"children": []

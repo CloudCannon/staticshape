@@ -41,9 +41,7 @@
 					"children": [
 						{
 							"type": "inline-markdown-variable",
-							"reference": [
-								"h1_primary-color-dark_inline_markdown"
-							]
+							"reference": ["h1_primary-color-dark_inline_markdown"]
 						}
 					]
 				},
@@ -90,9 +88,7 @@
 				},
 				{
 					"type": "loop",
-					"reference": [
-						"section_flex-ns_flex-wrap_justify-between_v-top_w-100_items"
-					],
+					"reference": ["section_flex-ns_flex-wrap_justify-between_v-top_w-100_items"],
 					"template": {
 						"type": "element",
 						"name": "a",
@@ -284,9 +280,7 @@
 			"children": [
 				{
 					"type": "variable",
-					"reference": [
-						"div_dib_f3_mt4"
-					]
+					"reference": ["div_dib_f3_mt4"]
 				}
 			]
 		},

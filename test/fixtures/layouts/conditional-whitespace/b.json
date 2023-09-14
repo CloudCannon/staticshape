@@ -1,79 +1,77 @@
 [
-    {
-        "type": "doctype",
-        "value": "html"
-    },
-    {
-        "type": "element",
-        "name": "html",
-        "attrs": {},
-        "children": [
-            {
-                "type": "text",
-                "value": "\n\t"
-            },
-            {
-                "type": "element",
-                "name": "head",
-                "attrs": {},
-                "children": [
-                    {
-                        "type": "text",
-                        "value": "\n\t\t"
-                    },
-                    {
-                        "type": "element",
-                        "name": "title",
-                        "attrs": {},
-                        "children": [
-                            {
-                                "type": "text",
-                                "value": "Test"
-                            }
-                        ]
-                    },
-                    {
-                        "type": "text",
-                        "value": "\n\t"
-                    }
-                ]
-            },
-            {
-                "type": "text",
-                "value": "\n\t"
-            },
-            {
-                "type": "element",
-                "name": "body",
-                "attrs": {},
-                "children": [
-                    {
-                        "type": "text",
-                        "value": "\n\t\t"
-                    },
-                    {
-                        "type": "element",
-                        "name": "h1",
-                        "attrs": {},
-                        "children": [
-                            {
-                                "type": "variable",
-                                "reference": [
-                                    "h1"
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "text",
-                        "value": "\n\t"
-                    }
-                ]
-            },
-            {
-                "type": "text",
-                "value": "\n"
-            }
-        ]
-    }
+	{
+		"type": "doctype",
+		"value": "html"
+	},
+	{
+		"type": "element",
+		"name": "html",
+		"attrs": {},
+		"children": [
+			{
+				"type": "text",
+				"value": "\n\t"
+			},
+			{
+				"type": "element",
+				"name": "head",
+				"attrs": {},
+				"children": [
+					{
+						"type": "text",
+						"value": "\n\t\t"
+					},
+					{
+						"type": "element",
+						"name": "title",
+						"attrs": {},
+						"children": [
+							{
+								"type": "text",
+								"value": "Test"
+							}
+						]
+					},
+					{
+						"type": "text",
+						"value": "\n\t"
+					}
+				]
+			},
+			{
+				"type": "text",
+				"value": "\n\t"
+			},
+			{
+				"type": "element",
+				"name": "body",
+				"attrs": {},
+				"children": [
+					{
+						"type": "text",
+						"value": "\n\t\t"
+					},
+					{
+						"type": "element",
+						"name": "h1",
+						"attrs": {},
+						"children": [
+							{
+								"type": "variable",
+								"reference": ["h1"]
+							}
+						]
+					},
+					{
+						"type": "text",
+						"value": "\n\t"
+					}
+				]
+			},
+			{
+				"type": "text",
+				"value": "\n"
+			}
+		]
+	}
 ]

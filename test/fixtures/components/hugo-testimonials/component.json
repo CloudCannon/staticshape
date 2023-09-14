@@ -41,9 +41,7 @@
 					"children": [
 						{
 							"type": "inline-markdown-variable",
-							"reference": [
-								"h3_f2_fw4_white_inline_markdown"
-							]
+							"reference": ["h3_f2_fw4_white_inline_markdown"]
 						}
 					]
 				},
@@ -68,9 +66,7 @@
 						},
 						{
 							"type": "loop",
-							"reference": [
-								"div_flex-ns_flex-wrap_justify-between_items"
-							],
+							"reference": ["div_flex-ns_flex-wrap_justify-between_items"],
 							"template": {
 								"type": "element",
 								"name": "div",
@@ -201,9 +197,7 @@
 												"children": [
 													{
 														"type": "inline-markdown-variable",
-														"reference": [
-															"p_f4_inline_markdown"
-														]
+														"reference": ["p_f4_inline_markdown"]
 													}
 												]
 											},
@@ -235,17 +229,13 @@
 															"href": {
 																"type": "variable-attribute",
 																"name": "href",
-																"reference": [
-																	"a_href"
-																]
+																"reference": ["a_href"]
 															}
 														},
 														"children": [
 															{
 																"type": "variable",
-																"reference": [
-																	"a"
-																]
+																"reference": ["a"]
 															}
 														]
 													},

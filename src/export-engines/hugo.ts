@@ -6,6 +6,7 @@ import {
 	ASTInlineMarkdownNode,
 	ASTLoopNode,
 	ASTMarkdownNode,
+	ASTNode,
 	ASTVariableAttribute,
 	ASTVariableNode
 } from '../types';
@@ -39,13 +40,13 @@ export default class HugoExportEngine extends HtmlExportEngine {
 	}
 
 	exportLayout(
-		layout: Record<string, any>,
+		layout: ASTNode[],
 		collection: CollectionResponse,
 		collectionKey: string
 	): FileExport {
 		return {
 			pathname: `layouts/${collectionKey}.html`,
-			contents: this.renderAST(layout.tree)
+			contents: this.renderAST(layout)
 		};
 	}
 

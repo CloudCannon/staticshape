@@ -1,13 +1,13 @@
 [
-    {
-        "type": "element",
-        "name": "h1",
-        "attrs": {},
-        "children": [
-            {
-                "type": "text",
-                "value": "Should be added to the data"
-            }
-        ]
-    }
+	{
+		"type": "element",
+		"name": "h1",
+		"attrs": {},
+		"children": [
+			{
+				"type": "text",
+				"value": "Should be added to the data"
+			}
+		]
+	}
 ]

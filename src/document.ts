@@ -1,5 +1,4 @@
 import Page from './page';
-import Layout from './layout';
 
 import { mergeTree } from './helpers/dom-diff';
 import htmlToAST, { PageContentsConfig } from './helpers/html-parser';
@@ -10,7 +9,7 @@ import { Logger } from './logger';
 export interface ASTTree {
 	base: Page;
 	pages: Page[];
-	layout: Layout;
+	layout: ASTNode[];
 }
 
 export interface DocumentConfig {
@@ -58,9 +57,7 @@ export default class Document {
 					data: other.data
 				})
 			],
-			layout: new Layout({
-				tree: tree
-			})
+			layout: tree
 		};
 	}
 }

@@ -9,9 +9,7 @@
 		},
 		{
 			"type": "markdown-variable",
-			"reference": [
-				"div_markdown"
-			]
+			"reference": ["div_markdown"]
 		},
 		{
 			"type": "text",

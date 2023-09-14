@@ -1,4 +1,10 @@
-import { ASTElementNode, ASTNode, ASTAttributeList, ASTValueNode } from '../types';
+import {
+	ASTElementNode,
+	ASTNode,
+	ASTAttributeList,
+	ASTValueNode,
+	ASTConditionalNode
+} from '../types';
 import { invalidLoopTags, findRepeatedIndex } from './loops';
 import { isAttrEquivalent } from './node-helper';
 import {
@@ -16,7 +22,7 @@ import {
 } from './markdown';
 import { booleanAttributes } from './attributes';
 import { Logger, nodeDebugString } from '../logger';
-import { convertTreeToComponents } from './component-builder';
+import { convertTreeToComponents, convertElementToComponent } from './component-builder';
 
 export function diffBasicNode(
 	firstData: Data,
@@ -48,13 +54,9 @@ export function diffElementNode(
 	parentElements: ASTElementNode[],
 	logger?: Logger
 ): ASTNode {
-	logger?.log(
-		'  '.repeat(parentElements.length),
-		'👀 Diff Element',
-		nodeDebugString(firstElement),
-		'vs',
-		nodeDebugString(secondElement)
-	);
+	logger?.log('  '.repeat(parentElements.length), '👀 Diff Element');
+	logger?.log('  '.repeat(parentElements.length), nodeDebugString(firstElement));
+	logger?.log('  '.repeat(parentElements.length), nodeDebugString(secondElement));
 	const tagsMatch = firstElement.name === secondElement.name;
 	if (!tagsMatch) {
 		throw new Error(`Mismatched node names ${firstElement.name}, ${secondElement.name}`);
@@ -91,12 +93,28 @@ export function diffNodes(
 	);
 	if (typesMatch) {
 		switch (firstNode.type) {
+			case 'conditional':
+				const secondConditional = secondNode as ASTConditionalNode;
+				const newData = new Data([], {});
+				const otherData = new Data([], {});
+				const template = diffElementNode(
+					newData,
+					otherData,
+					firstNode.child,
+					secondConditional.child,
+					parentElements
+				) as ASTElementNode;
+				firstData.chainSet(secondConditional.reference, newData.toJSON());
+				secondData.chainSet(secondConditional.reference, otherData.toJSON());
+				return {
+					...secondConditional,
+					child: template
+				};
+			case 'loop':
 			case 'content':
 			case 'variable':
 			case 'markdown-variable':
 			case 'inline-markdown-variable':
-			case 'conditional':
-			case 'loop':
 				return firstNode;
 			case 'comment':
 			case 'cdata':
@@ -128,10 +146,11 @@ export function diffNodes(
 				break;
 		}
 
-		return {
-			type: 'comment',
-			value: `Cannot diff identical node ${secondNode.type}`
-		};
+		throw new Error(
+			`Cannot diff identical node ${secondNode.type} ${nodeDebugString(
+				firstNode
+			)} ${nodeDebugString(secondNode)}`
+		);
 	}
 
 	if (
@@ -167,34 +186,71 @@ export function diffNodes(
 	}
 
 	if (secondNode.type === 'element' && firstNode.type === 'conditional') {
-		logger?.warn('TODO: merge element and conditional for the new data for both');
-		return firstNode;
+		const newData = new Data([], {});
+		const otherData = new Data([], {});
+		const template = diffElementNode(
+			newData,
+			otherData,
+			firstNode.child,
+			secondNode,
+			parentElements
+		) as ASTElementNode;
+		firstData.chainSet(firstNode.reference, newData.toJSON());
+		secondData.chainSet(firstNode.reference, otherData.toJSON());
+		logger?.debug(`Conditional merge ${firstNode.type} and ${secondNode.type}`);
+		logger?.debug('First: ', nodeDebugString(firstNode.child, 0, 0));
+		logger?.debug('Second: ', nodeDebugString(secondNode, 0, 0));
+		logger?.debug('Merged: ', nodeDebugString(template, 0, 0));
+		logger?.debug('newData: ', JSON.stringify(newData));
+		logger?.debug('otherData: ', JSON.stringify(otherData));
+
+		return {
+			...firstNode,
+			child: template
+		};
 	}
 
 	if (firstNode.type === 'element' && secondNode.type === 'conditional') {
-		logger?.warn('TODO: merge element and conditional for the new data for both');
-		return secondNode;
+		const newData = new Data([], {});
+		const otherData = new Data([], {});
+		const template = diffElementNode(
+			newData,
+			otherData,
+			firstNode,
+			secondNode.child,
+			parentElements
+		) as ASTElementNode;
+		firstData.chainSet(secondNode.reference, newData.toJSON());
+		secondData.chainSet(secondNode.reference, otherData.toJSON());
+		logger?.debug(`Conditional merge ${firstNode.type} and ${secondNode.type}`);
+		logger?.debug('First: ', nodeDebugString(firstNode, 0, 0));
+		logger?.debug('Second: ', nodeDebugString(secondNode.child, 0, 0));
+		logger?.debug('Merged: ', nodeDebugString(template, 0, 0));
+		logger?.debug('newData: ', JSON.stringify(newData));
+		logger?.debug('otherData: ', JSON.stringify(otherData));
+
+		return {
+			...secondNode,
+			child: template
+		};
 	}
 
-	if (firstNode.type === 'conditional' && secondNode.type === 'loop') {
-		logger?.warn('TODO: merge conditional element and loop template for the new data for both');
-		return secondNode;
-	}
+	// if (firstNode.type === 'conditional' && secondNode.type === 'loop') {
+	// 	logger?.warn('TODO: merge conditional element and loop template for the new data for both');
+	// 	return secondNode;
+	// }
 
-	if (firstNode.type === 'loop' && secondNode.type === 'conditional') {
-		logger?.warn('TODO: merge conditional element and loop template for the new data for both');
-		return firstNode;
-	}
+	// if (firstNode.type === 'loop' && secondNode.type === 'conditional') {
+	// 	logger?.warn('TODO: merge conditional element and loop template for the new data for both');
+	// 	return firstNode;
+	// }
 
 	const score = nodeEquivalencyScore(firstNode, secondNode);
 	logger?.error(`Cannot diff nodes ${firstNode.type} and ${secondNode.type} (${score})`);
 	logger?.error('First: ', nodeDebugString(firstNode, 0, 0));
 	logger?.error('Second: ', nodeDebugString(secondNode, 0, 0));
 
-	return {
-		type: 'comment',
-		value: `Cannot diff nodes ${firstNode.type} and ${secondNode.type}`
-	};
+	throw new Error(`Cannot diff nodes ${firstNode.type} and ${secondNode.type}`);
 }
 
 export function mergeAttrs(
@@ -219,7 +275,8 @@ export function mergeAttrs(
 			return;
 		}
 		if (firstAttr.type !== 'attribute') {
-			if (secondAttr.type === 'attribute') {
+			logger?.warn('TODO: add relevant null state for !secondAttr');
+			if (secondAttr?.type === 'attribute') {
 				secondData.chainSet(firstAttr.reference, secondAttr.value);
 			}
 			combined[attrName] = firstAttr;
@@ -282,7 +339,8 @@ export function mergeAttrs(
 		}
 
 		if (secondAttr && secondAttr.type !== 'attribute') {
-			if (firstAttr.type === 'attribute') {
+			logger?.warn('TODO: add relevant null state for !secondAttr');
+			if (firstAttr?.type === 'attribute') {
 				firstData.chainSet(secondAttr.reference, firstAttr.value.trim());
 			}
 			combined[attrName] = secondAttr;
@@ -455,7 +513,7 @@ export function mergeTree(
 		}
 
 		if (node.type === 'conditional') {
-			secondData.chainSet(node.reference, false);
+			secondData.chainSet(node.reference, null);
 			merged.push(node);
 			return;
 		}
@@ -479,15 +537,20 @@ export function mergeTree(
 		const parents = [...parentElements];
 		if (node.type === 'element') {
 			parents.push(node);
+			const newData = new Data([], {});
+			const template = convertElementToComponent(newData, node, []);
+			const variableName = firstData.getVariableName(parents);
+			firstData.set(variableName, newData.toJSON());
+			secondData.set(variableName, null);
+			merged.push({
+				type: 'conditional',
+				reference: firstData.getChain(variableName),
+				child: template
+			});
+			return;
 		}
-		const variableName = firstData.getVariableName(parents, 'show', '');
-		firstData.set(variableName, true);
-		secondData.set(variableName, false);
-		merged.push({
-			type: 'conditional',
-			reference: firstData.getChain(variableName),
-			child: node
-		});
+
+		throw new Error(`Unknown conditional node ${node.type}, ${nodeDebugString(node)}`);
 	};
 
 	function addMarkdownTree() {

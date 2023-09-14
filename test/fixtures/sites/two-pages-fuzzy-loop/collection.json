@@ -1,168 +1,156 @@
 {
-    "staticFiles": [],
-    "collections": {
-        "pages": {
-            "pages": [
-                {
-                    "pathname": "bethunes-gully.html",
-                    "content": [],
-                    "data": {
-                        "title": "Bethune’s Gully",
-                        "h2": "Bethune’s Gully",
-                        "div.badge_items": [
-                            {
-                                "div.badge": "picnic",
-                                "div.badge_class": "badge-orange"
-                            },
-                            {
-                                "div.badge": "walk",
-                                "div.badge_class": "badge-green"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "pathname": "smails-beach.html",
-                    "content": [],
-                    "data": {
-                        "title": "Smails Beach",
-                        "h2": "Smails Beach",
-                        "div.badge_items": [
-                            {
-                                "div.badge": "beach",
-                                "div.badge_class": "badge-blue"
-                            },
-                            {
-                                "div.badge": "wildlife",
-                                "div.badge_class": "badge-navy"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "layout": {
-                "tree": [
-                    {
-                        "type": "doctype",
-                        "value": "html"
-                    },
-                    {
-                        "type": "element",
-                        "name": "html",
-                        "attrs": {},
-                        "children": [
-                            {
-                                "type": "element",
-                                "name": "head",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "title",
-                                        "attrs": {},
-                                        "children": [
-                                            {
-                                                "type": "variable",
-                                                "reference": [
-                                                    "title"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
-                            {
-                                "type": "element",
-                                "name": "body",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "h2",
-                                        "attrs": {},
-                                        "children": [
-                                            {
-                                                "type": "variable",
-                                                "reference": [
-                                                    "h2"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "ul",
-                                        "attrs": {
-                                            "class": {
-                                                "type": "attribute",
-                                                "name": "class",
-                                                "value": "badges"
-                                            }
-                                        },
-                                        "children": [
-                                            {
-                                                "type": "text",
-                                                "value": "\n\t\t\t"
-                                            },
-                                            {
-                                                "type": "loop",
-                                                "reference": [
-                                                    "li.badge.badge-orange_items"
-                                                ],
-                                                "template": {
-                                                    "type": "element",
-                                                    "name": "li",
-                                                    "attrs": {
-                                                        "class": {
-                                                            "type": "variable-attribute",
-                                                            "name": "class",
-                                                            "reference": [
-                                                                "li.badge.badge-orange_class"
-                                                            ]
-                                                        }
-                                                    },
-                                                    "children": [
-                                                        {
-                                                            "type": "variable",
-                                                            "reference": [
-                                                                "li.badge.badge-orange"
-                                                            ]
-                                                        }
-                                                    ]
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\n"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    }
+	"staticFiles": [],
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "bethunes-gully.html",
+					"content": [],
+					"data": {
+						"title": "Bethune’s Gully",
+						"h2": "Bethune’s Gully",
+						"div.badge_items": [
+							{
+								"div.badge": "picnic",
+								"div.badge_class": "badge-orange"
+							},
+							{
+								"div.badge": "walk",
+								"div.badge_class": "badge-green"
+							}
+						]
+					}
+				},
+				{
+					"pathname": "smails-beach.html",
+					"content": [],
+					"data": {
+						"title": "Smails Beach",
+						"h2": "Smails Beach",
+						"div.badge_items": [
+							{
+								"div.badge": "beach",
+								"div.badge_class": "badge-blue"
+							},
+							{
+								"div.badge": "wildlife",
+								"div.badge_class": "badge-navy"
+							}
+						]
+					}
+				}
+			],
+			"layout": [
+				{
+					"type": "doctype",
+					"value": "html"
+				},
+				{
+					"type": "element",
+					"name": "html",
+					"attrs": {},
+					"children": [
+						{
+							"type": "element",
+							"name": "head",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "title",
+									"attrs": {},
+									"children": [
+										{
+											"type": "variable",
+											"reference": ["title"]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n\t"
+						},
+						{
+							"type": "element",
+							"name": "body",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "h2",
+									"attrs": {},
+									"children": [
+										{
+											"type": "variable",
+											"reference": ["h2"]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "ul",
+									"attrs": {
+										"class": {
+											"type": "attribute",
+											"name": "class",
+											"value": "badges"
+										}
+									},
+									"children": [
+										{
+											"type": "text",
+											"value": "\n\t\t\t"
+										},
+										{
+											"type": "loop",
+											"reference": ["li.badge.badge-orange_items"],
+											"template": {
+												"type": "element",
+												"name": "li",
+												"attrs": {
+													"class": {
+														"type": "variable-attribute",
+														"name": "class",
+														"reference": ["li.badge.badge-orange_class"]
+													}
+												},
+												"children": [
+													{
+														"type": "variable",
+														"reference": ["li.badge.badge-orange"]
+													}
+												]
+											}
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t\n"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
 }

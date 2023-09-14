@@ -27,7 +27,7 @@ export interface ASTVariableNode {
 export interface ASTConditionalNode {
 	type: 'conditional';
 	reference: string[];
-	child: ASTBasicNode;
+	child: ASTElementNode;
 }
 
 export interface ASTDoctypeNode {

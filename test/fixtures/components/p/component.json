@@ -5,9 +5,7 @@
 	"children": [
 		{
 			"type": "inline-markdown-variable",
-			"reference": [
-				"p_inline_markdown"
-			]
+			"reference": ["p_inline_markdown"]
 		}
 	]
 }

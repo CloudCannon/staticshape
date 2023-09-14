@@ -143,7 +143,7 @@ test('loop and element comparison', (t: ExecutionContext) =>
 		isAboveLoopThreshold: true,
 		score: 1
 	}));
-	
+
 test('div to section comparison', (t: ExecutionContext) =>
 	runTest(t, {
 		currentTree: [

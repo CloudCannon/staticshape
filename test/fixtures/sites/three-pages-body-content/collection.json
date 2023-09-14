@@ -1,143 +1,139 @@
 {
-    "staticFiles": [],
-    "collections": {
-        "pages": {
-            "pages": [
-                {
-                    "pathname": "about.html",
-                    "content": [
-                        {
-                            "type": "element",
-                            "name": "h1",
-                            "attrs": {},
-                            "children": [
-                                {
-                                    "type": "text",
-                                    "value": "About"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "text",
-                            "value": "\n"
-                        }
-                    ],
-                    "data": {
-                        "title": "About | Test"
-                    }
-                },
-                {
-                    "pathname": "contact.html",
-                    "content": [
-                        {
-                            "type": "element",
-                            "name": "h1",
-                            "attrs": {},
-                            "children": [
-                                {
-                                    "type": "text",
-                                    "value": "Contact"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "text",
-                            "value": "\n"
-                        }
-                    ],
-                    "data": {
-                        "title": "Contact | Test"
-                    }
-                },
-                {
-                    "pathname": "index.html",
-                    "content": [
-                        {
-                            "type": "element",
-                            "name": "h1",
-                            "attrs": {},
-                            "children": [
-                                {
-                                    "type": "text",
-                                    "value": "Home"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "text",
-                            "value": "\n"
-                        }
-                    ],
-                    "data": {
-                        "title": "Home | Test"
-                    }
-                }
-            ],
-            "layout": {
-                "tree": [
-                    {
-                        "type": "doctype",
-                        "value": "html"
-                    },
-                    {
-                        "type": "element",
-                        "name": "html",
-                        "attrs": {},
-                        "children": [
-                            {
-                                "type": "element",
-                                "name": "head",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "title",
-                                        "attrs": {},
-                                        "children": [
-                                            {
-                                                "type": "variable",
-                                                "reference": [
-                                                    "title"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
-                            {
-                                "type": "element",
-                                "name": "body",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "content"
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\n"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    }
+	"staticFiles": [],
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "about.html",
+					"content": [
+						{
+							"type": "element",
+							"name": "h1",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "About"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n"
+						}
+					],
+					"data": {
+						"title": "About | Test"
+					}
+				},
+				{
+					"pathname": "contact.html",
+					"content": [
+						{
+							"type": "element",
+							"name": "h1",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "Contact"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n"
+						}
+					],
+					"data": {
+						"title": "Contact | Test"
+					}
+				},
+				{
+					"pathname": "index.html",
+					"content": [
+						{
+							"type": "element",
+							"name": "h1",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "Home"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n"
+						}
+					],
+					"data": {
+						"title": "Home | Test"
+					}
+				}
+			],
+			"layout": [
+				{
+					"type": "doctype",
+					"value": "html"
+				},
+				{
+					"type": "element",
+					"name": "html",
+					"attrs": {},
+					"children": [
+						{
+							"type": "element",
+							"name": "head",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "title",
+									"attrs": {},
+									"children": [
+										{
+											"type": "variable",
+											"reference": ["title"]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n\t"
+						},
+						{
+							"type": "element",
+							"name": "body",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "content"
+								},
+								{
+									"type": "text",
+									"value": "\n\t\n"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
 }

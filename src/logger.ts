@@ -4,6 +4,7 @@ import { ASTNode } from './types';
 
 export type Level = number;
 const levels: Record<string, Level> = {
+	verbose: 4,
 	debug: 4,
 	log: 3,
 	warn: 2,
@@ -11,6 +12,7 @@ const levels: Record<string, Level> = {
 };
 
 const prefixes: Record<string, string> = {
+	verbose: '[verbose]',
 	debug: '[debug]',
 	log: '>',
 	warn: '🛑 warning',
@@ -44,6 +46,10 @@ export class Logger {
 
 	printLog(message: string) {
 		this.logs.push(message);
+	}
+
+	verbose(...messages: loggableObjects[]) {
+		this.addLog('verbose', ...messages);
 	}
 
 	debug(...messages: loggableObjects[]) {
@@ -93,9 +99,19 @@ export function nodeDebugString(node: ASTNode, depth = 0, maxDepth = 1): string 
 			return `{{ ${node.type} }}`;
 		case 'variable':
 		case 'markdown-variable':
-		case 'conditional':
-		case 'loop':
 			return `${node.type}: ${node.reference}`;
+		case 'conditional':
+			return `${node.type}: ${node.reference} ${nodeDebugString(
+				node.child,
+				depth + 1,
+				maxDepth
+			)}`;
+		case 'loop':
+			return `${node.type}: ${node.reference} ${nodeDebugString(
+				node.template,
+				depth + 1,
+				maxDepth
+			)}`;
 		case 'comment':
 		case 'cdata':
 		case 'text':

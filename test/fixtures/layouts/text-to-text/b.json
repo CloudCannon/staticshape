@@ -1,13 +1,13 @@
 [
-    {
-        "type": "element",
-        "name": "h1",
-        "attrs": {},
-        "children": [
-            {
-                "type": "text",
-                "value": "Secondary"
-            }
-        ]
-    }
+	{
+		"type": "element",
+		"name": "h1",
+		"attrs": {},
+		"children": [
+			{
+				"type": "text",
+				"value": "Secondary"
+			}
+		]
+	}
 ]

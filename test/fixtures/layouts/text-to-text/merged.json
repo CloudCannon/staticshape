@@ -1,15 +1,13 @@
 [
-    {
-        "type": "element",
-        "name": "h1",
-        "attrs": {},
-        "children": [
-            {
-                "type": "inline-markdown-variable",
-                "reference": [
-                    "h1_inline_markdown"
-                ]
-            }
-        ]
-    }
+	{
+		"type": "element",
+		"name": "h1",
+		"attrs": {},
+		"children": [
+			{
+				"type": "inline-markdown-variable",
+				"reference": ["h1_inline_markdown"]
+			}
+		]
+	}
 ]

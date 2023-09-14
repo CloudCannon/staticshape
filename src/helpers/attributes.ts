@@ -1,4 +1,4 @@
-//html.spec.whatwg.org/multipage/indices.html#attributes-3
+// https://html.spec.whatwg.org/multipage/indices.html#attributes-3
 export const booleanAttributes: Record<string, boolean> = {
 	allowfullscreen: true,
 	async: true,

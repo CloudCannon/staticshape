@@ -1,105 +1,99 @@
 {
-    "staticFiles": [
-        "assets/goose.jpg"
-    ],
-    "collections": {
-        "pages": {
-            "pages": [
-                {
-                    "pathname": "about.html",
-                    "content": [],
-                    "data": {
-                        "h1_inline_markdown": "About"
-                    }
-                },
-                {
-                    "pathname": "index.html",
-                    "content": [],
-                    "data": {
-                        "h1_inline_markdown": "Home"
-                    }
-                },
-                {
-                    "pathname": "contact.html",
-                    "content": [],
-                    "data": {
-                        "h1_inline_markdown": "Contact"
-                    }
-                }
-            ],
-            "layout": {
-                "tree": [
-                    {
-                        "type": "doctype",
-                        "value": "html"
-                    },
-                    {
-                        "type": "element",
-                        "name": "html",
-                        "attrs": {},
-                        "children": [
-                            {
-                                "type": "element",
-                                "name": "head",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "title",
-                                        "attrs": {},
-                                        "children": [
-                                            {
-                                                "type": "text",
-                                                "value": "Test"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "text",
-                                "value": "\n\t"
-                            },
-                            {
-                                "type": "element",
-                                "name": "body",
-                                "attrs": {},
-                                "children": [
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\t"
-                                    },
-                                    {
-                                        "type": "element",
-                                        "name": "h1",
-                                        "attrs": {},
-                                        "children": [
-                                            {
-                                                "type": "inline-markdown-variable",
-                                                "reference": [
-                                                    "h1_inline_markdown"
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "text",
-                                        "value": "\n\t\n"
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        }
-    }
+	"staticFiles": ["assets/goose.jpg"],
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "about.html",
+					"content": [],
+					"data": {
+						"h1_inline_markdown": "About"
+					}
+				},
+				{
+					"pathname": "index.html",
+					"content": [],
+					"data": {
+						"h1_inline_markdown": "Home"
+					}
+				},
+				{
+					"pathname": "contact.html",
+					"content": [],
+					"data": {
+						"h1_inline_markdown": "Contact"
+					}
+				}
+			],
+			"layout": [
+				{
+					"type": "doctype",
+					"value": "html"
+				},
+				{
+					"type": "element",
+					"name": "html",
+					"attrs": {},
+					"children": [
+						{
+							"type": "element",
+							"name": "head",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "title",
+									"attrs": {},
+									"children": [
+										{
+											"type": "text",
+											"value": "Test"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n\t"
+						},
+						{
+							"type": "element",
+							"name": "body",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "h1",
+									"attrs": {},
+									"children": [
+										{
+											"type": "inline-markdown-variable",
+											"reference": ["h1_inline_markdown"]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t\n"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
 }
