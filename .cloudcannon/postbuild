@@ -1,0 +1,1 @@
+npx -y pagefind@beta --site docs/public

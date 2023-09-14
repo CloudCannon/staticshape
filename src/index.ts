@@ -5,7 +5,7 @@ import Site from './site';
 import Exporter, { Engine } from './exporter';
 import { Logger } from './logger';
 
-p.intro(`Welcome to the static to ssg`);
+p.intro(`Welcome to the Staticshape`);
 
 const sourcePath = await p.text({
 	message: 'What folder contains your static site?',
@@ -36,7 +36,7 @@ const absoluteSourcePath = path.resolve(sourcePath);
 p.log.success(`Input set to ${absoluteSourcePath}`);
 
 const configPath = await p.text({
-	message: 'Where is your static-to-ssg config file?',
+	message: 'Where is your staticshape config file?',
 	placeholder: './example.json',
 	initialValue: '../../scrapes/',
 	validate(configPath) {

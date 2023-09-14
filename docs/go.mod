@@ -1,4 +1,4 @@
-module github.com/cloudcannon/static-to-ssg/docs
+module github.com/cloudcannon/staticshape/docs
 
 go 1.18
 

@@ -1,6 +1,6 @@
-baseURL = 'https://static-to-ssg.app/'
+baseURL = 'https://staticshape.app/'
 languageCode = 'en-us'
-title = 'Static to SSG'
+title = 'Staticshape'
 summaryLength = 30
 disableKinds = ["taxonomyTerm"]
 

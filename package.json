@@ -1,5 +1,5 @@
 {
-  "name": "static-to-ssg",
+  "name": "staticshape",
   "description": "A CLI tool to convert a static site into an SSG site to be used as a baseline",
   "version": "0.0.1",
   "main": "lib/index.js",
@@ -39,14 +39,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CloudCannon/static-to-ssg.git"
+    "url": "git+https://github.com/CloudCannon/staticshape.git"
   },
   "author": "CloudCannon",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CloudCannon/static-to-ssg/issues"
+    "url": "https://github.com/CloudCannon/staticshape/issues"
   },
-  "homepage": "https://github.com/CloudCannon/static-to-ssg#readme",
+  "homepage": "https://github.com/CloudCannon/staticshape#readme",
   "ava": {
     "extensions": {
       "ts": "module"
