@@ -234,7 +234,7 @@ export function mergeAttrs(
 			return;
 		}
 
-		if (booleanAttributes[attrName]) {
+		if (booleanAttributes[attrName] && !isAttrEquivalent(attrName, firstAttr, secondAttr)) {
 			firstData.set(variableName, !!firstAttr);
 			secondData.set(variableName, !!secondAttr);
 			combined[attrName] = {
@@ -246,7 +246,7 @@ export function mergeAttrs(
 		}
 
 		if (!secondAttr) {
-			firstData.set(variableName, firstAttr.value);
+			firstData.set(variableName, firstAttr.value.trim());
 			secondData.set(variableName, null);
 			combined[attrName] = {
 				type: 'conditional-attribute',
@@ -263,8 +263,8 @@ export function mergeAttrs(
 				value: secondAttr.value
 			};
 		} else {
-			firstData.set(variableName, firstAttr.value);
-			secondData.set(variableName, secondAttr.value);
+			firstData.set(variableName, firstAttr.value.trim());
+			secondData.set(variableName, secondAttr.value.trim());
 			combined[attrName] = {
 				type: 'variable-attribute',
 				name: attrName,
@@ -283,14 +283,14 @@ export function mergeAttrs(
 
 		if (secondAttr && secondAttr.type !== 'attribute') {
 			if (firstAttr.type === 'attribute') {
-				firstData.chainSet(secondAttr.reference, firstAttr.value);
+				firstData.chainSet(secondAttr.reference, firstAttr.value.trim());
 			}
 			combined[attrName] = secondAttr;
 			return secondAttr;
 		}
 
 		firstData.set(variableName, null);
-		secondData.set(variableName, secondAttr.value);
+		secondData.set(variableName, secondAttr.value.trim());
 		combined[attrName] = {
 			type: 'conditional-attribute',
 			name: attrName,
