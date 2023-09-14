@@ -9,21 +9,21 @@
                     "pathname": "about.html",
                     "content": [],
                     "data": {
-                        "h1": "About"
+                        "h1_inline_markdown": "About"
                     }
                 },
                 {
                     "pathname": "index.html",
                     "content": [],
                     "data": {
-                        "h1": "Home"
+                        "h1_inline_markdown": "Home"
                     }
                 },
                 {
                     "pathname": "contact.html",
                     "content": [],
                     "data": {
-                        "h1": "Contact"
+                        "h1_inline_markdown": "Contact"
                     }
                 }
             ],
@@ -83,9 +83,9 @@
                                         "attrs": {},
                                         "children": [
                                             {
-                                                "type": "variable",
+                                                "type": "inline-markdown-variable",
                                                 "reference": [
-                                                    "h1"
+                                                    "h1_inline_markdown"
                                                 ]
                                             }
                                         ]

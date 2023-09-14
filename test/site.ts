@@ -3,6 +3,7 @@ import Site from '../src/site';
 import * as path from 'path';
 import * as fs from 'fs';
 import { CollectionResponse } from '../src/collection';
+import { TestLogger } from './test-logger';
 
 function sortCollectionPages(collections: Record<string, CollectionResponse>) {
 	Object.keys(collections).forEach((key) => {
@@ -31,7 +32,8 @@ async function runTest(t: ExecutionContext, testName: string) {
 	);
 	const site = new Site({
 		basePath,
-		...config
+		...config,
+		logger: new TestLogger()
 	});
 
 	const output = await site.build();

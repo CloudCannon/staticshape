@@ -6,7 +6,7 @@
         "children": [
             {
                 "type": "text",
-                "value": "Should be ignored"
+                "value": "Should be added to the data"
             }
         ]
     }

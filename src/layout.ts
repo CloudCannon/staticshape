@@ -17,6 +17,7 @@ export default class Layout {
 
 	constructor(options: LayoutOptions) {
 		this.tree = options.tree;
+		this.logger = options.logger;
 	}
 
 	merge(other: Layout): Layout {

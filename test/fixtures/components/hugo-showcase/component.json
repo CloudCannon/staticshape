@@ -40,9 +40,9 @@
 					},
 					"children": [
 						{
-							"type": "variable",
+							"type": "inline-markdown-variable",
 							"reference": [
-								"h1_primary-color-dark"
+								"h1_primary-color-dark_inline_markdown"
 							]
 						}
 					]
@@ -223,9 +223,9 @@
 												},
 												"children": [
 													{
-														"type": "variable",
+														"type": "inline-markdown-variable",
 														"reference": [
-															"h2_dib_f3_mt4"
+															"h2_dib_f3_mt4_inline_markdown"
 														]
 													}
 												]

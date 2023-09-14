@@ -1,6 +1,7 @@
 import test, { ExecutionContext } from 'ava';
 import * as fs from 'fs';
 import Layout from '../src/layout';
+import { TestLogger } from './test-logger';
 
 async function runTest(t: ExecutionContext, testName: string) {
 	const expected = JSON.parse(
@@ -9,19 +10,23 @@ async function runTest(t: ExecutionContext, testName: string) {
 		)
 	);
 
+	const logger = new TestLogger();
+
 	const a = new Layout({
 		tree: JSON.parse(
 			(await fs.promises.readFile(`./test/fixtures/layouts/${testName}/a.json`)).toString(
 				'utf-8'
 			)
-		)
+		),
+		logger
 	});
 	const b = new Layout({
 		tree: JSON.parse(
 			(await fs.promises.readFile(`./test/fixtures/layouts/${testName}/b.json`)).toString(
 				'utf-8'
 			)
-		)
+		),
+		logger
 	});
 
 	const forwards = a.merge(b);

@@ -4,6 +4,7 @@ import { convertElementToComponent } from '../src/helpers/component-builder';
 import htmlToAST from '../src/helpers/html-parser';
 import { ASTElementNode } from '../src/types';
 import Data from '../src/helpers/Data';
+import { TestLogger } from './test-logger';
 
 async function runTest(t: ExecutionContext, testName: string) {
 	const html = (
@@ -21,7 +22,7 @@ async function runTest(t: ExecutionContext, testName: string) {
 	const element = ast.find((node) => node.type === 'element') as ASTElementNode;
 
 	const data = new Data([], {});
-	const component = convertElementToComponent(data, element);
+	const component = convertElementToComponent(data, element, [], {}, new TestLogger());
 
 	if (!fs.existsSync(`./test/fixtures/components/${testName}/component.json`)) {
 		await fs.promises.writeFile(
@@ -59,3 +60,4 @@ test('markdown', (t: ExecutionContext) => runTest(t, 'markdown'));
 test('logo-row', (t: ExecutionContext) => runTest(t, 'logo-row'));
 test('dunedinattractions-grid', (t: ExecutionContext) => runTest(t, 'dunedinattractions-grid'));
 test('hugo-showcase', (t: ExecutionContext) => runTest(t, 'hugo-showcase'));
+test('hugo-testimonials', (t: ExecutionContext) => runTest(t, 'hugo-testimonials'));

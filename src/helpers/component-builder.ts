@@ -1,10 +1,25 @@
 import { ASTElementNode, ASTNode, ASTAttributeList } from '../types';
 import { invalidLoopTags, findRepeatedIndex } from './loops';
 import Data from './Data';
-import { findEndOfMarkdownIndex, isMarkdownElement, markdownify } from './markdown';
+import {
+	findEndOfMarkdownIndex,
+	invalidMarkdownParentTags,
+	isMarkdownElement,
+	isMarkdownInlineTree,
+	markdownify,
+	validMarkdownBlockTags,
+	validMarkdownInlineTags
+} from './markdown';
 import { diffNodes } from './dom-diff';
-import { nodeDebugString } from './debug-helper';
-import { Logger } from '../logger';
+import { Logger, nodeDebugString } from '../logger';
+
+export interface ComponentBuilderConfig {
+	disableMarkdown?: boolean;
+	disableInlineMarkdown?: boolean;
+	disableTextVariables?: boolean;
+	disableAttributeVariables?: boolean;
+	disableLoops?: boolean;
+}
 
 export const editableAttrs: Record<string, boolean> = {
 	href: true,
@@ -39,16 +54,21 @@ export function convertAttrsToVariables(
 
 interface Loop {
 	itemData: Data[];
-	template: ASTNode;
+	template: ASTElementNode;
 }
 
 interface LoopState {
-	template: ASTNode;
+	template: ASTElementNode;
 	blocks: Data[];
 	base: Data;
 }
 
-function buildLoop(elements: ASTElementNode[], parentElements: ASTElementNode[]): Loop | null {
+function buildLoop(
+	elements: ASTElementNode[],
+	parentElements: ASTElementNode[],
+	config: ComponentBuilderConfig = {},
+	logger?: Logger
+): Loop | null {
 	const data = [] as Data[];
 	const base = elements[0];
 	let current: LoopState | null = null;
@@ -56,7 +76,14 @@ function buildLoop(elements: ASTElementNode[], parentElements: ASTElementNode[])
 		const loopEl = elements[i];
 		const newBaseData = new Data([], {});
 		const otherData = new Data([], {});
-		const template = diffNodes(newBaseData, otherData, base, loopEl, parentElements);
+		const template = diffNodes(
+			newBaseData,
+			otherData,
+			base,
+			loopEl,
+			parentElements,
+			logger
+		) as ASTElementNode;
 		data.push(otherData);
 
 		if (current === null) {
@@ -81,8 +108,18 @@ function buildLoop(elements: ASTElementNode[], parentElements: ASTElementNode[])
 				otherData,
 				current.template,
 				template,
-				parentElements
+				parentElements,
+				logger
+			) as ASTElementNode;
+			logger?.log(
+				'🤔 Diffing loop templates',
+				nodeDebugString(current.template, 0, 4),
+				'vs',
+				nodeDebugString(template, 0, 4)
 			);
+			logger?.log('🐓', nodeDebugString(current.template, 0, 4));
+			logger?.log('🐄', nodeDebugString(template, 0, 4));
+			logger?.log('🥂', nodeDebugString(merged, 0, 4));
 			current = {
 				template: merged,
 				blocks: [...oldBlocks, newBlock],
@@ -106,16 +143,20 @@ export function convertElementToComponent(
 	data: Data,
 	element: ASTElementNode,
 	parentElements: ASTElementNode[] = [],
+	config: ComponentBuilderConfig = {},
 	logger?: Logger
 ): ASTElementNode {
 	return {
 		type: 'element',
 		name: element.name,
-		attrs: convertAttrsToVariables(data, element, logger),
+		attrs: config.disableAttributeVariables
+			? element.attrs
+			: convertAttrsToVariables(data, element, logger),
 		children: convertTreeToComponents(
 			data,
 			element.children,
 			[...parentElements, element],
+			config,
 			logger
 		)
 	};
@@ -125,16 +166,35 @@ export function convertTreeToComponents(
 	data: Data,
 	tree: ASTNode[],
 	parentElements: ASTElementNode[] = [],
+	config: ComponentBuilderConfig = {},
 	logger?: Logger
 ): ASTNode[] {
+	const parent = parentElements[parentElements.length - 1];
+	if (parent && validMarkdownBlockTags[parent?.name] && !config.disableInlineMarkdown) {
+		if (tree.length > 0 && isMarkdownInlineTree(tree, validMarkdownInlineTags, true)) {
+			const variableName = data.getVariableName(parentElements, '', 'inline_markdown');
+			data.set(variableName, markdownify(tree));
+			return [
+				{
+					type: 'inline-markdown-variable',
+					reference: data.getChain(variableName)
+				}
+			];
+		}
+	}
+
 	const converted = [] as ASTNode[];
 	let index = 0;
 	while (index < tree.length) {
 		const node = tree[index];
+		const remainingNodes = tree.slice(index);
 		if (node.type === 'element') {
-			if (isMarkdownElement(node)) {
-				const remainingNodes = tree.slice(index);
-
+			if (
+				isMarkdownElement(node) &&
+				parent &&
+				!invalidMarkdownParentTags[parent.name] &&
+				!config.disableMarkdown
+			) {
 				const indexes = findEndOfMarkdownIndex(remainingNodes);
 				const markdownElements = remainingNodes
 					.slice(0, indexes.lastElIndex + 1)
@@ -150,8 +210,7 @@ export function convertTreeToComponents(
 				continue;
 			}
 
-			if (!invalidLoopTags[node.name]) {
-				const remainingNodes = tree.slice(index);
+			if (!invalidLoopTags[node.name] && !config.disableLoops) {
 				const repeatedIndex = findRepeatedIndex(remainingNodes);
 				if (repeatedIndex > 0) {
 					const repeatedElements = remainingNodes
@@ -159,7 +218,12 @@ export function convertTreeToComponents(
 						.filter((node) => node.type === 'element') as ASTElementNode[];
 
 					if (repeatedElements.length > 1) {
-						const loopData = buildLoop(repeatedElements, parentElements);
+						const loopData = buildLoop(
+							repeatedElements,
+							parentElements,
+							config,
+							logger
+						);
 						if (loopData) {
 							const { itemData, template } = loopData;
 							const variableName = data.getVariableName(parentElements, '', 'items');
@@ -180,9 +244,9 @@ export function convertTreeToComponents(
 				}
 			}
 
-			converted.push(convertElementToComponent(data, node, parentElements, logger));
+			converted.push(convertElementToComponent(data, node, parentElements, config, logger));
 			index += 1;
-		} else if (node.type === 'text' && node.value.trim()) {
+		} else if (node.type === 'text' && node.value.trim() && !config.disableTextVariables) {
 			const variableName = data.getVariableName(parentElements);
 			data.set(variableName, node.value);
 			converted.push({

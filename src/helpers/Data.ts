@@ -118,6 +118,28 @@ export default class Data {
 		this.data[variableName] = value;
 	}
 
+	chainSet(variableNames: string[], value: any): void {
+		const clone = structuredClone(variableNames);
+		const leadName = clone.pop();
+		const data = this.chainGet(clone);
+
+		if (leadName && typeof data === 'object') {
+			data[leadName] = value;
+		}
+	}
+
+	chainGet(variableNames: string[]): any | null {
+		let data = this.data;
+		for (let i = 0; i < variableNames.length; i++) {
+			const variableName = variableNames[i];
+			if (!(variableName in data)) {
+				return null;
+			}
+			data = data[variableName];
+		}
+		return data;
+	}
+
 	empty(): boolean {
 		return Object.keys(this.data).length === 0;
 	}

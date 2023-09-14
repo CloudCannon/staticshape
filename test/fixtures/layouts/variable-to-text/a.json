@@ -5,9 +5,9 @@
         "attrs": {},
         "children": [
             {
-                "type": "variable",
+                "type": "inline-markdown-variable",
                 "reference": [
-                    "h1"
+                    "h1_inline_markdown"
                 ]
             }
         ]

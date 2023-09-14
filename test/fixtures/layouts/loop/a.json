@@ -12,7 +12,7 @@
         "children": [
             {
                 "type": "text",
-                "value": "\n\t\t\t"
+                "value": "\n              "
             },
             {
                 "type": "element",
@@ -33,7 +33,7 @@
             },
             {
                 "type": "text",
-                "value": "\n\t\t\t"
+                "value": "\n\n              "
             },
             {
                 "type": "element",
@@ -54,7 +54,7 @@
             },
             {
                 "type": "text",
-                "value": "\n\t\t"
+                "value": "\n            "
             }
         ]
     }

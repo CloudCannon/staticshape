@@ -8,7 +8,7 @@
                     "content": [],
                     "data": {
                         "title": "Home | Test",
-                        "h1": "Home",
+                        "h1_inline_markdown": "Home",
                         "div_markdown": "## Home h2\n\nHome p"
                     }
                 },
@@ -17,7 +17,7 @@
                     "content": [],
                     "data": {
                         "title": "About | Test",
-                        "h1": "About",
+                        "h1_inline_markdown": "About",
                         "div_markdown": "## About h2\n\nAbout p"
                     }
                 }
@@ -80,9 +80,9 @@
                                         "attrs": {},
                                         "children": [
                                             {
-                                                "type": "variable",
+                                                "type": "inline-markdown-variable",
                                                 "reference": [
-                                                    "h1"
+                                                    "h1_inline_markdown"
                                                 ]
                                             }
                                         ]

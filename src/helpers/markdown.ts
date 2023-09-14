@@ -4,7 +4,7 @@ import { findLastNonWhitespaceIndex } from './node-helper';
 import * as Turndown from 'turndown';
 const TurndownService = (Turndown as any).default;
 
-export const invalidLoopParentTags: Record<string, boolean> = {
+export const invalidMarkdownParentTags: Record<string, boolean> = {
 	body: true
 };
 
@@ -17,7 +17,7 @@ const listItemTags: Record<string, boolean> = {
 	li: true
 };
 
-const validBlockTags: Record<string, boolean> = {
+export const validMarkdownBlockTags: Record<string, boolean> = {
 	h1: true,
 	h2: true,
 	h3: true,
@@ -28,7 +28,7 @@ const validBlockTags: Record<string, boolean> = {
 	...listTags
 };
 
-const validInlineTags: Record<string, boolean> = {
+export const validMarkdownInlineTags: Record<string, boolean> = {
 	a: true,
 	em: true,
 	strong: true,
@@ -39,7 +39,7 @@ const validInlineTags: Record<string, boolean> = {
 };
 
 const validInlineListTags: Record<string, boolean> = {
-	...validInlineTags,
+	...validMarkdownInlineTags,
 	...listTags
 };
 
@@ -114,7 +114,7 @@ export function isMarkdownTree(nodes: ASTNode[]): boolean {
 
 export function isMarkdownElement(el: ASTElementNode): boolean {
 	const name = el.name;
-	if (!validBlockTags[name]) {
+	if (!validMarkdownBlockTags[name]) {
 		return false;
 	}
 
@@ -134,7 +134,7 @@ export function isMarkdownElement(el: ASTElementNode): boolean {
 		return isMarkdownInlineTree(el.children, validInlineListTags, true);
 	}
 
-	return isMarkdownInlineTree(el.children, validInlineTags, true);
+	return isMarkdownInlineTree(el.children, validMarkdownInlineTags, true);
 }
 
 export function markdownify(ast: ASTNode[]): string {

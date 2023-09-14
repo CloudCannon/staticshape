@@ -9,7 +9,7 @@
                     "data": {
                         "title": "Home | Test",
                         "show_meta_description": true,
-                        "h1": "Home"
+                        "h1_inline_markdown": "Home"
                     }
                 },
                 {
@@ -18,7 +18,7 @@
                     "data": {
                         "title": "Test",
                         "show_meta_description": false,
-                        "h1": "About"
+                        "h1_inline_markdown": "About"
                     }
                 },
                 {
@@ -27,7 +27,7 @@
                     "data": {
                         "title": "Test",
                         "show_meta_description": false,
-                        "h1": "Contact"
+                        "h1_inline_markdown": "Contact"
                     }
                 }
             ],
@@ -116,9 +116,9 @@
                                         "attrs": {},
                                         "children": [
                                             {
-                                                "type": "variable",
+                                                "type": "inline-markdown-variable",
                                                 "reference": [
-                                                    "h1"
+                                                    "h1_inline_markdown"
                                                 ]
                                             }
                                         ]

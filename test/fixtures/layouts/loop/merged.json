@@ -12,7 +12,7 @@
         "children": [
             {
                 "type": "text",
-                "value": "\n\t\t\t"
+                "value": "\n              "
             },
             {
                 "type": "loop",
@@ -27,8 +27,7 @@
                             "type": "variable-attribute",
                             "name": "class",
                             "reference": [
-                                "li_badge",
-                                "class"
+                                "li_badge_badge-blue_class"
                             ]
                         }
                     },
@@ -36,7 +35,7 @@
                         {
                             "type": "variable",
                             "reference": [
-                                "li_badge-blue"
+                                "li_badge_badge-blue"
                             ]
                         }
                     ]
@@ -44,7 +43,7 @@
             },
             {
                 "type": "text",
-                "value": "\n\t\t"
+                "value": "\n            "
             }
         ]
     }

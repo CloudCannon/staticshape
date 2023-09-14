@@ -86,6 +86,64 @@ test('element to text comparison', (t: ExecutionContext) =>
 		score: 0
 	}));
 
+test('variable to variable comparison', (t: ExecutionContext) =>
+	runTest(t, {
+		currentTree: [{ type: 'variable', reference: ['a'] }],
+		otherTree: [{ type: 'variable', reference: ['a'] }],
+		isBestMatch: true,
+		isAboveLoopThreshold: true,
+		score: 1
+	}));
+
+test('loop and element comparison', (t: ExecutionContext) =>
+	runTest(t, {
+		currentTree: [
+			{
+				type: 'loop',
+				reference: ['ul_badges_items'],
+				template: {
+					type: 'element',
+					name: 'li',
+					attrs: {
+						class: {
+							type: 'variable-attribute',
+							name: 'class',
+							reference: ['li_badge_badge-blue_class']
+						}
+					},
+					children: [
+						{
+							type: 'variable',
+							reference: ['li_badge_badge-blue']
+						}
+					]
+				}
+			}
+		],
+		otherTree: [
+			{
+				type: 'element',
+				name: 'li',
+				attrs: {
+					class: {
+						type: 'attribute',
+						name: 'class',
+						value: 'badge badge-blue'
+					}
+				},
+				children: [
+					{
+						type: 'text',
+						value: 'beach'
+					}
+				]
+			}
+		],
+		isBestMatch: true,
+		isAboveLoopThreshold: true,
+		score: 1
+	}));
+	
 test('div to section comparison', (t: ExecutionContext) =>
 	runTest(t, {
 		currentTree: [

@@ -1,0 +1,29 @@
+{
+	"h3_f2_fw4_white_inline_markdown": "See what others are saying about Hugo…",
+	"div_flex-ns_flex-wrap_justify-between_items": [
+		{
+			"p_f4_inline_markdown": "Working with @GoHugoIO is such a joy. Having worked with #Jekyll in the past, the near instant preview is a big win! Did not expect this to make such a huge difference.",
+			"cite_f6_gray_homepage-tweet-attribution": "─ Heinrich Hartmann (@heinrichhartman)",
+			"a_href": "https://twitter.com/heinrichhartman/status/1199736512264462341",
+			"a": "November 12, 2019"
+		},
+		{
+			"p_f4_inline_markdown": "Can't overstate how much I enjoy [@GoHugoIO](https://twitter.com/gohugoio). My site is relatively small, but \\*18 ms\\* to build the whole thing made template development and proofing a breeze.",
+			"cite_f6_gray_homepage-tweet-attribution": "─ Joshua Steven (@jscarto)",
+			"a_href": "https://twitter.com/jscarto/status/1039648827815485440",
+			"a": "September 12, 2018"
+		},
+		{
+			"p_f4_inline_markdown": "The more I use [gohugo.io](https://gohugo.io), the more I really like it. Super intuitive/powerful static site generator...great job [@GoHugoIO](https://twitter.com/gohugoio)",
+			"cite_f6_gray_homepage-tweet-attribution": "─ Christophe Diericx (@spcrngr_)",
+			"a_href": "https://twitter.com/spcrngr_/status/870863020905435136",
+			"a": "June 3, 2017"
+		},
+		{
+			"p_f4_inline_markdown": "Blog migrated from [@WordPress](https://twitter.com/WordPress) to [@GoHugoIO](https://twitter.com/GoHugoIO), with a little refresh of my theme, Vim shortcuts and a full featured deploy script [#gohugo](https://twitter.com/hashtag/gohugo?src=hash)",
+			"cite_f6_gray_homepage-tweet-attribution": "─ marcoscan (@marcoscan)",
+			"a_href": "https://twitter.com/marcoscan/status/869661175960752129",
+			"a": "May 30, 2017"
+		}
+	]
+}

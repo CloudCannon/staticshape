@@ -16,7 +16,8 @@ import {
 	ASTStaticAttribute,
 	ASTLoopNode,
 	ASTAttributeList,
-	ASTMarkdownNode
+	ASTMarkdownNode,
+	ASTInlineMarkdownNode
 } from '../types';
 
 interface ExportEngineOptions {
@@ -82,6 +83,8 @@ export default class HtmlExportEngine {
 				return this.renderVariable(node);
 			case 'markdown-variable':
 				return this.renderMarkdownVariable(node);
+			case 'inline-markdown-variable':
+				return this.renderInlineMarkdownVariable(node);
 			case 'conditional':
 				return this.renderConditional(node);
 			case 'loop':
@@ -155,6 +158,10 @@ export default class HtmlExportEngine {
 
 	renderMarkdownVariable(_node: ASTMarkdownNode): string {
 		throw new Error('Markdown render not yet implemented');
+	}
+
+	renderInlineMarkdownVariable(_node: ASTInlineMarkdownNode): string {
+		throw new Error('Inline markdown render not yet implemented');
 	}
 
 	renderConditional(_node: ASTConditionalNode): string {

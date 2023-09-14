@@ -62,10 +62,15 @@ export interface ASTMarkdownNode {
 	reference: string[];
 }
 
+export interface ASTInlineMarkdownNode {
+	type: 'inline-markdown-variable';
+	reference: string[];
+}
+
 export interface ASTLoopNode {
 	type: 'loop';
 	reference: string[];
-	template: ASTNode;
+	template: ASTElementNode;
 }
 
 export interface ASTElementNode {
@@ -83,6 +88,7 @@ export type ASTVaraibleNode =
 	| ASTConditionalNode
 	| ASTContentNode
 	| ASTMarkdownNode
+	| ASTInlineMarkdownNode
 	| ASTLoopNode;
 export type ASTNode = ASTBasicNode | ASTVaraibleNode;
 export type ASTAttributeList = Record<string, ASTAttribute>;

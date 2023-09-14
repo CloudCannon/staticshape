@@ -4,9 +4,9 @@
 	"attrs": {},
 	"children": [
 		{
-			"type": "variable",
+			"type": "inline-markdown-variable",
 			"reference": [
-				"p"
+				"p_inline_markdown"
 			]
 		}
 	]

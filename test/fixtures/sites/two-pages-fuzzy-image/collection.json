@@ -16,7 +16,7 @@
                             "class": "",
                             "alt": "Goose"
                         },
-                        "h1": "Goose Owner"
+                        "h1_inline_markdown": "Goose Owner"
                     }
                 },
                 {
@@ -29,7 +29,7 @@
                             "class": "reversed",
                             "alt": "Goose Reversed"
                         },
-                        "h1": "Goose Admirer"
+                        "h1_inline_markdown": "Goose Admirer"
                     }
                 }
             ],
@@ -151,9 +151,9 @@
                                                 "attrs": {},
                                                 "children": [
                                                     {
-                                                        "type": "variable",
+                                                        "type": "inline-markdown-variable",
                                                         "reference": [
-                                                            "h1"
+                                                            "h1_inline_markdown"
                                                         ]
                                                     }
                                                 ]

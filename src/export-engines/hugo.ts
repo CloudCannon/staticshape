@@ -3,6 +3,7 @@ import {
 	ASTConditionalAttribute,
 	ASTConditionalNode,
 	ASTContentNode,
+	ASTInlineMarkdownNode,
 	ASTLoopNode,
 	ASTMarkdownNode,
 	ASTVariableAttribute,
@@ -72,6 +73,10 @@ export default class HugoExportEngine extends HtmlExportEngine {
 
 	renderMarkdownVariable(node: ASTMarkdownNode): string {
 		return `{{ .Params.${node.reference.join('.')} | markdownify }}`;
+	}
+
+	renderInlineMarkdownVariable(node: ASTInlineMarkdownNode): string {
+		return `{{ .Params.${node.reference.join('.')} | fake_inline_markdownify_filter }}`;
 	}
 
 	renderConditional(node: ASTConditionalNode): string {
