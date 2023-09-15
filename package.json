@@ -46,7 +46,7 @@
   "bugs": {
     "url": "https://github.com/CloudCannon/staticshape/issues"
   },
-  "homepage": "https://github.com/CloudCannon/staticshape#readme",
+  "homepage": "https://staticshape.app/",
   "ava": {
     "extensions": {
       "ts": "module"
