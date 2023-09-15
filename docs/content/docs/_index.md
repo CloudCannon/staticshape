@@ -2,7 +2,7 @@
 title: "Getting Started with Staticshape"
 nav_title: "Quick Start"
 nav_section: Root
-weight: 7
+weight: 5
 ---
 
 TODO
