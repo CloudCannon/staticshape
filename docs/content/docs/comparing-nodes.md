@@ -1,8 +1,8 @@
 ---
 title: "Comparing nodes"
 nav_title: "Comparing nodes"
-nav_section: Root
-weight: 8
+nav_section: How it works
+weight: 4
 ---
 
 TODO

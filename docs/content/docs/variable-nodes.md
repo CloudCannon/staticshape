@@ -1,7 +1,7 @@
 ---
 title: "Variable Nodes"
-nav_title: "Variable"
-nav_section: Node Types
+nav_title: "Variables"
+nav_section: Variable nodes
 weight: 4
 ---
 

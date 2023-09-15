@@ -1,7 +1,7 @@
 ---
-title: "Conditional Nodes"
-nav_title: "Conditional"
-nav_section: Node Types
+title: "Conditional nodes"
+nav_title: "Conditionals"
+nav_section: Nodes
 weight: 8
 ---
 

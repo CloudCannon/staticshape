@@ -1,7 +1,7 @@
 ---
-title: "Loop Nodes"
-nav_title: "Loop"
-nav_section: Node Types
+title: "Loop nodes"
+nav_title: "Loops"
+nav_section: Nodes
 weight: 7
 ---
 

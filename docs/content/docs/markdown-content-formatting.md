@@ -1,7 +1,7 @@
 ---
-title: "Markdown Content Formatting"
-nav_title: "Markdown Content"
-nav_section: Content Types
+title: "Markdown page content"
+nav_title: "Markdown page content"
+nav_section: Page content
 weight: 11
 ---
 

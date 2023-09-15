@@ -1,7 +1,7 @@
 ---
-title: "Inline Markdown Variable Nodes"
-nav_title: "Inline Markdown Variable"
-nav_section: Node Types
+title: "Inline markdown variable nodes"
+nav_title: "Inline markdown variables"
+nav_section: Variable nodes
 weight: 6
 ---
 

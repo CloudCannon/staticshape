@@ -1,7 +1,7 @@
 ---
 title: "Component Content Formatting"
 nav_title: "Component Content"
-nav_section: Content Types
+nav_section: Page content
 weight: 12
 ---
 
