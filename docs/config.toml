@@ -1,6 +1,6 @@
 baseURL = 'https://staticshape.app/'
 languageCode = 'en-us'
-title = 'Staticshape'
+title = 'StaticShape'
 summaryLength = 30
 disableKinds = ["taxonomyTerm"]
 

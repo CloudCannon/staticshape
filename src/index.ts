@@ -5,7 +5,7 @@ import Site from './site';
 import Exporter, { Engine } from './exporter';
 import { Logger } from './logger';
 
-p.intro(`Welcome to the Staticshape`);
+p.intro(`Welcome to the StaticShape`);
 
 const sourcePath = await p.text({
 	message: 'What folder contains your static site?',

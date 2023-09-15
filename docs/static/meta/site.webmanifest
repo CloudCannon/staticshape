@@ -1,6 +1,6 @@
 {
-    "name": "Staticshape",
-    "short_name": "Staticshape",
+    "name": "StaticShape",
+    "short_name": "StaticShape",
     "icons": [
         {
             "src": "/meta/android-chrome-192x192.png",

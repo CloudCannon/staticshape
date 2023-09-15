@@ -24,15 +24,22 @@ export interface ASTVariableNode {
 	reference: string[];
 }
 
+export interface ASTDoctypeNode {
+	type: 'doctype';
+	value: string;
+}
+
+export interface ASTElementNode {
+	type: 'element';
+	name: string;
+	attrs: ASTAttributeList;
+	children: ASTNode[];
+}
+
 export interface ASTConditionalNode {
 	type: 'conditional';
 	reference: string[];
 	child: ASTElementNode;
-}
-
-export interface ASTDoctypeNode {
-	type: 'doctype';
-	value: string;
 }
 
 export interface ASTContentNode {
@@ -71,13 +78,6 @@ export interface ASTLoopNode {
 	type: 'loop';
 	reference: string[];
 	template: ASTElementNode;
-}
-
-export interface ASTElementNode {
-	type: 'element';
-	name: string;
-	attrs: ASTAttributeList;
-	children: ASTNode[];
 }
 
 export type ASTAttribute = ASTVariableAttribute | ASTStaticAttribute | ASTConditionalAttribute;

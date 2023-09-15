@@ -5,6 +5,6 @@ nav_links:
     link_label: Local
     link_icon_path: /github.svg
 logo:
-  logo_heading: Staticshape
+  logo_heading: StaticShape
   logo_image: /staticshape.svg
   logo_image_dark: /staticshape-dark.svg

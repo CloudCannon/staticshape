@@ -1,10 +1,18 @@
 ---
-title: Staticshape
+title: StaticShape
 nav_title: Home
 weight: 1
 ---
 
-Staticshape is a tool for automatically shaping a fully static site into an SSG site.
+StaticShape is a tool for automatically shaping a fully static site into an SSG site.
+
+## What is the goal of StaticShape
+
+StaticShape is designed to streamline migrations from any site to your SSG of choice. StaticShape reads a folder containing your static site and turns your pages into data and layouts accordingly.
+
+![Diagram of a static site being shaped back into a SSG codebase](/how-staticshape-works.svg)
+
+Using an SSG is more popular than ever and gives enormous benefits to the developers, content editors and end users of the website. Migrating your existing website to an SSG can take a long time, especially if you have a large number of pages. Transitioning to an SSG is even more daunting if you have more than one website. 
 
 ## What is an SSG
 
@@ -18,16 +26,8 @@ In essence the content for the website is stored in markdown, yaml, json, toml a
 
 ![Diagram of an SSG codebase being built to a static site](/how-an-ssg-works.svg)
 
-Using an SSG is more popular than ever and gives enormous benefits to the developers, content editors and end users of the website. Migrating your existing website to an SSG can take a long time, especially if you have a large number of pages. Transitioning to an SSG is even more daunting if you have more than one website. 
-
-## What is the goal of Staticshape
-
-Staticshape is designed to streamline migrations from any site to your SSG of choice. Staticshape reads a folder containing your static site and turns your pages into data and layouts accordingly.
-
-![Diagram of a static site being shaped back into a SSG codebase](/how-staticshape-works.svg)
-
 ## What is a Scraper
 
-A scraper is a tool to download any live site into a static site. Enter a URL and the scraper will download the html from that page and recursively download any connected files. After downloading all the files, you will have a static version of the live site. Now all that is left is to run Staticshape on that folder and you have an SSG codebase. Wordpress, Drupal, Geocities, it doesn't matter what the site is built in. 
+A scraper is a tool to download any live site into a static site. Enter a URL and the scraper will download the html from that page and recursively download any connected files. After downloading all the files, you will have a static version of the live site. Now all that is left is to run StaticShape on that folder and you have an SSG codebase. Wordpress, Drupal, Geocities, it doesn't matter what the site is built in. 
 
 ![Diagram of a live site being downloaded into a static site](/how-a-scraper-works.svg)
