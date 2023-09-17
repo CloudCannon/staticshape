@@ -5,7 +5,7 @@ nav_section: Nodes
 weight: 48
 ---
 
-A conditional is a very common part of building a website. It allows for nodes to be exist in some places and not in others. Use cases for a conditionals are:
+A conditional is a very common part of building a website. It allows for nodes to exist in some places and not in others. Use cases for a conditional are:
 
 - Page banners
 - Warnings and notices
@@ -30,7 +30,7 @@ StaticShape uses dom diffing to generate conditionals in documents, loop nodes o
 
 ## Output Format
 
-conditional nodes use the type `ASTconditionalNode` which has the following format:
+Conditional nodes use the type `ASTconditionalNode` which has the following format:
 
 ```typescript
 {
@@ -40,7 +40,7 @@ conditional nodes use the type `ASTconditionalNode` which has the following form
 }
 ```
 
-conditionals will reference an array in the data and for each item of data produce the specified template. This will reset the variable `references` namespace for exporting. An example of a conditional is:
+Conditionals will reference an array in the data and for each item of data produce the specified template. This will reset the variable `references` namespace for exporting. An example of a conditional is:
 
 ```json
 [
@@ -71,13 +71,13 @@ Which can be exported into the following liquid templating:
 
 ## Merging rules
 
-conditionals can be merged with:
+Conditionals can be merged with:
 
 - Loop nodes
 - Conditional nodes
 - Element nodes
 
-conditionals cannot be merged with:
+Conditionals cannot be merged with:
 
 - Text nodes
 - Comment nodes
