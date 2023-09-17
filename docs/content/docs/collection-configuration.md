@@ -5,9 +5,9 @@ nav_section: Configuration
 weight: 22
 ---
 
-## What is a Collection
+## What is a collection?
 
-A Collection is a general SSG term used to define a group of files. A collections could be:
+A collection is a general SSG term used to define a group of files. A collection could be:
 
 - Pages, e.g. general pages, landing pages
 - People, e.g. staff members, authors, contributors
@@ -30,7 +30,7 @@ The most basic configuration file has one collection with no `content` tag confi
 
 The above example says every HTML within the root directory is to be considered part of the `pages` collection.
 
-Each file in a collection will only be compared to each other. This means that if a page does not significantly match the other pages, you should create another collection. In the next example a `policies` collection is added. The policies HTML files are all within the folder `policies` which can be specified using the `subPath` attribute. The `subPath` attribute defaults to the root directory and should be unique across the collections. In this example, `policies` has a more specific `subPath` than the  `pages` collection. A collection should not process files which are referenced with more specificity to prevent double processing.
+Each file in a collection will only be compared to each other. This means that if a page does not significantly match the other pages, you should create another collection. In the next example a `policies` collection is added. The policies HTML files are all within the folder `policies`, which can be specified using the `subPath` attribute. The `subPath` attribute defaults to the root directory and should be unique across the collections. In this example, `policies` has a more specific `subPath` than the  `pages` collection. A collection should not process files which are referenced with more specificity to prevent double processing.
 
 ```json
 {
@@ -47,7 +47,7 @@ Each file in a collection will only be compared to each other. This means that i
 ```
 
 ### Additional filtering
-In some cases, collection borders don't nicely fall into the folders. This is where some additional filtering comes in handy.
+In some cases, collection borders don't neatly fall into the folders. This is where some additional filtering can be useful.
 
 #### Only
 
