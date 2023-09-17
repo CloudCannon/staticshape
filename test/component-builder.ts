@@ -4,7 +4,7 @@ import { convertElementToComponent } from '../src/helpers/component-builder';
 import htmlToAST from '../src/helpers/html-parser';
 import { ASTElementNode } from '../src/types';
 import Data from '../src/helpers/Data';
-import { TestLogger } from './test-logger';
+import { TestLogger } from './helpers/test-logger';
 
 async function runTest(t: ExecutionContext, testName: string) {
 	const html = (

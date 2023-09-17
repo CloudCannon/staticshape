@@ -1,6 +1,6 @@
 import test, { ExecutionContext } from 'ava';
 import * as fs from 'fs';
-import { TestLogger } from './test-logger';
+import { TestLogger } from './helpers/test-logger';
 import { mergeTree } from '../src/helpers/dom-diff';
 import Data from '../src/helpers/Data';
 import { ASTNode } from '../src/types';

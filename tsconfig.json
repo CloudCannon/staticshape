@@ -6,6 +6,6 @@
 		"strict": true,
 		"outDir": "./lib"
 	},
-	"include": ["src", "test/dom.ts", "test/test-logger.ts"],
+	"include": ["src", "test/dom.ts", "test/helpers/test-logger.ts"],
 	"exclude": ["node_modules", "test"]
 }

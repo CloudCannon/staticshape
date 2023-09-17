@@ -2,7 +2,7 @@ import test, { ExecutionContext } from 'ava';
 import { mergeTree } from '../src/helpers/dom-diff';
 import { ASTNode } from '../src/types';
 import Data from '../src/helpers/Data';
-import { TestLogger } from './test-logger';
+import { TestLogger } from './helpers/test-logger';
 
 interface TestDefinition {
 	primary: ASTNode[];

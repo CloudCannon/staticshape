@@ -1,4 +1,4 @@
-import { Level, Logger } from '../src/logger';
+import { Level, Logger } from '../../src/logger';
 
 export class TestLogger extends Logger {
 	constructor(defaultLogLevel: Level = 1) {
