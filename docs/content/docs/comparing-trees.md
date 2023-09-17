@@ -5,7 +5,7 @@ nav_section: How it works
 weight: 25
 ---
 
-Comparing/Diffing/Merging trees is a core part of StaticShape, it is what powers all of the templating and variables.
+Comparing/Diffing/Merging trees is a core part of StaticShape. This is what powers all of StaticShape's templating and variables.
 
 ## Manual comparisons
 

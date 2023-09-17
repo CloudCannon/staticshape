@@ -24,7 +24,7 @@ I'm text
 
 ## Element nodes
 
-An [element node](https://developer.mozilla.org/en-US/docs/Web/API/Element) represents an HTML container, e.g. `div`, `p`, `html`. Elements can contain other nodes within the key `children`. Processed Element nodes can be left as an Element node, converted into a conditional node, or converted into a loop node. Some elements are considered to be a markdown block or be part of an inline markdown block which is converted into a [Variable node](/docs/variable-nodes/).
+An [element node](https://developer.mozilla.org/en-US/docs/Web/API/Element) represents an HTML container, e.g. `div`, `p`, `html`. Elements can contain other nodes within the key `children`. Processed element nodes can be left as an element node, converted into a conditional node, or converted into a loop node. Some elements are considered to be a markdown block or be part of an inline markdown block which is converted into a [Variable node](/docs/variable-nodes/).
 
 ```html
 <div><img src="goose.png"></div>
