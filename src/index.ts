@@ -11,7 +11,7 @@ p.intro(`Welcome to the StaticShape`);
 const sourcePath = await p.text({
 	message: 'What folder contains your static site?',
 	placeholder: './_site/',
-	initialValue: '../../scrapes/',
+	initialValue: '',
 	validate(sourcePath) {
 		if (sourcePath.length === 0) return `Source path is required!`;
 
@@ -39,7 +39,7 @@ p.log.success(`Input set to ${absoluteSourcePath}`);
 const configPath = await p.text({
 	message: 'Where is your staticshape config file?',
 	placeholder: './example.json',
-	initialValue: '../../scrapes/',
+	initialValue: '',
 	validate(configPath) {
 		if (configPath.length === 0) return `Config path is required!`;
 		const absoluteConfigPath = path.resolve(configPath);

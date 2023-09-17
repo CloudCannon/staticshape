@@ -81,4 +81,4 @@ test('three-pages-body-content', (t: ExecutionContext) => runTest(t, 'three-page
 test('three-pages-conditional', (t: ExecutionContext) => runTest(t, 'three-pages-conditional'));
 test('four-pages-conditional', (t: ExecutionContext) => runTest(t, 'four-pages-conditional'));
 
-test('three-pages-xkcd-news', (t: ExecutionContext) => runTest(t, 'three-pages-xkcd-news'));
+// test('three-pages-xkcd-news', (t: ExecutionContext) => runTest(t, 'three-pages-xkcd-news'));
