@@ -46,6 +46,8 @@ text: About
 
 For a computer to do this, we need to read the HTML into a format that can be interfaced with. This interface is a set of objects that represent the HTML nodes. These objects contain metadata about themselves and are organised into arrays. Some nodes have "children" which is an array of nodes that are inside the node. Putting this all together creates a tree structure which is like a [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model). If you have every written any CSS selectors or used JavaScript this should feel familiar.
 
+### Extra nodes
+
 In the StaticShape world, there are all the "basic" nodes and some additional types to represent the following items:
 
 1. Variables
@@ -55,6 +57,8 @@ In the StaticShape world, there are all the "basic" nodes and some additional ty
 2. Loops
 3. Conditionals
 4. Page Content
+
+### Example tree
 
 The rest of the docs will represent trees and nodes as JSON. For the example above we can represent it as:
 
@@ -92,6 +96,8 @@ The rest of the docs will represent trees and nodes as JSON. For the example abo
 ]
 ```
 
+### Process for diffing trees
+
 In each file, the tree (root array) has one element node which has a text node as a child. To compare these two trees we take the following steps:
 
 1. Create a new array for the merged tree
@@ -101,6 +107,8 @@ In each file, the tree (root array) has one element node which has a text node a
    - Else: Add a conditional node
 4. Keep going until there are no nodes, If one tree runs out first, all remaining nodes are added as conditional nodes.
 5. Return the new merged tree and data from variables.
+
+### Example diffing trees
 
 Step by step for this example would be:
 

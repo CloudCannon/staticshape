@@ -30,7 +30,7 @@ export default class Site {
 
 		const files = await directory.files();
 
-		const { collections: collectionsConfig } = this.options;
+		const collectionsConfig = this.options.collections;
 		const collections = {} as collectionList;
 		for (let i = 0; i < collectionsConfig.length; i++) {
 			const config = collectionsConfig[i];
