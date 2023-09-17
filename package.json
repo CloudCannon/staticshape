@@ -10,6 +10,11 @@
   "files": [
     "lib/**/*.js"
   ],
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  },
+  "bin": "lib/index.js",
   "type": "module",
   "dependencies": {
     "@clack/prompts": "^0.7.0",
