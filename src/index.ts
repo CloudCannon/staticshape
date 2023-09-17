@@ -79,7 +79,7 @@ const outputPath = await p.text({
 			const stat = fs.statSync(absoluteOutputPath);
 
 			if (!stat.isDirectory()) {
-				return `${sourcePath} is not a directory`;
+				return `${absoluteOutputPath} is not a directory`;
 			}
 
 			const files = fs.readdirSync(absoluteOutputPath);
