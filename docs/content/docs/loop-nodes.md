@@ -2,7 +2,7 @@
 title: "Loop nodes"
 nav_title: "Loops"
 nav_section: Nodes
-weight: 7
+weight: 47
 ---
 
 A loop is a very common part of building a website. It allows for nodes to be repeated with different data. In combination with variables and conditionals it covers the core items on a website. Use cases for a loop are:

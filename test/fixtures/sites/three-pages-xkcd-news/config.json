@@ -1,5 +1,5 @@
 {
-	"collectionsConfig": [
+	"collections": [
 		{
 			"name": "pages",
 			"subPath": ""

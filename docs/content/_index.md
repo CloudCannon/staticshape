@@ -31,3 +31,5 @@ In essence the content for the website is stored in markdown, yaml, json, toml a
 A scraper is a tool to download any live site into a static site. Enter a URL and the scraper will download the html from that page and recursively download any connected files. After downloading all the files, you will have a static version of the live site. Now all that is left is to run StaticShape on that folder and you have an SSG codebase. Wordpress, Drupal, Geocities, it doesn't matter what the site is built in. 
 
 ![Diagram of a live site being downloaded into a static site](/how-a-scraper-works.svg)
+
+For a convenient site scraper, see [sitescrape](https://github.com/CloudCannon/sitescrape).

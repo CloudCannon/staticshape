@@ -2,7 +2,7 @@
 title: "Conditional nodes"
 nav_title: "Conditionals"
 nav_section: Nodes
-weight: 8
+weight: 48
 ---
 
 A conditional is a very common part of building a website. It allows for nodes to be exist in some places and not in others. Use cases for a conditionals are:

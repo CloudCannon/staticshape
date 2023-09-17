@@ -4,7 +4,7 @@ import { Logger } from './logger';
 
 interface SiteOptions {
 	basePath: string;
-	collectionsConfig: CollectionConfig[];
+	collections: CollectionConfig[];
 	logger?: Logger;
 }
 
@@ -30,7 +30,7 @@ export default class Site {
 
 		const files = await directory.files();
 
-		const { collectionsConfig } = this.options;
+		const { collections: collectionsConfig } = this.options;
 		const collections = {} as collectionList;
 		for (let i = 0; i < collectionsConfig.length; i++) {
 			const config = collectionsConfig[i];

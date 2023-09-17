@@ -2,7 +2,7 @@
 title: "Comparing nodes"
 nav_title: "Comparing nodes"
 nav_section: How it works
-weight: 4
+weight: 26
 ---
 
 TODO

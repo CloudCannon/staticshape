@@ -2,7 +2,7 @@
 title: "Attributes"
 nav_title: "Attributes"
 nav_section: Nodes
-weight: 5
+weight: 45
 ---
 
 TODO

@@ -2,7 +2,7 @@
 title: "Converting a site"
 nav_title: "Converting a site"
 nav_section: How it works
-weight: 2
+weight: 20
 ---
 
 StaticShape takes a folder and converts it to an SSG site. This means that:
@@ -14,18 +14,16 @@ StaticShape takes a folder and converts it to an SSG site. This means that:
 
 All of this is generated into an [Abstract Syntax Tree (AST)](https://en.wikipedia.org/wiki/Abstract_syntax_tree) so that it can be [exported](/docs/export-engines/) into a variety of different static site generators. This includes the SSG configuration, the folder structure and specific templating langugages.
 
-## Collections
+## Shaping the site
 
-A Collection is a general SSG term used to define a group of files. A collections could be:
+StaticShape begins the process by reading the configuration file. This allows each collection to be processed separately:
 
-- Pages, e.g. general pages, landing pages
-- People, e.g. staff members, authors, contributors
-- News, e.g. blogs, articles, press releases
-- Items, e.g. products, collectables, books
+1. The files are organised into their collecitons
+2. Each file has the content and layout separated and parsed into a set of basic nodes
+3. The layout trees are compared against each other to add loops, conditionals, and variables. In doing so the data is produced for each page.
+4. The content is processed into it's configured content type (markdown, html or components)
 
-Knowing what pages are part of which collection on your site is out of scope for StaticShape. To bridge the gap, this is configured using an external JSON file. This configuration tells StaticShape which files are part of each collection and what element holds the page `content`.
-
-Once StaticShape has all of the correct files to parse, it can get to work on reading each file and comparing each to produce the data and shared layout.
+Each collection is now organised into data, layouts and content.
 
 ## Exporting
 
