@@ -15,4 +15,4 @@ A content node represents the material that was selected by StaticShape for the 
 }
 ```
 
-You can [configure your page content](/docs/configuring-page-content/) with selectors to define your content.
+You can [configure your page content](/docs/configuring-page-content/) with selectors that define the boundaries of your content.
