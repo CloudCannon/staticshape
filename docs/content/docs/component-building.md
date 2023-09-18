@@ -13,29 +13,29 @@ All node trees are checked for repeated blocks. Any found are turned into `loop`
 
 ```html
 <div class="logo-ticker">
-	<div class="logo-1">
-		<img
-			alt=""
-			class="gallery-image"
-			src="/images/logos/1.svg"
-		/>
-	</div>
+  <div class="logo-1">
+    <img
+      alt=""
+      class="gallery-image"
+      src="/images/logos/1.svg"
+    />
+  </div>
 
-	<div class="logo-2">
-		<img
-			alt=""
-			class="gallery-image"
-			src="/images/logos/2.svg"
-		/>
-	</div>
+  <div class="logo-2">
+    <img
+      alt=""
+      class="gallery-image"
+      src="/images/logos/2.svg"
+    />
+  </div>
 
-	<div class="logo-3">
-		<img
-			alt=""
-			class="gallery-image"
-			src="/images/logos/3.svg"
-		/>
-	</div>
+  <div class="logo-3">
+    <img
+      alt=""
+      class="gallery-image"
+      src="/images/logos/3.svg"
+    />
+  </div>
 </div>
 ```
 
@@ -43,15 +43,15 @@ For example, the above node tree is converted into templating like:
 
 ```html
 <div class="logo-ticker">
-    {% for item in logo_ticker %}
-	<div class="{{ item.class }}">
-		<img
-			alt="{{ item.alt }}"
-			class="gallery-image"
-			src="{{ item.src }}"
-		/>
-	</div>
-    {% end %}
+  {% for item in logo_ticker %}
+  <div class="{{ item.class }}">
+    <img
+      alt="{{ item.alt }}"
+      class="gallery-image"
+      src="{{ item.src }}"
+    />
+  </div>
+  {% end %}
 </div>
 ```
 
