@@ -18,7 +18,7 @@ All of this is generated into an [Abstract Syntax Tree (AST)](https://en.wikiped
 
 StaticShape begins the process by reading the configuration file. This allows each collection to be processed separately:
 
-1. The files are organized into their collecitons
+1. The files are organized into their collections
 2. Each file has the content and layout separated and parsed into a set of basic nodes
 3. The layout trees are compared against each other to add loops, conditionals, and variables. In doing so the data is produced for each page.
 4. The content is processed into its configured content type (markdown, html or components)
