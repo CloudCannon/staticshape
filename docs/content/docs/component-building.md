@@ -5,7 +5,7 @@ nav_section: How it works
 weight: 27
 ---
 
-Component building is a concept used to add variables and loops to data. This works differently to the node diffing as it works only on a single node. The node is passed to a function which has a predefined list of values that should become variables. 
+Component building is a concept used to add variables and loops to data. This works differently to node diffing, as it works only on a single node. The node is passed to a function which has a predefined list of values that should become variables. 
 
 ## Loops
 
@@ -39,7 +39,7 @@ All node trees are checked for repeated blocks. Any found are turned into `loop`
 </div>
 ```
 
-Gets converted into templating like:
+For example, the above node tree is converted into templating like:
 
 ```html
 <div class="logo-ticker">
@@ -64,7 +64,7 @@ All node trees are checked for markdown blocks. Any found are turned into `markd
 <p>Hi there</p>
 ```
 
-Gets converted into templating like:
+The above is converted into templating like:
 
 ```html
 {{ markdown | markdownify }}
@@ -74,13 +74,11 @@ Gets converted into templating like:
 
 All node trees are checked for inline markdown blocks. Any found are turned into `inline-markdown-variable` nodes.
 
-For example, an html block like:
-
 ```html
 <h2 class="c-heading">Here is some text with <a href="">a link</a></h2>
 ```
 
-Gets converted into templating like:
+For example, an html block like the above is converted into templating like:
 
 ```html
 <h2 class="c-heading">{{ markdown | inline_markdownify }}</h2>
@@ -96,13 +94,11 @@ The following attributes are converted into variable attributes:
 - `alt`
 - `title`
 
-For example, an html block like:
-
 ```html
 <img src="goose.jpg" alt="A goose" title="A goose's tooltip">
 ```
 
-Gets converted into templating like:
+For example, an html block like the above is converted into:  
 
 ```html
 <img src="{{ src }}" alt="{{ alt }}" title="{{ title }}">
