@@ -1,6 +1,6 @@
 ---
-title: "Configuring Collections"
-nav_title: "Configuring Collections"
+title: "Configuring collections"
+nav_title: "Configuring collections"
 nav_section: Configuration
 weight: 22
 ---

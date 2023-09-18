@@ -11,9 +11,13 @@ The following are [standard HTML nodes](https://developer.mozilla.org/en-US/docs
 
 A [text node](https://developer.mozilla.org/en-US/docs/Web/API/Text) represents a string of text within the DOM. Text nodes can be left as a Text node or converted into a [Variable node](/docs/variable-nodes/).
 
+### Example input
+
 ```html
 I'm text
 ```
+
+### AST
 
 ```json
 {
@@ -26,9 +30,13 @@ I'm text
 
 An [element node](https://developer.mozilla.org/en-US/docs/Web/API/Element) represents an HTML container, e.g. `div`, `p`, `html`. Elements can contain other nodes within the key `children`. Processed element nodes can be left as an element node, converted into a conditional node, or converted into a loop node. Some elements are considered to be a markdown block or be part of an inline markdown block which is converted into a [Variable node](/docs/variable-nodes/).
 
+### Example input
+
 ```html
 <div><img src="goose.png"></div>
 ```
+
+### AST
 
 ```json
 {
@@ -57,9 +65,13 @@ An [element node](https://developer.mozilla.org/en-US/docs/Web/API/Element) repr
 
 A [comment node](https://developer.mozilla.org/en-US/docs/Web/API/Comment) represents a string of text printed between `<!--` and `-->`. Comments are never turned into conditionals, loops or variables.
 
+### Example input
+
 ```html
 <!-- I'm a comment -->
 ```
+
+### AST
 
 ```json
 {
@@ -72,9 +84,13 @@ A [comment node](https://developer.mozilla.org/en-US/docs/Web/API/Comment) repre
 
 A [doctype node](https://developer.mozilla.org/en-US/docs/Web/API/DocumentType) represents how a document should be processed by the HTML processor. Doctype nodes are never turned into conditionals, loops or variables.
 
+### Example input
+
 ```html
 <!doctype html>
 ```
+
+### AST
 
 ```json
 {
@@ -87,9 +103,13 @@ A [doctype node](https://developer.mozilla.org/en-US/docs/Web/API/DocumentType) 
 
 Unused and largely ignored, [see MDN](https://developer.mozilla.org/en-US/docs/Web/API/CDATASection).
 
+### Example input
+
 ```html
 <![CDATA[ … ]]>
 ```
+
+### AST
 
 ```json
 {
