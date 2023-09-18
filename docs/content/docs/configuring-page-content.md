@@ -27,7 +27,7 @@ By default, StaticShape applies no content selector.
 
 ### selector
 
-The `selector` option functions like a CSS selector, in that it allows you to define patterns within your static pages and then set page elements as content nodes. Use 'selector' when your page content is clearly defined, for example within a single '<div>'.
+The `selector` option functions like a CSS selector, in that it allows you to define patterns within your static pages and then set page elements as content nodes. Use `selector` when your page content is clearly defined, for example within a single `<div>`.
 
 The below example defines the main content for files within the "pages" collection, and will separate the content, excluding it from the layout diffing. 
 
@@ -46,7 +46,7 @@ The below example defines the main content for files within the "pages" collecti
 
 ### beforeSelector and afterSelector
 
-The `beforeSelector` and 'afterSelector' options are recommended when your page content has no clear hierarchy or does not use content blocks. You can use either option separately, or you can use both options to indicate the page content node. 
+The `beforeSelector` and `afterSelector` options are recommended when your page content has no clear hierarchy or does not use content blocks. You can use either option separately, or you can use both options to indicate the page content node. 
 
 The below example defines the page content as all material between the nav and the footer.
 
@@ -64,4 +64,4 @@ The below example defines the page content as all material between the nav and t
 }
 ```
 
-If used separately, the 'afterSelector' option stops looking once it reaches the end of the current node tree. Similarly, the 'beforeSelector' option stops once it reaches the beginning of the current node tree.
+If used separately, the `afterSelector` option stops looking once it reaches the end of the current node tree. Similarly, the `beforeSelector` option stops once it reaches the beginning of the current node tree.
