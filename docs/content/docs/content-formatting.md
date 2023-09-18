@@ -1,6 +1,6 @@
 ---
-title: "Content Formatting"
-nav_title: "Content Formatting"
+title: "Content node"
+nav_title: "Content"
 nav_section: Nodes
 weight: 70
 ---
