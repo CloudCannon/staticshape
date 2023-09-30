@@ -53,6 +53,12 @@ const configPath = await p.text({
 		} catch (error: any) {
 			return error.message;
 		}
+
+		try {
+			JSON.parse(fs.readFileSync(absoluteConfigPath).toString('utf-8'));
+		} catch (error: any) {
+			return `Invalid JSON: ${error.message}`;
+		}
 	}
 });
 
