@@ -20,6 +20,15 @@ function renderFrontMatter(data: Record<string, any>) {
 	})}---`;
 }
 
+/**
+ * 
+ * @param node 
+ * @returns a string that is hugo formatted
+ */
+function formatParam(node: ASTVariableNode | ASTMarkdownNode | ASTInlineMarkdownNode | ASTConditionalNode | ASTLoopNode | ASTVariableAttribute | ASTConditionalAttribute){
+	return node.reference.join('.').replaceAll(/([\-\:])+/g, '_');
+}
+
 export default class HugoExportEngine extends HtmlExportEngine {
 	staticDirectory(): string {
 		return 'static';
@@ -27,8 +36,8 @@ export default class HugoExportEngine extends HtmlExportEngine {
 
 	engineConfig(): FileExport {
 		return {
-			pathname: 'config.toml',
-			contents: "baseURL = ''"
+			pathname: 'hugo.yaml',
+			contents: "baseURL: ''"
 		};
 	}
 
@@ -45,7 +54,7 @@ export default class HugoExportEngine extends HtmlExportEngine {
 		collectionKey: string
 	): FileExport {
 		return {
-			pathname: `layouts/${collectionKey}.html`,
+			pathname: `layouts/_default/${collectionKey}.html`,
 			contents: this.renderAST(layout)
 		};
 	}
@@ -61,48 +70,50 @@ export default class HugoExportEngine extends HtmlExportEngine {
 			...item.data,
 			layout: collectionKey
 		};
-
 		return {
 			pathname: `content/${folder}${item.pathname}`,
 			contents: [renderFrontMatter(frontMatter), this.renderAST(item.content)].join('\n')
 		};
 	}
-
+	
 	renderVariable(node: ASTVariableNode): string {
-		return `{{ .Params.${node.reference.join('.')} }}`;
+		return `{{ .Params.${formatParam(node)} }}`;
 	}
 
 	renderMarkdownVariable(node: ASTMarkdownNode): string {
-		return `{{ .Params.${node.reference.join('.')} | markdownify }}`;
+		return `{{ .Params.${formatParam(node)} | markdownify }}`;
 	}
 
 	renderInlineMarkdownVariable(node: ASTInlineMarkdownNode): string {
-		return `{{ .Params.${node.reference.join('.')} | fake_inline_markdownify_filter }}`;
+		// return `{{ .Params.${formatParam(node)} | fake_inline_markdownify_filter }}`;
+		// TODO: fix fake_inline_markdownify_filter
+		return `{{ .Params.${formatParam(node)} | markdownify }}`;
+
 	}
 
 	renderConditional(node: ASTConditionalNode): string {
-		return `{{ if .Params.${node.reference.join('.')} }}${this.renderASTNode(
+		return `{{ if .Params.${formatParam(node)} }} ${this.renderASTNode(
 			node.child
 		)}{{ end }}`;
 	}
 
 	renderLoop(node: ASTLoopNode): string {
-		return `{{ range .Params.${node.reference.join('.')} }}${this.renderASTNode(
+		return `{{ range .Params.${formatParam(node)} }}${this.renderASTNode(
 			node.template
 		)}{{ end }}`;
 	}
 
 	renderContent(_node: ASTContentNode): string {
-		// TODO support different render types (markdown vs blocks vs basic)
-		return `{{ content }}`; // TODO make this the actual render
+		// TODO: support different render types (markdown vs blocks vs basic)
+		return `{{ content }}`; // TODO: make this the actual render
 	}
 
 	renderVariableAttribute(attr: ASTVariableAttribute | ASTConditionalAttribute): string {
-		return [attr.name, `"{{ .Params.${attr.reference.join('.')} }}"`].join('=');
+		return [attr.name, `"{{ .Params.${formatParam(attr)} }}"`].join('=');
 	}
 
 	renderConditionalAttribute(attr: ASTConditionalAttribute): string {
-		return `{{ if .Params.${attr.reference.join('.')} }}${this.renderVariableAttribute(
+		return `{{ if .Params.${formatParam(attr)} }}${this.renderVariableAttribute(
 			attr
 		)}{{ end }}`;
 	}
