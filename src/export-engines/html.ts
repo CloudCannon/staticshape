@@ -138,6 +138,14 @@ export default class HtmlExportEngine {
 			name = name.substring(5);
 		}
 
+		// Meta and Link elements don't need closing tags 
+		if(name === "meta" || name === "link"){
+			return `<${name}${this.renderAttributes(element.attrs)}>${this.renderAST(element.children)}`;
+		}
+		// TODO: Fix scripts
+		if(name === "script"){
+			return `<!-- Script was here -->`;
+		}
 		return `<${name}${this.renderAttributes(element.attrs)}>${this.renderAST(
 			element.children
 		)}</${name}>`;
