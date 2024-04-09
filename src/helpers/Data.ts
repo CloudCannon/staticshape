@@ -26,6 +26,15 @@ function getAttributeSignature(attr: ASTAttribute | undefined): string | null {
 	return null;
 }
 
+/**
+ * 
+ * @param variable string containing a variable name. 
+ * @returns a string that is formatted to work across various ssgs.
+ */
+function formatVariable(variable: String){
+	return variable.replaceAll(/([\-\:])+/g, '_');
+}
+
 export function getVariableNames(element: ASTElementNode): string[] {
 	if (element.name === 'meta') {
 		const nameAttr = element.attrs['name'];
@@ -118,7 +127,7 @@ export default class Data {
 	}
 
 	set(variableName: string, value: any): void {
-		this.data[variableName] = value;
+		this.data[formatVariable(variableName)] = value;
 	}
 
 	chainSet(variableNames: string[], value: any): void {

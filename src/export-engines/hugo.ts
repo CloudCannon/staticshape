@@ -111,7 +111,8 @@ export default class HugoExportEngine extends HtmlExportEngine {
 	renderVariableAttribute(attr: ASTVariableAttribute | ASTConditionalAttribute): string {
 		return [attr.name, `"{{ .Params.${formatParam(attr)} }}"`].join('=');
 	}
-
+	
+	// TODO: get this running
 	renderConditionalAttribute(attr: ASTConditionalAttribute): string {
 		return `{{ if .Params.${formatParam(attr)} }}${this.renderVariableAttribute(
 			attr
