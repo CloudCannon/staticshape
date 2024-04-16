@@ -137,9 +137,11 @@ export function isMarkdownElement(el: ASTElementNode): boolean {
 	return isMarkdownInlineTree(el.children, validMarkdownInlineTags, true);
 }
 
+// Converts to HTML
 export function markdownify(ast: ASTNode[]): string {
 	const exportEngine = new HtmlExportEngine();
-	const html = ast.map((node) => exportEngine.renderASTNode(node)).join('');
+	// TODO: each export engine will need a default variableScope value that is passed into renderASTNode here
+	const html = ast.map((node) => exportEngine.renderASTNode(node, ".Params.")).join('');
 	const service = new TurndownService({
 		headingStyle: 'atx'
 	});

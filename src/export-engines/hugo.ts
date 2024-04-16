@@ -55,7 +55,7 @@ export default class HugoExportEngine extends HtmlExportEngine {
 	): FileExport {
 		return {
 			pathname: `layouts/_default/${collectionKey}.html`,
-			contents: this.renderAST(layout)
+			contents: this.renderAST(layout, ".Params.")
 		};
 	}
 
@@ -72,50 +72,50 @@ export default class HugoExportEngine extends HtmlExportEngine {
 		};
 		return {
 			pathname: `content/${folder}${item.pathname}`,
-			contents: [renderFrontMatter(frontMatter), this.renderAST(item.content)].join('\n')
+			contents: [renderFrontMatter(frontMatter), this.renderAST(item.content, ".Params.")].join('\n')
 		};
 	}
 	
-	renderVariable(node: ASTVariableNode): string {
-		return `{{ .Params.${formatParam(node)} }}`;
+	renderVariable(node: ASTVariableNode, variableScope: string): string {
+		return `{{ ${variableScope}${formatParam(node)} }}`;
 	}
 
-	renderMarkdownVariable(node: ASTMarkdownNode): string {
-		return `{{ .Params.${formatParam(node)} | markdownify }}`;
+	renderMarkdownVariable(node: ASTMarkdownNode, variableScope: string): string {
+		return `{{ ${variableScope}${formatParam(node)} | markdownify }}`;
 	}
 
-	renderInlineMarkdownVariable(node: ASTInlineMarkdownNode): string {
+	renderInlineMarkdownVariable(node: ASTInlineMarkdownNode, variableScope: string): string {
 		// return `{{ .Params.${formatParam(node)} | fake_inline_markdownify_filter }}`;
 		// TODO: fix fake_inline_markdownify_filter
-		return `{{ .Params.${formatParam(node)} | markdownify }}`;
+		return `{{ ${variableScope}${formatParam(node)} | markdownify }}`;
 
 	}
 
-	renderConditional(node: ASTConditionalNode): string {
-		return `{{ if .Params.${formatParam(node)} }} ${this.renderASTNode(
-			node.child
+	renderConditional(node: ASTConditionalNode, variableScope: string): string {
+		return `{{ with ${variableScope}${formatParam(node)} }} ${this.renderASTNode(
+			node.child, "."
 		)}{{ end }}`;
 	}
 
-	renderLoop(node: ASTLoopNode): string {
-		return `{{ range .Params.${formatParam(node)} }}${this.renderASTNode(
-			node.template
+	renderLoop(node: ASTLoopNode, variableScope: string): string {
+		return `{{ range ${variableScope}${formatParam(node)} }}${this.renderASTNode(
+			node.template, "."
 		)}{{ end }}`;
 	}
 
-	renderContent(_node: ASTContentNode): string {
+	renderContent(_node: ASTContentNode, variableScope: string): string {
 		// TODO: support different render types (markdown vs blocks vs basic)
 		return `{{ content }}`; // TODO: make this the actual render
 	}
 
-	renderVariableAttribute(attr: ASTVariableAttribute | ASTConditionalAttribute): string {
-		return [attr.name, `"{{ .Params.${formatParam(attr)} }}"`].join('=');
+	renderVariableAttribute(attr: ASTVariableAttribute | ASTConditionalAttribute, variableScope: string): string {
+		return [attr.name, `"{{ ${variableScope}${formatParam(attr)} }}"`].join('=');
 	}
 	
 	// TODO: get this running
-	renderConditionalAttribute(attr: ASTConditionalAttribute): string {
-		return `{{ if .Params.${formatParam(attr)} }}${this.renderVariableAttribute(
-			attr
+	renderConditionalAttribute(attr: ASTConditionalAttribute, variableScope: string): string {
+		return `{{ with ${variableScope}${formatParam(attr)} }}${this.renderVariableAttribute(
+			attr, variableScope
 		)}{{ end }}`;
 	}
 }
