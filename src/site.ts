@@ -1,10 +1,12 @@
 import Directory from './directory';
 import Collection, { CollectionResponse, CollectionConfig } from './collection';
 import { Logger } from './logger';
+import { HtmlProcessorConfig } from './helpers/html-parser';
 
 interface SiteOptions {
 	basePath: string;
 	collections: CollectionConfig[];
+	htmlOptions: HtmlProcessorConfig;
 	logger?: Logger;
 }
 
@@ -30,12 +32,16 @@ export default class Site {
 
 		const files = await directory.files();
 
+		const htmlOptions = this.options.htmlOptions || {
+			excludedTypes: ['comment']
+		};
+
 		const collectionsConfig = this.options.collections;
 		const collections = {} as collectionList;
 		for (let i = 0; i < collectionsConfig.length; i++) {
 			const config = collectionsConfig[i];
 			await this.options.logger?.setNamespace(config.name);
-			const collection = new Collection(files, config, {
+			const collection = new Collection(files, htmlOptions, config, {
 				logger: this.options.logger
 			});
 

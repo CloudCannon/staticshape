@@ -11,6 +11,8 @@ import {
 } from '../types';
 import { DocumentConfig } from '../document';
 
+type NodeType = 'element' | 'attribute' | 'text' | 'cdata' | 'PROCESSING_INSTRUCTION_NODE' | 'comment' | 'DOCUMENT_NODE' | 'docType' | 'DOCUMENT_FRAGMENT_NODE';
+
 // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
 const nodeTypes = {
 	1: 'element',
@@ -22,7 +24,7 @@ const nodeTypes = {
 	9: 'DOCUMENT_NODE',
 	10: 'docType',
 	11: 'DOCUMENT_FRAGMENT_NODE'
-} as Record<number, string>;
+} as Record<number, NodeType>;
 
 export interface PageContentsConfig {
 	selector?: string;
@@ -30,11 +32,17 @@ export interface PageContentsConfig {
 	beforeSelector?: string;
 }
 
+export interface HtmlProcessorConfig {
+	excludedTypes?: NodeType[];
+}
+
 class htmlProcessor {
 	contentsConfig: PageContentsConfig | null;
+	htmlProcessorConfig: HtmlProcessorConfig | null;
 	contents: ASTNode[];
 
-	constructor(contentsConfig?: PageContentsConfig) {
+	constructor(contentsConfig: PageContentsConfig, htmlProcessorConfig: HtmlProcessorConfig) {
+		this.htmlProcessorConfig = htmlProcessorConfig || null;
 		this.contentsConfig = contentsConfig || null;
 		this.contents = [];
 	}
@@ -43,14 +51,22 @@ class htmlProcessor {
 		const dom = new JSDOM(html);
 		const nodes = [] as ASTNode[];
 		for (const node of dom.window.document.childNodes) {
-			nodes.push(this.formatNode(node));
+			const newNode = this.formatNode(node);
+			if (newNode) {
+				nodes.push(newNode);
+			}
 		}
 
 		return nodes;
 	}
 
-	formatNode(node: Node): ASTNode {
+	formatNode(node: Node): ASTNode | null {
 		const type = nodeTypes[node.nodeType];
+
+		if (this.htmlProcessorConfig?.excludedTypes?.includes(type)) {
+			return null;
+		}
+
 		if (type === 'text') {
 			return formatTextNode(node as Text);
 		}
@@ -89,6 +105,10 @@ class htmlProcessor {
 		}
 		for (const node of element.childNodes) {
 			const formattedNode = this.formatNode(node);
+
+			if (!formattedNode) {
+				continue;
+			}
 
 			const type = nodeTypes[node.nodeType];
 			if (type === 'element') {
@@ -160,8 +180,8 @@ interface HTMLProcessorResponse {
 	contents: ASTNode[];
 }
 
-export default function htmlToAST(html: string, config: DocumentConfig): HTMLProcessorResponse {
-	const processor = new htmlProcessor(config.content);
+export default function htmlToAST(html: string,documentConfig: DocumentConfig, processorConfig: HtmlProcessorConfig): HTMLProcessorResponse {
+	const processor = new htmlProcessor(documentConfig.content || {}, processorConfig);
 	const layout = processor.parse(html);
 
 	return {

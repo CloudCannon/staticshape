@@ -1,5 +1,5 @@
 import File from './file';
-import { PageContentsConfig } from './helpers/html-parser';
+import { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser';
 import Document from './document';
 import { PageJSON } from './page';
 import { Logger } from './logger';
@@ -28,12 +28,14 @@ export interface CollectionResponse {
 
 export default class Collection {
 	content?: PageContentsConfig;
+	processorConfig?: HtmlProcessorConfig;
 	logger?: Logger;
 	files: File[];
 
-	constructor(files: File[], config: CollectionConfig, options: CollectionOptions) {
+	constructor(files: File[], processorConfig: HtmlProcessorConfig, config: CollectionConfig, options: CollectionOptions) {
 		this.logger = options.logger;
 		this.content = config.content;
+		this.processorConfig = processorConfig;
 
 		this.files = files.filter((file) => {
 			if (!file.isHtml()) {
@@ -67,6 +69,7 @@ export default class Collection {
 					config: {
 						content: this.content
 					},
+					processorConfig: this.processorConfig || {},
 					logger: this.logger
 				});
 			})

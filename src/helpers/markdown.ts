@@ -140,8 +140,7 @@ export function isMarkdownElement(el: ASTElementNode): boolean {
 // Converts to HTML
 export function markdownify(ast: ASTNode[]): string {
 	const exportEngine = new HtmlExportEngine();
-	// TODO: each export engine will need a default variableScope value that is passed into renderASTNode here
-	const html = ast.map((node) => exportEngine.renderASTNode(node, ".Params.")).join('');
+	const html = ast.map((node) => exportEngine.renderASTNode(node, '')).join('');
 	const service = new TurndownService({
 		headingStyle: 'atx'
 	});

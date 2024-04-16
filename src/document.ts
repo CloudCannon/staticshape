@@ -1,7 +1,7 @@
 import Page from './page';
 
 import { mergeTree } from './helpers/dom-diff';
-import htmlToAST, { PageContentsConfig } from './helpers/html-parser';
+import htmlToAST, { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser';
 import { ASTNode } from './types';
 import Data from './helpers/Data';
 import { Logger } from './logger';
@@ -20,6 +20,7 @@ export interface DocumentOptions {
 	pathname: string;
 	content: string;
 	config: DocumentConfig;
+	processorConfig: HtmlProcessorConfig;
 	logger?: Logger;
 }
 
@@ -33,7 +34,7 @@ export default class Document {
 	constructor(options: DocumentOptions) {
 		this.logger = options.logger;
 		this.pathname = options.pathname;
-		const { layout, contents } = htmlToAST(options.content, options.config);
+		const { layout, contents } = htmlToAST(options.content, options.config, options.processorConfig);
 		this.layout = layout;
 		this.contents = contents;
 		this.data = new Data([], {});
