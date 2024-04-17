@@ -54,7 +54,8 @@ export default class HugoExportEngine extends HtmlExportEngine {
 		collectionKey: string
 	): FileExport {
 		return {
-			pathname: `layouts/_default/${collectionKey}.html`,
+			// TODO: this logic is currently fixed to use a default layout (list.html)
+			pathname: `layouts/${collectionKey}/list.html`,
 			contents: this.renderAST(layout, ".Params.")
 		};
 	}
@@ -65,13 +66,13 @@ export default class HugoExportEngine extends HtmlExportEngine {
 		collectionKey: string
 	): FileExport {
 		const folder = collectionKey !== 'pages' ? `${collectionKey}/` : '';
-
+		// TODO: the layout is currenty fixed to use the default layout
 		const frontMatter = {
 			...item.data,
-			layout: collectionKey
+			type: collectionKey
 		};
 		return {
-			pathname: `content/${folder}${item.pathname}`,
+			pathname: `content/${folder}${item.pathname.replace('index', '_index')}`,
 			contents: [renderFrontMatter(frontMatter), this.renderAST(item.content, ".Params.")].join('\n')
 		};
 	}

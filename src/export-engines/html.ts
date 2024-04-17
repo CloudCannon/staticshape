@@ -142,6 +142,11 @@ export default class HtmlExportEngine {
 		if(name === "meta" || name === "link" || name === "img"){
 			return `<${name}${this.renderAttributes(element.attrs, variableScope)}>${this.renderAST(element.children, variableScope)}`;
 		}
+		// // TODO: Fix style tags 
+		// if(name === "style"){
+		// 	return `<!-- Style was here -->`;
+		// }
+
 		// TODO: Fix scripts
 		if(name === "script"){
 			return `<!-- Script was here -->`;
