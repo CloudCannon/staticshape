@@ -136,14 +136,14 @@ export default class Data {
 		const data = this.chainGet(clone);
 
 		if (leadName && typeof data === 'object') {
-			data[leadName] = value;
+			data[formatVariable(leadName)] = value;
 		}
 	}
 
 	chainGet(variableNames: string[]): any | null {
 		let data = this.data;
 		for (let i = 0; i < variableNames.length; i++) {
-			const variableName = variableNames[i];
+			const variableName = formatVariable(variableNames[i]);
 			if (!(variableName in data)) {
 				return null;
 			}
@@ -157,7 +157,7 @@ export default class Data {
 	}
 
 	getChain(variableName: string): string[] {
-		return [...this.chain, variableName];
+		return [...this.chain, formatVariable(variableName)];
 	}
 
 	getVariableName(parentElements: ASTElementNode[], prefix?: string, suffix?: string): string {
@@ -178,11 +178,11 @@ export default class Data {
 	}
 
 	versionedVarableName(variableName: string): string {
-		if (!this.hasKey(variableName)) {
-			return variableName;
+		if (!this.hasKey(formatVariable(variableName))) {
+			return formatVariable(variableName);
 		}
 		for (let i = 0; i < 2000; i++) {
-			const suffixed = joinNameParts([variableName, i.toString()]);
+			const suffixed = joinNameParts([formatVariable(variableName), i.toString()]);
 			if (!this.hasKey(suffixed)) {
 				return suffixed;
 			}
@@ -192,7 +192,7 @@ export default class Data {
 	}
 
 	hasKey(variableName: string): boolean {
-		return variableName in this.data;
+		return formatVariable(variableName) in this.data;
 	}
 
 	merge(other: Data): Data {
@@ -201,7 +201,7 @@ export default class Data {
 	}
 
 	createSubdata(variableName: string, data?: Hash): Data {
-		return new Data(this.getChain(variableName), data || {});
+		return new Data(this.getChain(formatVariable(variableName)), data || {});
 	}
 
 	toJSON(): Hash {
