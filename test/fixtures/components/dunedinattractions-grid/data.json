@@ -1,34 +1,34 @@
 {
-	"div_attractions_grid_vertical-flow_items": [
+	"div_attractions_grid_vertical_flow_items": [
 		{
 			"a_attraction_href": "/aramoana/",
 			"img_alt": "Aramoana",
 			"img_src": "/generated/images/aramoana/700x500.jpg?_cchid=f9939703a35574542d28704b6095149d",
-			"div_attraction-details_markdown": "### Aramoana",
+			"div_attraction_details_markdown": "### Aramoana",
 			"ul_badges_items": [
 				{
-					"li_badge_badge-blue_class": "badge badge-blue",
-					"li_badge_badge-blue": "beach"
+					"li_badge_badge_blue_class": "badge badge-blue",
+					"li_badge_badge_blue": "beach"
 				},
 				{
-					"li_badge_badge-blue_class": "badge badge-navy",
-					"li_badge_badge-blue": "wildlife"
+					"li_badge_badge_blue_class": "badge badge-navy",
+					"li_badge_badge_blue": "wildlife"
 				}
 			],
-			"div_attraction-details_markdown_0": "Tranquil settlement and wildlife hotspot at the mouth of the Otago Harbour."
+			"div_attraction_details_markdown_0": "Tranquil settlement and wildlife hotspot at the mouth of the Otago Harbour."
 		},
 		{
 			"a_attraction_href": "/mount-cargill/",
 			"img_alt": "Mount Cargill",
 			"img_src": "/generated/images/mount-cargill/700x500.jpg?_cchid=ecaaf8bd78790522cd78a1b0cdc45c28",
-			"div_attraction-details_markdown": "### Mount Cargill",
+			"div_attraction_details_markdown": "### Mount Cargill",
 			"ul_badges_items": [
 				{
-					"li_badge_badge-blue_class": "badge badge-green",
-					"li_badge_badge-blue": "walk"
+					"li_badge_badge_blue_class": "badge badge-green",
+					"li_badge_badge_blue": "walk"
 				}
 			],
-			"div_attraction-details_markdown_0": "Towering volcanic outcrop reigning over the skyline north of Dunedin."
+			"div_attraction_details_markdown_0": "Towering volcanic outcrop reigning over the skyline north of Dunedin."
 		}
 	]
 }

@@ -10,7 +10,7 @@ async function runTest(t: ExecutionContext, testName: string) {
 	const html = (
 		await fs.promises.readFile(`./test/fixtures/components/${testName}/component.html`)
 	).toString('utf-8');
-	const { layout } = htmlToAST(html, {});
+	const { layout } = htmlToAST(html, {}, {});
 	const htmlEl = layout.find(
 		(node) => node.type === 'element' && node.name === 'html'
 	) as ASTElementNode;

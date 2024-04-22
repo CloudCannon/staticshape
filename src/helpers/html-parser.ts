@@ -180,7 +180,7 @@ interface HTMLProcessorResponse {
 	contents: ASTNode[];
 }
 
-export default function htmlToAST(html: string,documentConfig: DocumentConfig, processorConfig: HtmlProcessorConfig): HTMLProcessorResponse {
+export default function htmlToAST(html: string, documentConfig: DocumentConfig, processorConfig: HtmlProcessorConfig): HTMLProcessorResponse {
 	const processor = new htmlProcessor(documentConfig.content || {}, processorConfig);
 	const layout = processor.parse(html);
 

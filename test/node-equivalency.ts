@@ -108,13 +108,13 @@ test('loop and element comparison', (t: ExecutionContext) =>
 						class: {
 							type: 'variable-attribute',
 							name: 'class',
-							reference: ['li_badge_badge-blue_class']
+							reference: ['li_badge_badge_blue_class']
 						}
 					},
 					children: [
 						{
 							type: 'variable',
-							reference: ['li_badge_badge-blue']
+							reference: ['li_badge_badge_blue']
 						}
 					]
 				}
