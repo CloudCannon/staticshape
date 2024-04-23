@@ -470,7 +470,8 @@ export function mergeTree(
 	const componentConfig = {
 		disableTextVariables: true,
 		disableAttributeVariables: true,
-		disableLoops: true
+		// TODO: loops?
+		disableLoops: false
 	};
 	const firstTree = convertTreeToComponents(
 		firstData,
@@ -613,6 +614,7 @@ export function mergeTree(
 								firstEls.length === secondEls.length &&
 								nodeTreeEquivalencyScore(firstEls, secondEls) === 1;
 
+								// TODO: Object building
 							if (!isExactMatch) {
 								const loopData = buildLoop(firstEls, secondEls, parentElements);
 								if (loopData) {
