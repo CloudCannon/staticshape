@@ -90,6 +90,7 @@ export function getVariableNames(element: ASTElementNode): string[] {
 
 export type Hash = Record<string, any>;
 
+// Merges for loops
 export function mergeHash(data: Hash, other: Hash) {
 	if (!data) {
 		return data;
@@ -134,7 +135,6 @@ export default class Data {
 		const clone = structuredClone(variableNames);
 		const leadName = clone.pop();
 		const data = this.chainGet(clone);
-
 		if (leadName && typeof data === 'object') {
 			data[formatVariable(leadName)] = value;
 		}
