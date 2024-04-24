@@ -70,7 +70,7 @@ test('two-pages-markdown-variable', (t: ExecutionContext) =>
 test('two-pages-loop', (t: ExecutionContext) => runTest(t, 'two-pages-loop'));
 
 
-// test('two-pages-conditional-object', (t: ExecutionContext) => runTest(t, 'two-pages-conditional-object'));
+test('two-pages-conditional-object', (t: ExecutionContext) => runTest(t, 'two-pages-conditional-object'));
 test('two-pages-conditional-loop', (t: ExecutionContext) => runTest(t, 'two-pages-conditional-loop'));
 
 
