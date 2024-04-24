@@ -574,6 +574,7 @@ test('loop template and element comparison', (t: ExecutionContext) =>
 			text_var: 'beach'
 		}
 	}));
+
 test('conditional and element comparison', (t: ExecutionContext) =>
 	runTest(t, {
 		primary: [
@@ -650,5 +651,155 @@ test('conditional and element comparison', (t: ExecutionContext) =>
 			meta_description_content: {
 				meta_description_content: 'Staff'
 			}
+		}
+	}));
+
+test('conditional and loop comparison', (t: ExecutionContext) =>
+	runTest(t, {
+		primary: [
+			{
+				type: 'element',
+				name: 'div',
+				attrs: {},
+				children: [
+					{
+						type: 'element',
+						name: 'div',
+						attrs: {},
+						children: [
+							{
+								type: 'element',
+								name: 'p',
+								attrs: {},
+								children: [
+									{
+										type: 'text',
+										value: 'Lorem Ipsum 1'
+									}
+								]
+							},
+							{
+								type: 'element',
+								name: 'img',
+								attrs: {
+									src: {
+										name: 'src',
+										type: 'attribute',
+										value: 'https://placebear.com/250/50'
+									}
+								},
+								children: []
+							}
+						]
+					},
+					{
+						type: 'element',
+						name: 'div',
+						attrs: {},
+						children: [
+							{
+								type: 'element',
+								name: 'p',
+								attrs: {},
+								children: [
+									{
+										type: 'text',
+										value: 'Lorem Ipsum 2'
+									}
+								]
+							},
+							{
+								type: 'element',
+								name: 'img',
+								attrs: {
+									src: {
+										name: 'src',
+										type: 'attribute',
+										value: 'https://placebear.com/150/50'
+									}
+								},
+								children: []
+							}
+						]
+					},
+					{
+						type: 'element',
+						name: 'div',
+						attrs: {},
+						children: [
+							{
+								type: 'element',
+								name: 'p',
+								attrs: {},
+								children: [
+									{
+										type: 'text',
+										value: 'Lorem Ipsum 3'
+									}
+								]
+							},
+							{
+								type: 'element',
+								name: 'img',
+								attrs: {
+									src: {
+										name: 'src',
+										type: 'attribute',
+										value: 'https://placebear.com/50/50'
+									}
+								},
+								children: []
+							}
+						]
+					}
+				]
+			}
+		],
+		secondary: [],
+		merged: [
+			{
+				type: 'conditional',
+				reference: ['div'],
+				child: {
+					type: 'element',
+					name: 'div',
+					attrs: {},
+					children: [
+						{
+							type: 'loop',
+							reference: ['div_items'],
+							template: {
+								type: 'element',
+								name: 'div',
+								attrs: {},
+								children: [
+									{
+										type: 'markdown-variable',
+										reference: ['div_markdown']
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		expectedPrimaryData: {
+			div: {
+				div_items: [
+					{
+						div_markdown: 'Lorem Ipsum 1\n\n![](https://placebear.com/250/50)'
+					},
+					{
+						div_markdown: 'Lorem Ipsum 2\n\n![](https://placebear.com/150/50)'
+					},
+					{
+						div_markdown: 'Lorem Ipsum 3\n\n![](https://placebear.com/50/50)'
+					}
+				]
+			}
+		},
+		expectedSecondaryData: {
+			div: null
 		}
 	}));
