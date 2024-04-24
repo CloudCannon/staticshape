@@ -1,0 +1,150 @@
+{
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "about.html",
+					"data": {
+						"div_twoColumn": {
+							"div_twoColumn_items": [
+								{
+									"div_twoColumn_left_class": "twoColumn--left",
+									"div_twoColumn_left_markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros. In suscipit arcu elit, id mattis massa tempus congue. Mauris non mi tincidunt, placerat massa nec, eleifend ante. In risus orci, interdum at euismod at, convallis nec felis. Vestibulum ac vestibulum nulla, vel venenatis ligula. Mauris porttitor pulvinar purus et hendrerit. Donec pellentesque tellus sed sollicitudin maximus. Morbi eget ipsum sit amet nunc dapibus posuere. Ut tempor commodo nisi id blandit. Vivamus feugiat accumsan lacinia. Integer ac arcu ac quam ultrices tempus porta ut nisl. Nam mollis velit non varius fermentum. Vestibulum consequat mi quis nunc commodo, sed lacinia erat pellentesque. Vivamus bibendum nibh orci, eu placerat libero tempor vel. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros. In suscipit arcu elit, id mattis massa tempus congue. Mauris non mi tincidunt, placerat massa nec, eleifend ante. In risus orci, interdum at euismod at, convallis nec felis. Vestibulum ac vestibulum nulla, vel venenatis ligula. Mauris porttitor pulvinar purus et hendrerit. Donec pellentesque tellus sed sollicitudin maximus. Morbi eget ipsum sit amet nunc dapibus posuere. Ut tempor commodo nisi id blandit. Vivamus feugiat accumsan lacinia. Integer ac arcu ac quam ultrices tempus porta ut nisl. Nam mollis velit non varius fermentum. Vestibulum consequat mi quis nunc commodo, sed lacinia erat pellentesque. Vivamus bibendum nibh orci, eu placerat libero tempor vel."
+								},
+								{
+									"div_twoColumn_left_class": "twoColumn--right",
+									"div_twoColumn_left_markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros. In suscipit arcu elit, id mattis massa tempus congue. Mauris non mi tincidunt, placerat massa nec, eleifend ante. In risus orci, interdum at euismod at, convallis nec felis. Vestibulum ac vestibulum nulla, vel venenatis ligula. Mauris porttitor pulvinar purus et hendrerit. Donec pellentesque tellus sed sollicitudin maximus. Morbi eget ipsum sit amet nunc dapibus posuere. Ut tempor commodo nisi id blandit. Vivamus feugiat accumsan lacinia. Integer ac arcu ac quam ultrices tempus porta ut nisl. Nam mollis velit non varius fermentum. Vestibulum consequat mi quis nunc commodo, sed lacinia erat pellentesque. Vivamus bibendum nibh orci, eu placerat libero tempor vel."
+								}
+							]
+						}
+					},
+					"content": []
+				},
+				{
+					"pathname": "index.html",
+					"data": {
+						"div_twoColumn": null
+					},
+					"content": []
+				}
+			],
+			"layout": [
+				{
+					"type": "doctype",
+					"value": "html"
+				},
+				{
+					"type": "element",
+					"name": "html",
+					"attrs": {},
+					"children": [
+						{
+							"type": "element",
+							"name": "head",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "title",
+									"attrs": {},
+									"children": [
+										{
+											"type": "text",
+											"value": "Test"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n\t"
+						},
+						{
+							"type": "element",
+							"name": "body",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n        "
+								},
+								{
+									"type": "conditional",
+									"reference": ["div_twoColumn"],
+									"child": {
+										"type": "element",
+										"name": "div",
+										"attrs": {
+											"class": {
+												"type": "attribute",
+												"name": "class",
+												"value": "twoColumn"
+											}
+										},
+										"children": [
+											{
+												"type": "text",
+												"value": "\n            "
+											},
+											{
+												"type": "loop",
+												"reference": ["div_twoColumn_items"],
+												"template": {
+													"type": "element",
+													"name": "div",
+													"attrs": {
+														"class": {
+															"type": "variable-attribute",
+															"name": "class",
+															"reference": [
+																"div_twoColumn_left_class"
+															]
+														}
+													},
+													"children": [
+														{
+															"type": "text",
+															"value": "\n              "
+														},
+														{
+															"type": "markdown-variable",
+															"reference": [
+																"div_twoColumn_left_markdown"
+															]
+														},
+														{
+															"type": "text",
+															"value": "\n            "
+														}
+													]
+												}
+											},
+											{
+												"type": "text",
+												"value": "\n        "
+											}
+										]
+									}
+								},
+								{
+									"type": "text",
+									"value": "\n    \n"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	},
+	"staticFiles": []
+}
