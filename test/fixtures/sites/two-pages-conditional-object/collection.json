@@ -6,16 +6,8 @@
 					"pathname": "about.html",
 					"data": {
 						"div_twoColumn": {
-							"div_twoColumn_items": [
-								{
-									"div_twoColumn_left_class": "twoColumn--left",
-									"div_twoColumn_left_markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros. In suscipit arcu elit, id mattis massa tempus congue. Mauris non mi tincidunt, placerat massa nec, eleifend ante. In risus orci, interdum at euismod at, convallis nec felis. Vestibulum ac vestibulum nulla, vel venenatis ligula. Mauris porttitor pulvinar purus et hendrerit. Donec pellentesque tellus sed sollicitudin maximus. Morbi eget ipsum sit amet nunc dapibus posuere. Ut tempor commodo nisi id blandit. Vivamus feugiat accumsan lacinia. Integer ac arcu ac quam ultrices tempus porta ut nisl. Nam mollis velit non varius fermentum. Vestibulum consequat mi quis nunc commodo, sed lacinia erat pellentesque. Vivamus bibendum nibh orci, eu placerat libero tempor vel. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros. In suscipit arcu elit, id mattis massa tempus congue. Mauris non mi tincidunt, placerat massa nec, eleifend ante. In risus orci, interdum at euismod at, convallis nec felis. Vestibulum ac vestibulum nulla, vel venenatis ligula. Mauris porttitor pulvinar purus et hendrerit. Donec pellentesque tellus sed sollicitudin maximus. Morbi eget ipsum sit amet nunc dapibus posuere. Ut tempor commodo nisi id blandit. Vivamus feugiat accumsan lacinia. Integer ac arcu ac quam ultrices tempus porta ut nisl. Nam mollis velit non varius fermentum. Vestibulum consequat mi quis nunc commodo, sed lacinia erat pellentesque. Vivamus bibendum nibh orci, eu placerat libero tempor vel."
-								},
-								{
-									"div_twoColumn_left_class": "twoColumn--right",
-									"div_twoColumn_left_markdown": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros. In suscipit arcu elit, id mattis massa tempus congue. Mauris non mi tincidunt, placerat massa nec, eleifend ante. In risus orci, interdum at euismod at, convallis nec felis. Vestibulum ac vestibulum nulla, vel venenatis ligula. Mauris porttitor pulvinar purus et hendrerit. Donec pellentesque tellus sed sollicitudin maximus. Morbi eget ipsum sit amet nunc dapibus posuere. Ut tempor commodo nisi id blandit. Vivamus feugiat accumsan lacinia. Integer ac arcu ac quam ultrices tempus porta ut nisl. Nam mollis velit non varius fermentum. Vestibulum consequat mi quis nunc commodo, sed lacinia erat pellentesque. Vivamus bibendum nibh orci, eu placerat libero tempor vel."
-								}
-							]
+							"div_twoColumn_left_markdown": "Lorem ipsum dolor sit amet",
+							"div_twoColumn_right_markdown": "Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros."
 						}
 					},
 					"content": []
@@ -79,7 +71,9 @@
 								},
 								{
 									"type": "conditional",
-									"reference": ["div_twoColumn"],
+									"reference": [
+										"div_twoColumn"
+									],
 									"child": {
 										"type": "element",
 										"name": "div",
@@ -96,37 +90,78 @@
 												"value": "\n            "
 											},
 											{
-												"type": "loop",
-												"reference": ["div_twoColumn_items"],
-												"template": {
-													"type": "element",
-													"name": "div",
-													"attrs": {
-														"class": {
-															"type": "variable-attribute",
-															"name": "class",
-															"reference": [
-																"div_twoColumn_left_class"
-															]
-														}
+												"type": "element",
+												"name": "div",
+												"attrs": {
+													"class": {
+														"type": "attribute",
+														"name": "class",
+														"value": "twoColumn--left"
+													}
+												},
+												"children": [
+													{
+														"type": "text",
+														"value": "\n              "
 													},
-													"children": [
-														{
-															"type": "text",
-															"value": "\n              "
+													{
+														"type": "markdown-variable",
+														"reference": [
+															"div_twoColumn_left_markdown"
+														]
+													},
+													{
+														"type": "text",
+														"value": "\n            "
+													}
+												]
+											},
+											{
+												"type": "text",
+												"value": "\n            "
+											},
+											{
+												"type": "element",
+												"name": "div",
+												"attrs": {
+													"class": {
+														"type": "attribute",
+														"name": "class",
+														"value": "twoColumn--right"
+													}
+												},
+												"children": [
+													{
+														"type": "text",
+														"value": "\n                "
+													},
+													{
+														"type": "element",
+														"name": "div",
+														"attrs": {
+															"class": {
+																"type": "attribute",
+																"name": "class",
+																"value": "twoColumn__image"
+															}
 														},
-														{
-															"type": "markdown-variable",
-															"reference": [
-																"div_twoColumn_left_markdown"
-															]
-														},
-														{
-															"type": "text",
-															"value": "\n            "
-														}
-													]
-												}
+														"children": []
+													},
+													{
+														"type": "text",
+														"value": "\n              "
+													},
+													{
+														"type": "markdown-variable",
+														"reference": [
+															"div_twoColumn_right_markdown"
+														]
+													},
+													{
+														"type": "text",
+														"value": "\n            "
+													}
+												]
 											},
 											{
 												"type": "text",
