@@ -654,6 +654,169 @@ test('conditional and element comparison', (t: ExecutionContext) =>
 		}
 	}));
 
+test('conditional object', (t: ExecutionContext) =>
+	runTest(t, {
+		primary: [
+			{
+				type: 'element',
+				name: 'div',
+				attrs: {
+					class: {
+						type: 'attribute',
+						name: 'class',
+						value: 'twoColumn'
+					}
+				},
+				children: [
+					{
+						type: 'element',
+						name: 'div',
+						attrs: {
+							class: {
+								type: 'attribute',
+								name: 'class',
+								value: 'twoColumn--left'
+							}
+						},
+						children: [
+							{
+								type: 'element',
+								name: 'p',
+								attrs: {},
+								children: [
+									{
+										type: 'text',
+										value: 'Lorem ipsum dolor sit amet'
+									}
+								]
+							},
+
+						]
+					},
+					{
+						type: 'element',
+						name: 'div',
+						attrs: {
+							class: {
+								type: 'attribute',
+								name: 'class',
+								value: 'twoColumn--right'
+							}
+						},
+						children: [
+							{
+								type: 'element',
+								name: 'div',
+								attrs: {
+									class: {
+										type: 'attribute',
+										name: 'class',
+										value: 'twoColumn__image'
+									}
+								},
+								children: []
+							},
+							{
+								type: 'element',
+								name: 'p',
+								attrs: {},
+								children: [
+									{
+										type: 'text',
+										value: 'Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros.'
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		],
+		secondary: [],
+		merged: [
+			{
+				type: "conditional",
+				reference: [
+					"div_twoColumn"
+				],
+				child: {
+					type: "element",
+					name: "div",
+					attrs: {
+						class: {
+							type: "attribute",
+							name: "class",
+							value: "twoColumn"
+						}
+					},
+					children: [
+						{
+							type: "element",
+							name: "div",
+							attrs: {
+								class: {
+									type: "attribute",
+									name: "class",
+									value: "twoColumn--left"
+								}
+							},
+							children: [
+								{
+									type: "markdown-variable",
+									reference: [
+										"div_twoColumn_left_markdown"
+									]
+								},
+							]
+						},
+						{
+							type: "element",
+							name: "div",
+							attrs: {
+								class: {
+									type: "attribute",
+									name: "class",
+									value: "twoColumn--right"
+								}
+							},
+							children: [
+								{
+									type: "element",
+									name: "div",
+									attrs: {
+										class: {
+											type: "attribute",
+											name: "class",
+											value: "twoColumn__image"
+										}
+									},
+									children: []
+								},
+								{
+									type: "markdown-variable",
+									reference: [
+										"div_twoColumn_right_markdown"
+									]
+								},
+							]
+						}
+					]
+				}
+			},
+
+
+		],
+		expectedPrimaryData: {
+			div_twoColumn: {
+				div_twoColumn_left_markdown: "Lorem ipsum dolor sit amet",
+				div_twoColumn_right_markdown: "Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros."
+			}
+		},
+		expectedSecondaryData: {
+			div: null
+		}
+	}));
+
 test('conditional and loop comparison', (t: ExecutionContext) =>
 	runTest(t, {
 		primary: [
