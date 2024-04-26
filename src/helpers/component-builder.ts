@@ -32,7 +32,8 @@ export const editableAttrs: Record<string, boolean> = {
 export function convertAttrsToVariables(
 	data: Data,
 	element: ASTElementNode,
-	logger?: Logger
+	existingData: Data,
+	logger: Logger
 ): ASTAttributeList {
 	const converted = {} as ASTAttributeList;
 	Object.keys(element.attrs).forEach((attrName) => {
@@ -45,6 +46,31 @@ export function convertAttrsToVariables(
 				name: attrName,
 				reference: data.getChain(variableName)
 			};
+		} else if (attr && attr.type !== 'attribute') {
+			logger.log(
+				'📀 Inheriting attribute variables',
+				JSON.stringify(attr),
+				'from',
+				JSON.stringify(existingData)
+			);
+
+			const variableName = attr.reference[0];
+			if (!existingData.hasKey(variableName)) {
+				logger.log(
+					'💿 Failed attr inheritance',
+					JSON.stringify(attr.reference),
+					variableName,
+					JSON.stringify(existingData)
+				);
+				throw new Error('Found attr variable but could not find existing value');
+			}
+
+			if (data !== existingData) {
+				logger.log('💿 SETTING ', variableName, `${existingData.getKey(variableName)}`);
+				data.set(variableName, existingData.getKey(variableName));
+				logger.log('💿 DELETING ', variableName);
+				existingData.delete(variableName);
+			}
 		} else {
 			converted[attrName] = attr;
 		}
@@ -67,7 +93,7 @@ function buildLoop(
 	elements: ASTElementNode[],
 	parentElements: ASTElementNode[],
 	config: ComponentBuilderConfig = {},
-	logger?: Logger
+	logger: Logger
 ): Loop | null {
 	const data = [] as Data[];
 	const base = elements[0];
@@ -111,15 +137,15 @@ function buildLoop(
 				parentElements,
 				logger
 			) as ASTElementNode;
-			logger?.log(
+			logger.log(
 				'🤔 Diffing loop templates',
 				nodeDebugString(current.template, 0, 4),
 				'vs',
 				nodeDebugString(template, 0, 4)
 			);
-			logger?.log('🐓', nodeDebugString(current.template, 0, 4));
-			logger?.log('🐄', nodeDebugString(template, 0, 4));
-			logger?.log('🥂', nodeDebugString(merged, 0, 4));
+			logger.log('🐓', nodeDebugString(current.template, 0, 4));
+			logger.log('🐄', nodeDebugString(template, 0, 4));
+			logger.log('🥂', nodeDebugString(merged, 0, 4));
 			current = {
 				template: merged,
 				blocks: [...oldBlocks, newBlock],
@@ -144,19 +170,21 @@ export function convertElementToComponent(
 	element: ASTElementNode,
 	parentElements: ASTElementNode[] = [],
 	config: ComponentBuilderConfig = {},
-	logger?: Logger
+	existingData: Data,
+	logger: Logger
 ): ASTElementNode {
 	return {
 		type: 'element',
 		name: element.name,
 		attrs: config.disableAttributeVariables
 			? element.attrs
-			: convertAttrsToVariables(data, element, logger),
+			: convertAttrsToVariables(data, element, existingData, logger),
 		children: convertTreeToComponents(
 			data,
 			element.children,
 			[...parentElements, element],
 			config,
+			existingData,
 			logger
 		)
 	};
@@ -167,11 +195,18 @@ export function convertTreeToComponents(
 	tree: ASTNode[],
 	parentElements: ASTElementNode[] = [],
 	config: ComponentBuilderConfig = {},
-	logger?: Logger
+	existingData: Data,
+	logger: Logger
 ): ASTNode[] {
 	const parent = parentElements[parentElements.length - 1];
 	if (parent && validMarkdownBlockTags[parent?.name] && !config.disableInlineMarkdown) {
 		if (tree.length > 0 && isMarkdownInlineTree(tree, validMarkdownInlineTags, true)) {
+			logger.log(
+				'📀 Inheriting markdown variables',
+				JSON.stringify(tree),
+				'from',
+				JSON.stringify(existingData)
+			);
 			const variableName = data.getVariableName(parentElements, '', 'inline_markdown');
 			data.set(variableName, markdownify(tree));
 			return [
@@ -187,6 +222,9 @@ export function convertTreeToComponents(
 	let index = 0;
 	while (index < tree.length) {
 		const node = tree[index];
+		logger.log('📀 Componenting', nodeDebugString(node));
+		logger.log(JSON.stringify(existingData));
+
 		const remainingNodes = tree.slice(index);
 		if (node.type === 'element') {
 			if (
@@ -244,7 +282,9 @@ export function convertTreeToComponents(
 				}
 			}
 
-			converted.push(convertElementToComponent(data, node, parentElements, config, logger));
+			converted.push(
+				convertElementToComponent(data, node, parentElements, config, existingData, logger)
+			);
 			index += 1;
 		} else if (node.type === 'text' && node.value.trim() && !config.disableTextVariables) {
 			const variableName = data.getVariableName(parentElements);
@@ -255,6 +295,28 @@ export function convertTreeToComponents(
 			});
 			index += 1;
 		} else {
+			if (
+				node.type === 'conditional' ||
+				node.type === 'markdown-variable' ||
+				node.type === 'variable' ||
+				node.type === 'loop' ||
+				node.type === 'inline-markdown-variable'
+			) {
+				logger.log(
+					'📀 Inheriting node variables',
+					JSON.stringify(node),
+					'from',
+					JSON.stringify(existingData)
+				);
+
+				const variableName = node.reference[0];
+				if (existingData.hasKey(variableName) && data !== existingData) {
+					logger.log('💿 SETTING ', variableName, `${existingData.getKey(variableName)}`);
+					data.set(variableName, existingData.getKey(variableName));
+					logger.log('💿 DELETING ', variableName);
+					existingData.delete(variableName);
+				}
+			}
 			converted.push(node);
 			index += 1;
 		}

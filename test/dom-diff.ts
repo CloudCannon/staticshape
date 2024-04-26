@@ -7,25 +7,26 @@ import { TestLogger } from './helpers/test-logger';
 interface TestDefinition {
 	primary: ASTNode[];
 	secondary: ASTNode[];
+	primaryData: Record<string, any>;
+	secondaryData: Record<string, any>;
 	merged: ASTNode[];
-	expectedPrimaryData?: Record<string, any>;
-	expectedSecondaryData?: Record<string, any>;
+	expectedPrimaryData: Record<string, any> | null;
+	expectedSecondaryData: Record<string, any> | null;
 	expectedPrimaryContents?: ASTNode[];
 	expectedSecondaryContents?: ASTNode[];
 }
 
 function testTree(
 	t: ExecutionContext,
+	primaryData: Data,
+	secondaryData: Data,
 	primary: ASTNode[],
 	secondary: ASTNode[],
 	merged: ASTNode[],
-	expectedPrimaryData?: Record<string, any>,
-	expectedSecondaryData?: Record<string, any>,
-	message?: string
+	expectedPrimaryData: Record<string, any> | null,
+	expectedSecondaryData: Record<string, any> | null,
+	message: string
 ) {
-	const primaryData = new Data([], {});
-	const secondaryData = new Data([], {});
-
 	const tree = mergeTree(
 		primaryData,
 		secondaryData,
@@ -49,12 +50,18 @@ function testTree(
 	if (expectedSecondaryData) {
 		t.deepEqual(secondaryData.toJSON(), expectedSecondaryData, message);
 	}
+
 	return tree;
 }
 
 async function runTest(t: ExecutionContext, def: TestDefinition) {
+	const primaryData = new Data([], structuredClone(def.primaryData));
+	const secondaryData = new Data([], structuredClone(def.secondaryData));
+
 	const forwards = testTree(
 		t,
+		primaryData,
+		secondaryData,
 		def.primary,
 		def.secondary,
 		def.merged,
@@ -62,8 +69,13 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 		def.expectedSecondaryData,
 		'tree merge'
 	);
+
+	const primaryReversedData = new Data([], structuredClone(def.primaryData));
+	const secondaryReversedData = new Data([], structuredClone(def.secondaryData));
 	const reversed = testTree(
 		t,
+		secondaryReversedData,
+		primaryReversedData,
 		def.secondary,
 		def.primary,
 		def.merged,
@@ -71,9 +83,42 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 		def.expectedPrimaryData,
 		'reversed tree merge'
 	);
-	testTree(t, forwards, reversed, def.merged);
-	testTree(t, forwards, def.secondary, def.merged);
-	testTree(t, reversed, def.primary, def.merged);
+
+	testTree(
+		t,
+		primaryData,
+		secondaryData,
+		forwards,
+		reversed,
+		def.merged,
+		primaryData.toJSON(),
+		secondaryData.toJSON(),
+		'forwards and reversed tree merge'
+	);
+
+	testTree(
+		t,
+		primaryData,
+		new Data([], structuredClone(def.secondaryData)),
+		forwards,
+		def.secondary,
+		def.merged,
+		null,
+		null,
+		'forwards and secondary tree merge'
+	);
+
+	testTree(
+		t,
+		new Data([], structuredClone(secondaryReversedData.data)),
+		new Data([], structuredClone(def.primaryData)),
+		reversed,
+		def.primary,
+		def.merged,
+		null,
+		null,
+		'reversed and primary tree merge'
+	);
 }
 
 test('text to text', (t: ExecutionContext) =>
@@ -90,6 +135,8 @@ test('text to text', (t: ExecutionContext) =>
 				value: 'Secondary'
 			}
 		],
+		primaryData: {},
+		secondaryData: {},
 		merged: [
 			{
 				type: 'variable',
@@ -119,6 +166,8 @@ test('text to empty', (t: ExecutionContext) =>
 				reference: ['div']
 			}
 		],
+		primaryData: {},
+		secondaryData: {},
 		expectedPrimaryData: {
 			div: ''
 		},
@@ -150,6 +199,8 @@ test('markdown to empty', (t: ExecutionContext) =>
 				reference: ['div_markdown']
 			}
 		],
+		primaryData: {},
+		secondaryData: {},
 		expectedPrimaryData: {
 			div_markdown: ''
 		},
@@ -222,6 +273,8 @@ test('conditional meta - no whitespace', (t: ExecutionContext) =>
 				}
 			}
 		],
+		primaryData: {},
+		secondaryData: {},
 		expectedPrimaryData: {
 			title: 'Primary',
 			meta_description: null
@@ -304,6 +357,8 @@ test('conditional meta - with whitespace', (t: ExecutionContext) =>
 			},
 			{ type: 'text', value: '\n\t' }
 		],
+		primaryData: {},
+		secondaryData: {},
 		expectedPrimaryData: {
 			meta_description: null
 		},
@@ -337,6 +392,18 @@ test('loop and element comparison', (t: ExecutionContext) =>
 				}
 			}
 		],
+		primaryData: {
+			ul_badges_items: [
+				{
+					class_var: 'badge badge-pink',
+					text_var: 'pool'
+				},
+				{
+					class_var: 'badge badge-purple',
+					text_var: 'park'
+				}
+			]
+		},
 		secondary: [
 			{
 				type: 'element',
@@ -356,6 +423,7 @@ test('loop and element comparison', (t: ExecutionContext) =>
 				]
 			}
 		],
+		secondaryData: {},
 		merged: [
 			{
 				type: 'loop',
@@ -379,7 +447,18 @@ test('loop and element comparison', (t: ExecutionContext) =>
 				}
 			}
 		],
-		expectedPrimaryData: {},
+		expectedPrimaryData: {
+			ul_badges_items: [
+				{
+					class_var: 'badge badge-pink',
+					text_var: 'pool'
+				},
+				{
+					class_var: 'badge badge-purple',
+					text_var: 'park'
+				}
+			]
+		},
 		expectedSecondaryData: {
 			ul_badges_items: [
 				{
@@ -464,6 +543,8 @@ test('loop with same first item', (t: ExecutionContext) =>
 				]
 			}
 		],
+		primaryData: {},
+		secondaryData: {},
 		merged: [
 			{
 				type: 'loop',
@@ -530,6 +611,10 @@ test('loop template and element comparison', (t: ExecutionContext) =>
 				]
 			}
 		],
+		primaryData: {
+			class_var: 'badge badge-green',
+			text_var: 'park'
+		},
 		secondary: [
 			{
 				type: 'element',
@@ -549,6 +634,7 @@ test('loop template and element comparison', (t: ExecutionContext) =>
 				]
 			}
 		],
+		secondaryData: {},
 		merged: [
 			{
 				type: 'element',
@@ -568,7 +654,10 @@ test('loop template and element comparison', (t: ExecutionContext) =>
 				]
 			}
 		],
-		expectedPrimaryData: {},
+		expectedPrimaryData: {
+			class_var: 'badge badge-green',
+			text_var: 'park'
+		},
 		expectedSecondaryData: {
 			class_var: 'badge badge-blue',
 			text_var: 'beach'
@@ -600,6 +689,9 @@ test('conditional and element comparison', (t: ExecutionContext) =>
 				}
 			}
 		],
+		primaryData: {
+			meta_description_content: {}
+		},
 		secondary: [
 			{
 				type: 'element',
@@ -619,6 +711,7 @@ test('conditional and element comparison', (t: ExecutionContext) =>
 				children: []
 			}
 		],
+		secondaryData: {},
 		merged: [
 			{
 				type: 'conditional',
@@ -660,13 +753,7 @@ test('conditional object', (t: ExecutionContext) =>
 			{
 				type: 'element',
 				name: 'div',
-				attrs: {
-					class: {
-						type: 'attribute',
-						name: 'class',
-						value: 'twoColumn'
-					}
-				},
+				attrs: {},
 				children: [
 					{
 						type: 'element',
@@ -689,8 +776,7 @@ test('conditional object', (t: ExecutionContext) =>
 										value: 'Lorem ipsum dolor sit amet'
 									}
 								]
-							},
-
+							}
 						]
 					},
 					{
@@ -733,86 +819,249 @@ test('conditional object', (t: ExecutionContext) =>
 			}
 		],
 		secondary: [],
+		primaryData: {},
+		secondaryData: {},
 		merged: [
 			{
-				type: "conditional",
-				reference: [
-					"div_twoColumn"
-				],
+				type: 'conditional',
+				reference: ['div'],
 				child: {
-					type: "element",
-					name: "div",
-					attrs: {
-						class: {
-							type: "attribute",
-							name: "class",
-							value: "twoColumn"
-						}
-					},
+					type: 'element',
+					name: 'div',
+					attrs: {},
 					children: [
 						{
-							type: "element",
-							name: "div",
+							type: 'element',
+							name: 'div',
 							attrs: {
 								class: {
-									type: "attribute",
-									name: "class",
-									value: "twoColumn--left"
+									type: 'attribute',
+									name: 'class',
+									value: 'twoColumn--left'
 								}
 							},
 							children: [
 								{
-									type: "markdown-variable",
-									reference: [
-										"div_twoColumn_left_markdown"
-									]
-								},
+									type: 'markdown-variable',
+									reference: ['div_twoColumn_left_markdown']
+								}
 							]
 						},
 						{
-							type: "element",
-							name: "div",
+							type: 'element',
+							name: 'div',
 							attrs: {
 								class: {
-									type: "attribute",
-									name: "class",
-									value: "twoColumn--right"
+									type: 'attribute',
+									name: 'class',
+									value: 'twoColumn--right'
 								}
 							},
 							children: [
 								{
-									type: "element",
-									name: "div",
+									type: 'element',
+									name: 'div',
 									attrs: {
 										class: {
-											type: "attribute",
-											name: "class",
-											value: "twoColumn__image"
+											type: 'attribute',
+											name: 'class',
+											value: 'twoColumn__image'
 										}
 									},
 									children: []
 								},
 								{
-									type: "markdown-variable",
-									reference: [
-										"div_twoColumn_right_markdown"
-									]
-								},
+									type: 'markdown-variable',
+									reference: ['div_twoColumn_right_markdown']
+								}
 							]
 						}
 					]
 				}
-			},
-
-
+			}
 		],
 		expectedPrimaryData: {
-			div_twoColumn: {
-				div_twoColumn_left_markdown: "Lorem ipsum dolor sit amet",
-				div_twoColumn_right_markdown: "Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros."
+			div: {
+				div_twoColumn_left_markdown: 'Lorem ipsum dolor sit amet',
+				div_twoColumn_right_markdown:
+					'Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros.'
 			}
 		},
 		expectedSecondaryData: {
+			div: null
+		}
+	}));
+
+test('conditional object with sibling variable', (t: ExecutionContext) =>
+	runTest(t, {
+		primary: [
+			{
+				type: 'element',
+				name: 'p',
+				attrs: {},
+				children: [
+					{
+						type: 'text',
+						value: 'First text'
+					}
+				]
+			},
+			{
+				type: 'element',
+				name: 'div',
+				attrs: {},
+				children: [
+					{
+						type: 'element',
+						name: 'div',
+						attrs: {
+							class: {
+								type: 'attribute',
+								name: 'class',
+								value: 'twoColumn--left'
+							}
+						},
+						children: [
+							{
+								type: 'element',
+								name: 'p',
+								attrs: {},
+								children: [
+									{
+										type: 'text',
+										value: 'Lorem ipsum dolor sit amet'
+									}
+								]
+							}
+						]
+					},
+					{
+						type: 'element',
+						name: 'div',
+						attrs: {
+							class: {
+								type: 'attribute',
+								name: 'class',
+								value: 'twoColumn--right'
+							}
+						},
+						children: [
+							{
+								type: 'element',
+								name: 'div',
+								attrs: {
+									class: {
+										type: 'attribute',
+										name: 'class',
+										value: 'twoColumn__image'
+									}
+								},
+								children: []
+							},
+							{
+								type: 'element',
+								name: 'p',
+								attrs: {},
+								children: [
+									{
+										type: 'text',
+										value: 'Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros.'
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		],
+		secondary: [
+			{
+				type: 'element',
+				name: 'p',
+				attrs: {},
+				children: [
+					{
+						type: 'text',
+						value: 'Second text'
+					}
+				]
+			}
+		],
+		primaryData: {},
+		secondaryData: {},
+		merged: [
+			{
+				type: 'markdown-variable',
+				reference: ['div_markdown']
+			},
+			{
+				type: 'conditional',
+				reference: ['div'],
+				child: {
+					type: 'element',
+					name: 'div',
+					attrs: {},
+					children: [
+						{
+							type: 'element',
+							name: 'div',
+							attrs: {
+								class: {
+									type: 'attribute',
+									name: 'class',
+									value: 'twoColumn--left'
+								}
+							},
+							children: [
+								{
+									type: 'markdown-variable',
+									reference: ['div_twoColumn_left_markdown']
+								}
+							]
+						},
+						{
+							type: 'element',
+							name: 'div',
+							attrs: {
+								class: {
+									type: 'attribute',
+									name: 'class',
+									value: 'twoColumn--right'
+								}
+							},
+							children: [
+								{
+									type: 'element',
+									name: 'div',
+									attrs: {
+										class: {
+											type: 'attribute',
+											name: 'class',
+											value: 'twoColumn__image'
+										}
+									},
+									children: []
+								},
+								{
+									type: 'markdown-variable',
+									reference: ['div_twoColumn_right_markdown']
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		expectedPrimaryData: {
+			div_markdown: 'First text',
+			div: {
+				div_twoColumn_left_markdown: 'Lorem ipsum dolor sit amet',
+				div_twoColumn_right_markdown:
+					'Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros.'
+			}
+		},
+		expectedSecondaryData: {
+			div_markdown: 'Second text',
 			div: null
 		}
 	}));
@@ -919,6 +1168,8 @@ test('conditional and loop comparison', (t: ExecutionContext) =>
 			}
 		],
 		secondary: [],
+		primaryData: {},
+		secondaryData: {},
 		merged: [
 			{
 				type: 'conditional',

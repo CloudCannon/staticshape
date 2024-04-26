@@ -3,7 +3,8 @@ import {
 	ASTNode,
 	ASTAttributeList,
 	ASTValueNode,
-	ASTConditionalNode
+	ASTConditionalNode,
+	ASTLoopNode
 } from '../types';
 import { invalidLoopTags, findRepeatedIndex } from './loops';
 import { isAttrEquivalent } from './node-helper';
@@ -30,7 +31,7 @@ export function diffBasicNode(
 	firstNode: ASTValueNode,
 	secondNode: ASTValueNode,
 	parentElements: ASTElementNode[],
-	logger?: Logger
+	logger: Logger
 ): ASTNode {
 	const valuesMatch = firstNode.value.trim() === secondNode.value.trim();
 	if (valuesMatch) {
@@ -52,11 +53,11 @@ export function diffElementNode(
 	firstElement: ASTElementNode,
 	secondElement: ASTElementNode,
 	parentElements: ASTElementNode[],
-	logger?: Logger
+	logger: Logger
 ): ASTNode {
-	logger?.log('  '.repeat(parentElements.length), '👀 Diff Element');
-	logger?.log('  '.repeat(parentElements.length), nodeDebugString(firstElement));
-	logger?.log('  '.repeat(parentElements.length), nodeDebugString(secondElement));
+	logger.log('  '.repeat(parentElements.length), '👀 Diff Element');
+	logger.log('  '.repeat(parentElements.length), nodeDebugString(firstElement));
+	logger.log('  '.repeat(parentElements.length), nodeDebugString(secondElement));
 	const tagsMatch = firstElement.name === secondElement.name;
 	if (!tagsMatch) {
 		throw new Error(`Mismatched node names ${firstElement.name}, ${secondElement.name}`);
@@ -81,10 +82,10 @@ export function diffNodes(
 	firstNode: ASTNode,
 	secondNode: ASTNode,
 	parentElements: ASTElementNode[],
-	logger?: Logger
+	logger: Logger
 ): ASTNode {
 	const typesMatch = firstNode.type === secondNode.type;
-	logger?.log(
+	logger.log(
 		'  '.repeat(parentElements.length),
 		'👀 Diff Nodes',
 		nodeDebugString(firstNode, 0, 0),
@@ -94,22 +95,14 @@ export function diffNodes(
 	if (typesMatch) {
 		switch (firstNode.type) {
 			case 'conditional':
-				const secondConditional = secondNode as ASTConditionalNode;
-				const newData = new Data([], {});
-				const otherData = new Data([], {});
-				const template = diffElementNode(
-					newData,
-					otherData,
-					firstNode.child,
-					secondConditional.child,
-					parentElements
-				) as ASTElementNode;
-				firstData.chainSet(secondConditional.reference, newData.toJSON());
-				secondData.chainSet(secondConditional.reference, otherData.toJSON());
-				return {
-					...secondConditional,
-					child: template
-				};
+				return diffConditionalNodes(
+					firstNode,
+					secondNode as ASTConditionalNode,
+					firstData,
+					secondData,
+					parentElements,
+					logger
+				);
 			case 'loop':
 			case 'content':
 			case 'variable':
@@ -170,87 +163,208 @@ export function diffNodes(
 	}
 
 	if (secondNode.type === 'element' && firstNode.type === 'loop') {
-		const newData = new Data([], {});
-		const otherData = new Data([], {});
-		diffElementNode(newData, otherData, firstNode.template, secondNode, parentElements);
-		secondData.chainSet(firstNode.reference, [otherData.toJSON()]);
-		return firstNode;
+		return diffLoopAndElementNode(
+			firstNode,
+			secondNode,
+			firstData,
+			secondData,
+			parentElements,
+			logger
+		);
 	}
 
 	if (firstNode.type === 'element' && secondNode.type === 'loop') {
-		const newData = new Data([], {});
-		const otherData = new Data([], {});
-		diffElementNode(newData, otherData, firstNode, secondNode.template, parentElements);
-		firstData.chainSet(secondNode.reference, [newData.toJSON()]);
-		return secondNode;
+		return diffLoopAndElementNode(
+			secondNode,
+			firstNode,
+			secondData,
+			firstData,
+			parentElements,
+			logger
+		);
 	}
 
 	if (secondNode.type === 'element' && firstNode.type === 'conditional') {
-		const newData = new Data([], {});
-		const otherData = new Data([], {});
-		const template = diffElementNode(
-			newData,
-			otherData,
-			firstNode.child,
+		return diffConditionalAndElementNode(
+			firstNode,
 			secondNode,
-			parentElements
-		) as ASTElementNode;
-		firstData.chainSet(firstNode.reference, newData.toJSON());
-		secondData.chainSet(firstNode.reference, otherData.toJSON());
-		logger?.debug(`Conditional merge ${firstNode.type} and ${secondNode.type}`);
-		logger?.debug('First: ', nodeDebugString(firstNode.child, 0, 0));
-		logger?.debug('Second: ', nodeDebugString(secondNode, 0, 0));
-		logger?.debug('Merged: ', nodeDebugString(template, 0, 0));
-		logger?.debug('newData: ', JSON.stringify(newData));
-		logger?.debug('otherData: ', JSON.stringify(otherData));
-
-		return {
-			...firstNode,
-			child: template
-		};
+			firstData,
+			secondData,
+			parentElements,
+			logger
+		);
 	}
 
 	if (firstNode.type === 'element' && secondNode.type === 'conditional') {
-		const newData = new Data([], {});
-		const otherData = new Data([], {});
-		const template = diffElementNode(
-			newData,
-			otherData,
+		return diffConditionalAndElementNode(
+			secondNode,
 			firstNode,
-			secondNode.child,
-			parentElements
-		) as ASTElementNode;
-		firstData.chainSet(secondNode.reference, newData.toJSON());
-		secondData.chainSet(secondNode.reference, otherData.toJSON());
-		logger?.debug(`Conditional merge ${firstNode.type} and ${secondNode.type}`);
-		logger?.debug('First: ', nodeDebugString(firstNode, 0, 0));
-		logger?.debug('Second: ', nodeDebugString(secondNode.child, 0, 0));
-		logger?.debug('Merged: ', nodeDebugString(template, 0, 0));
-		logger?.debug('newData: ', JSON.stringify(newData));
-		logger?.debug('otherData: ', JSON.stringify(otherData));
-
-		return {
-			...secondNode,
-			child: template
-		};
+			secondData,
+			firstData,
+			parentElements,
+			logger
+		);
 	}
 
 	// if (firstNode.type === 'conditional' && secondNode.type === 'loop') {
-	// 	logger?.warn('TODO: merge conditional element and loop template for the new data for both');
+	// 	logger.warn('TODO: merge conditional element and loop template for the new data for both');
 	// 	return secondNode;
 	// }
 
 	// if (firstNode.type === 'loop' && secondNode.type === 'conditional') {
-	// 	logger?.warn('TODO: merge conditional element and loop template for the new data for both');
+	// 	logger.warn('TODO: merge conditional element and loop template for the new data for both');
 	// 	return firstNode;
 	// }
 
 	const score = nodeEquivalencyScore(firstNode, secondNode);
-	logger?.error(`Cannot diff nodes ${firstNode.type} and ${secondNode.type} (${score})`);
-	logger?.error('First: ', nodeDebugString(firstNode, 0, 0));
-	logger?.error('Second: ', nodeDebugString(secondNode, 0, 0));
+	logger.error(`Cannot diff nodes ${firstNode.type} and ${secondNode.type} (${score})`);
+	logger.error('First: ', nodeDebugString(firstNode, 0, 0));
+	logger.error('Second: ', nodeDebugString(secondNode, 0, 0));
 
 	throw new Error(`Cannot diff nodes ${firstNode.type} and ${secondNode.type}`);
+}
+
+function diffConditionalAndElementNode(
+	conditionalNode: ASTConditionalNode,
+	elementNode: ASTElementNode,
+	conditionalData: Data,
+	elementData: Data,
+	parentElements: ASTElementNode[],
+	logger: Logger
+): ASTConditionalNode {
+	const variableName = conditionalNode.reference[0];
+	if (!conditionalData.hasKey(variableName)) {
+		logger.log(
+			'💿 Failed value inheritance',
+			JSON.stringify(conditionalNode.reference),
+			variableName,
+			JSON.stringify(conditionalData)
+		);
+		throw new Error('Found loop variable but could not find existing value');
+	}
+
+	const existingValue = conditionalData.getKey(variableName);
+	if (existingValue === null || typeof existingValue !== 'object') {
+		return conditionalNode;
+	}
+	const existingData = new Data([], structuredClone(existingValue));
+	const newData = new Data([], {});
+
+	const template = diffElementNode(
+		existingData,
+		newData,
+		conditionalNode.child,
+		elementNode,
+		parentElements,
+		logger
+	) as ASTElementNode;
+
+	conditionalData.chainSet(conditionalNode.reference, existingData.toJSON());
+	elementData.chainSet(conditionalNode.reference, newData.toJSON());
+
+	return {
+		...conditionalNode,
+		child: template
+	};
+}
+
+function diffConditionalNodes(
+	firstNode: ASTConditionalNode,
+	secondNode: ASTConditionalNode,
+	firstData: Data,
+	secondData: Data,
+	parentElements: ASTElementNode[],
+	logger: Logger
+) {
+	const variableName = firstNode.reference[0];
+	if (variableName !== secondNode.reference[0]) {
+		throw new Error('Conditional diff mismatched variable names');
+	}
+
+	if (!firstData.hasKey(variableName)) {
+		logger.log(
+			'💿 Failed value inheritance',
+			JSON.stringify(firstNode.reference),
+			variableName,
+			JSON.stringify(firstData)
+		);
+		throw new Error('Found conditional variable but could not find existing value');
+	}
+
+	if (!secondData.hasKey(variableName)) {
+		logger.log(
+			'💿 Failed value inheritance',
+			JSON.stringify(secondNode.reference),
+			variableName,
+			JSON.stringify(secondData)
+		);
+		throw new Error('Found conditional variable but could not find existing value');
+	}
+
+	const firstSubData = firstData.getKey(variableName);
+	const secondSubData = secondData.getKey(variableName);
+
+	const newData = new Data(
+		[],
+		firstSubData === null || typeof firstSubData !== 'object' ? {} : firstSubData
+	);
+	const otherData = new Data(
+		[],
+		secondSubData === null || typeof secondSubData !== 'object' ? {} : secondSubData
+	);
+	const template = diffElementNode(
+		newData,
+		otherData,
+		firstNode.child,
+		secondNode.child,
+		parentElements,
+		logger
+	) as ASTElementNode;
+	firstData.chainSet(secondNode.reference, firstSubData ? newData.toJSON() : null);
+	secondData.chainSet(secondNode.reference, secondSubData ? otherData.toJSON() : null);
+	return {
+		...secondNode,
+		child: template
+	};
+}
+
+function diffLoopAndElementNode(
+	loopNode: ASTLoopNode,
+	elementNode: ASTElementNode,
+	loopData: Data,
+	elementData: Data,
+	parentElements: ASTElementNode[],
+	logger: Logger
+): ASTLoopNode {
+	logger.log(
+		'📀 Inheriting loop variables',
+		JSON.stringify(loopNode),
+		'from',
+		JSON.stringify(loopData)
+	);
+
+	const variableName = loopNode.reference[0];
+	if (!loopData.hasKey(variableName)) {
+		logger.log(
+			'💿 Failed value inheritance',
+			JSON.stringify(loopNode.reference),
+			variableName,
+			JSON.stringify(loopData)
+		);
+		throw new Error('Found loop variable but could not find existing value');
+	}
+
+	const existingItems = loopData.getKey(variableName);
+
+	if (!Array.isArray(existingItems)) {
+		throw new Error('Found loop variable that is not array');
+	}
+	const existingData = new Data([], existingItems[0]);
+	const newData = new Data([], {});
+
+	diffElementNode(existingData, newData, loopNode.template, elementNode, parentElements, logger);
+	elementData.chainSet(loopNode.reference, [newData.toJSON()]);
+	return loopNode;
 }
 
 export function mergeAttrs(
@@ -258,15 +372,12 @@ export function mergeAttrs(
 	secondData: Data,
 	firstElement: ASTElementNode,
 	secondElement: ASTElementNode,
-	logger?: Logger
+	logger: Logger
 ): ASTAttributeList {
 	const firstAttrs = firstElement.attrs;
 	const secondAttrs = secondElement.attrs;
 	const combined = {} as ASTAttributeList;
 
-	logger?.debug('🏷️ Merging attrs');
-	logger?.debug(JSON.stringify(firstAttrs));
-	logger?.debug(JSON.stringify(secondAttrs));
 	Object.keys(firstAttrs).forEach((attrName) => {
 		const variableName = firstData.getVariableName([firstElement], '', attrName);
 		const firstAttr = firstAttrs[attrName];
@@ -339,7 +450,7 @@ export function mergeAttrs(
 		}
 
 		if (secondAttr && secondAttr.type !== 'attribute') {
-			logger?.warn('TODO: add relevant null state for !secondAttr');
+			logger.warn('TODO: add relevant null state for !secondAttr');
 			if (firstAttr?.type === 'attribute') {
 				firstData.chainSet(secondAttr.reference, firstAttr.value.trim());
 			}
@@ -356,7 +467,7 @@ export function mergeAttrs(
 		};
 	});
 
-	logger?.debug(JSON.stringify(combined));
+	logger.debug(JSON.stringify(combined));
 	return combined;
 }
 
@@ -380,7 +491,8 @@ interface LoopState {
 function buildLoop(
 	firstEls: ASTElementNode[],
 	secondEls: ASTElementNode[],
-	parentElements: ASTElementNode[]
+	parentElements: ASTElementNode[],
+	logger: Logger
 ): Loop | null {
 	const firstItems = [] as Data[];
 	const secondItems = [] as Data[];
@@ -410,7 +522,8 @@ function buildLoop(
 			otherData,
 			base.el,
 			loopEl.el,
-			parentElements
+			parentElements,
+			logger
 		) as ASTElementNode;
 		loopEl.dataSource.push(otherData);
 
@@ -436,7 +549,8 @@ function buildLoop(
 				otherData,
 				current.template,
 				template,
-				parentElements
+				parentElements,
+				logger
 			) as ASTElementNode;
 			current = {
 				template: merged,
@@ -464,7 +578,7 @@ export function mergeTree(
 	rawFirstTree: ASTNode[],
 	rawSecondTree: ASTNode[],
 	parentElements: ASTElementNode[] = [],
-	logger?: Logger
+	logger: Logger
 ): ASTNode[] {
 	const parent = parentElements[parentElements.length - 1];
 	const componentConfig = {
@@ -473,24 +587,31 @@ export function mergeTree(
 		// TODO: loops?
 		disableLoops: false
 	};
+
 	const firstTree = convertTreeToComponents(
 		firstData,
 		rawFirstTree,
 		parentElements,
-		componentConfig
+		componentConfig,
+		firstData,
+		logger
 	);
+
+	logger.log('--------------------- second tree');
 	const secondTree = convertTreeToComponents(
 		secondData,
 		rawSecondTree,
 		parentElements,
-		componentConfig
+		componentConfig,
+		secondData,
+		logger
 	);
 
 	const merged = [] as ASTNode[];
 	let firstPointer = 0;
 	let secondPointer = 0;
 	const addConditionalNode = (node: ASTNode, firstData: Data, secondData: Data) => {
-		logger?.log('Adding conditional node', nodeDebugString(node));
+		logger.log('Adding conditional node', nodeDebugString(node));
 		if (node.type === 'text') {
 			const trimmed = node.value.trim();
 			if (trimmed.length === 0) {
@@ -539,7 +660,15 @@ export function mergeTree(
 		if (node.type === 'element') {
 			parents.push(node);
 			const newData = new Data([], {});
-			const template = convertElementToComponent(newData, node, []);
+			const config = {}; // TODO pass component config
+			const template = convertElementToComponent(
+				newData,
+				node,
+				[],
+				config,
+				firstData,
+				logger
+			);
 			const variableName = firstData.getVariableName(parents);
 			firstData.set(variableName, newData.toJSON());
 			secondData.set(variableName, null);
@@ -614,9 +743,14 @@ export function mergeTree(
 								firstEls.length === secondEls.length &&
 								nodeTreeEquivalencyScore(firstEls, secondEls) === 1;
 
-								// TODO: Object building
+							// TODO: Object building
 							if (!isExactMatch) {
-								const loopData = buildLoop(firstEls, secondEls, parentElements);
+								const loopData = buildLoop(
+									firstEls,
+									secondEls,
+									parentElements,
+									logger
+								);
 								if (loopData) {
 									const { firstItems, secondItems, template } = loopData;
 									const variableName = firstData.getVariableName(
@@ -633,7 +767,7 @@ export function mergeTree(
 										secondItems.map((item: Data) => item.toJSON())
 									);
 
-									logger?.log('🔄 Added loop', nodeDebugString(template));
+									logger.log('🔄 Added loop', nodeDebugString(template));
 									merged.push({
 										type: 'loop',
 										reference: firstData.getChain(variableName),
@@ -645,7 +779,7 @@ export function mergeTree(
 								}
 							}
 						}
-						logger?.log(
+						logger.log(
 							'🔂 Not enough loop elements',
 							score,
 							nodeDebugString(current, 0, 0),
@@ -653,7 +787,7 @@ export function mergeTree(
 							nodeDebugString(other, 0, 0)
 						);
 					} else {
-						logger?.log(
+						logger.log(
 							'🔂 Not enough loop nodes',
 							score,
 							nodeDebugString(current, 0, 0),
@@ -666,7 +800,7 @@ export function mergeTree(
 		}
 
 		if (isBestMatch(firstRemainingNodes, secondRemainingNodes, logger)) {
-			logger?.log(
+			logger.log(
 				'👀 Comparing nodes',
 				nodeDebugString(current, 0, 0),
 				'vs',
@@ -680,7 +814,7 @@ export function mergeTree(
 						.slice(0, repeatedIndex + 1)
 						.filter((node) => node.type === 'element') as ASTElementNode[];
 					if (elements.length > 1) {
-						const loopData = buildLoop(elements, [], parentElements);
+						const loopData = buildLoop(elements, [], parentElements, logger);
 						if (loopData) {
 							const { firstItems, template } = loopData;
 							firstData.chainSet(
@@ -688,7 +822,7 @@ export function mergeTree(
 								firstItems.map((item: Data) => item.toJSON())
 							);
 
-							logger?.log(
+							logger.log(
 								'🔄 Added diffed loop',
 								nodeDebugString(template),
 								JSON.stringify(firstItems)
@@ -722,7 +856,7 @@ export function mergeTree(
 					.slice(0, repeatedIndex + 1)
 					.filter((node) => node.type === 'element') as ASTElementNode[];
 				if (elements.length > 1) {
-					const loopData = buildLoop(elements, [], parentElements);
+					const loopData = buildLoop(elements, [], parentElements, logger);
 					if (loopData) {
 						const { secondItems, template } = loopData;
 						secondData.chainSet(
@@ -730,7 +864,7 @@ export function mergeTree(
 							secondItems.map((item: Data) => item.toJSON())
 						);
 
-						logger?.log(
+						logger.log(
 							'🔄 Added diffed loop',
 							nodeDebugString(template),
 							JSON.stringify(secondItems)
@@ -760,24 +894,24 @@ export function mergeTree(
 			firstPointer += 1;
 			secondPointer += 1;
 		} else if (firstRemaining > secondRemaining) {
-			logger?.log(`? Conditional first weighted [${firstRemaining}, ${secondRemaining}]`);
+			logger.log(`? Conditional first weighted [${firstRemaining}, ${secondRemaining}]`);
 			addConditionalNode(current, firstData, secondData);
 			firstPointer += 1;
 		} else {
-			logger?.log(`? Conditional second weighted [${firstRemaining}, ${secondRemaining}]`);
+			logger.log(`? Conditional second weighted [${firstRemaining}, ${secondRemaining}]`);
 			addConditionalNode(other, secondData, firstData);
 			secondPointer += 1;
 		}
 	}
 
 	while (firstPointer < firstTree.length) {
-		logger?.log('? Conditional first remaining');
+		logger.log('? Conditional first remaining');
 		addConditionalNode(firstTree[firstPointer], firstData, secondData);
 		firstPointer += 1;
 	}
 
 	while (secondPointer < secondTree.length) {
-		logger?.log('? Conditional second remaining');
+		logger.log('? Conditional second remaining');
 		addConditionalNode(secondTree[secondPointer], secondData, firstData);
 		secondPointer += 1;
 	}

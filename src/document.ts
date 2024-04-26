@@ -21,11 +21,11 @@ export interface DocumentOptions {
 	content: string;
 	config: DocumentConfig;
 	processorConfig: HtmlProcessorConfig;
-	logger?: Logger;
+	logger: Logger;
 }
 
 export default class Document {
-	logger?: Logger;
+	logger: Logger;
 	pathname: string;
 	data: Data;
 	layout: ASTNode[];
@@ -34,7 +34,11 @@ export default class Document {
 	constructor(options: DocumentOptions) {
 		this.logger = options.logger;
 		this.pathname = options.pathname;
-		const { layout, contents } = htmlToAST(options.content, options.config, options.processorConfig);
+		const { layout, contents } = htmlToAST(
+			options.content,
+			options.config,
+			options.processorConfig
+		);
 		this.layout = layout;
 		this.contents = contents;
 		this.data = new Data([], {});
@@ -43,7 +47,7 @@ export default class Document {
 	diff(other: Document): ASTTree {
 		this.data = new Data([], {});
 
-		this.logger?.log(`Comparing ${this.pathname} and ${other.pathname}`);
+		this.logger.log(`Comparing ${this.pathname} and ${other.pathname}`);
 		const tree = mergeTree(this.data, other.data, this.layout, other.layout, [], this.logger);
 		return {
 			base: new Page({

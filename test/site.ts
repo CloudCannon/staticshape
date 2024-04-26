@@ -69,10 +69,10 @@ test('two-pages-markdown-variable', (t: ExecutionContext) =>
 	runTest(t, 'two-pages-markdown-variable'));
 test('two-pages-loop', (t: ExecutionContext) => runTest(t, 'two-pages-loop'));
 
-
-test('two-pages-conditional-object', (t: ExecutionContext) => runTest(t, 'two-pages-conditional-object'));
-test('two-pages-conditional-loop', (t: ExecutionContext) => runTest(t, 'two-pages-conditional-loop'));
-
+test('two-pages-conditional-object', (t: ExecutionContext) =>
+	runTest(t, 'two-pages-conditional-object'));
+test('two-pages-conditional-loop', (t: ExecutionContext) =>
+	runTest(t, 'two-pages-conditional-loop'));
 
 // TODO the following items work but have alternating variable names between tests
 // test('two-pages-fuzzy-image', (t: ExecutionContext) => runTest(t, 'two-pages-fuzzy-image'));

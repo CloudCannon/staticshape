@@ -22,7 +22,15 @@ async function runTest(t: ExecutionContext, testName: string) {
 	const element = ast.find((node) => node.type === 'element') as ASTElementNode;
 
 	const data = new Data([], {});
-	const component = convertElementToComponent(data, element, [], {}, new TestLogger());
+	const existingData = new Data([], {});
+	const component = convertElementToComponent(
+		data,
+		element,
+		[],
+		{},
+		existingData,
+		new TestLogger()
+	);
 
 	if (!fs.existsSync(`./test/fixtures/components/${testName}/component.json`)) {
 		await fs.promises.writeFile(

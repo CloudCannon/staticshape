@@ -1,6 +1,7 @@
 import test, { ExecutionContext } from 'ava';
 import { isBestMatch, nodeEquivalencyScore, loopThreshold } from '../src/helpers/node-equivalency';
 import { ASTElementNode, ASTNode, ASTTextNode } from '../src/types';
+import { TestLogger } from './helpers/test-logger';
 
 interface TestDefinition {
 	currentTree: ASTNode[];
@@ -17,12 +18,13 @@ function roundScore(score: number) {
 const textNode = (text: string): ASTNode => ({ type: 'text', value: text }) as ASTTextNode;
 
 async function runTest(t: ExecutionContext, def: TestDefinition) {
+	const logger = new TestLogger();
 	const forwardsScore = nodeEquivalencyScore(def.currentTree[0], def.otherTree[0]);
 	t.is(roundScore(forwardsScore), def.score);
 	const reverseScore = nodeEquivalencyScore(def.currentTree[0], def.otherTree[0]);
 	t.is(roundScore(reverseScore), def.score);
-	t.is(isBestMatch(def.currentTree, def.otherTree), def.isBestMatch);
-	t.is(isBestMatch(def.otherTree, def.currentTree), def.isBestMatch);
+	t.is(isBestMatch(def.currentTree, def.otherTree, logger), def.isBestMatch);
+	t.is(isBestMatch(def.otherTree, def.currentTree, logger), def.isBestMatch);
 	t.is(
 		forwardsScore >= loopThreshold,
 		def.isAboveLoopThreshold,

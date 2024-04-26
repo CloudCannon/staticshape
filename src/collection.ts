@@ -18,7 +18,7 @@ export interface CollectionConfig {
 }
 
 export interface CollectionOptions {
-	logger?: Logger;
+	logger: Logger;
 }
 
 export interface CollectionResponse {
@@ -29,10 +29,15 @@ export interface CollectionResponse {
 export default class Collection {
 	content?: PageContentsConfig;
 	processorConfig?: HtmlProcessorConfig;
-	logger?: Logger;
+	logger: Logger;
 	files: File[];
 
-	constructor(files: File[], processorConfig: HtmlProcessorConfig, config: CollectionConfig, options: CollectionOptions) {
+	constructor(
+		files: File[],
+		processorConfig: HtmlProcessorConfig,
+		config: CollectionConfig,
+		options: CollectionOptions
+	) {
 		this.logger = options.logger;
 		this.content = config.content;
 		this.processorConfig = processorConfig;
@@ -81,28 +86,30 @@ export default class Collection {
 
 		const baseDoc = documents[0];
 		let current = baseDoc.diff(documents[1]);
-		await this.logger?.writeLog(
+		await this.logger.writeLog(
 			`base-${slugify(baseDoc.pathname)}.json`,
 			JSON.stringify(baseDoc.layout, null, '\t')
 		);
-		await this.logger?.writeLog(
+		await this.logger.writeLog(
 			`${slugify(documents[1].pathname)}.json`,
 			JSON.stringify(documents[1].layout, null, '\t')
 		);
-		await this.logger?.writeLog('layout.json', JSON.stringify(current.layout, null, '\t'));
+		await this.logger.writeLog('layout.json', JSON.stringify(current.layout, null, '\t'));
 		for (let i = 2; i < documents.length; i++) {
-			await this.logger?.rotateLog();
+			await this.logger.rotateLog();
 			const next = baseDoc.diff(documents[i]);
-			await this.logger?.writeLog(
+			await this.logger.writeLog(
 				`${slugify(documents[i].pathname)}.json`,
 				JSON.stringify(documents[1].layout, null, '\t')
 			);
-			await this.logger?.writeLog('diffed.json', JSON.stringify(next, null, '\t'));
-			this.logger?.log(`Comparing layouts`);
+			await this.logger.writeLog('diffed.json', JSON.stringify(next, null, '\t'));
+			this.logger.log(`Comparing layouts`);
 
 			// Merge the next and current layouts
-			const currentMergeData = new Data([], {});
-			const nextMergeData = new Data([], {});
+
+			// console.dir({ current, next }, { depth: null });
+			const currentMergeData = new Data([], structuredClone(current.base.data.data));
+			const nextMergeData = new Data([], structuredClone(next.base.data.data));
 			const layout = mergeTree(
 				currentMergeData,
 				nextMergeData,
@@ -113,15 +120,16 @@ export default class Collection {
 			);
 
 			if (!currentMergeData.empty() || !nextMergeData.empty()) {
-				this.logger?.warn('Layout merge produced data');
-				this.logger?.warn('currentMergeData', JSON.stringify(currentMergeData.toJSON()));
-				this.logger?.warn('nextMergeData', JSON.stringify(nextMergeData.toJSON()));
-				this.logger?.warn('current', JSON.stringify(current.pages, null, 2));
-				this.logger?.warn('next', JSON.stringify(next.pages, null, 2));
+				this.logger.warn('Layout merge produced data');
+				this.logger.warn('currentMergeData', JSON.stringify(currentMergeData.toJSON()));
+				this.logger.warn('nextMergeData', JSON.stringify(nextMergeData.toJSON()));
+				this.logger.warn('current', JSON.stringify(current.pages, null, 2));
+				this.logger.warn('next', JSON.stringify(next.pages, null, 2));
 			}
 
 			// Merge the next and current bases
-			const base = current.base.merge(next.base);
+			const base = current.base.mergeData(next.base.data);
+
 			// Merge current pages with the next base
 			const oldPages = current.pages.map((page) => page.mergeData(currentMergeData));
 
@@ -129,15 +137,19 @@ export default class Collection {
 			const newPages = next.pages.map((page) => page.mergeData(nextMergeData));
 
 			// const layout = current.layout.merge(next.layout);
-			await this.logger?.writeLog('merged.json', JSON.stringify(current, null, '\t'));
+			await this.logger.writeLog('merged.json', JSON.stringify(current, null, '\t'));
 
+			console.log(
+				'...oldPages, ...newPages: ',
+				JSON.stringify([...oldPages, ...newPages], null, '  ')
+			);
 			current = {
 				base,
 				pages: [...oldPages, ...newPages],
 				layout
 			};
 		}
-		await this.logger?.rotateLog();
+		await this.logger.rotateLog();
 
 		return {
 			pages: [current.base.toJSON(), ...current.pages.map((page) => page.toJSON())],

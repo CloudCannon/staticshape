@@ -201,7 +201,7 @@ export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
 	return 0;
 }
 
-export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[], logger?: Logger) => {
+export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[], logger: Logger) => {
 	const current = currentTree[0];
 	const other = otherTree[0];
 	const score = nodeEquivalencyScore(current, other);
@@ -211,7 +211,7 @@ export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[], logger
 	if (score === 1) {
 		return true;
 	}
-	logger?.debug(
+	logger.debug(
 		'Compare lead nodes',
 		nodeDebugString(current, 0, 0),
 		'vs',
@@ -223,7 +223,7 @@ export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[], logger
 		const currentAlternative = currentTree[i];
 
 		let alternativeScore = nodeEquivalencyScore(currentAlternative, other);
-		logger?.debug(
+		logger.debug(
 			'Compare current alternatives',
 			nodeDebugString(currentAlternative, 0, 0),
 			'vs',
@@ -239,7 +239,7 @@ export const isBestMatch = (currentTree: ASTNode[], otherTree: ASTNode[], logger
 		const otherAlternative = otherTree[i];
 
 		let alternativeScore = nodeEquivalencyScore(otherAlternative, current);
-		logger?.debug(
+		logger.debug(
 			'Compare other alternatives',
 			nodeDebugString(otherAlternative, 0, 0),
 			'vs',

@@ -91,7 +91,7 @@ export function getVariableNames(element: ASTElementNode): string[] {
 export type Hash = Record<string, any>;
 
 // Merges for loops
-export function mergeHash(data: Hash, other: Hash) {
+export function mergeHash(data: Record<string, any>, other: Record<string, any>) {
 	if (!data) {
 		return data;
 	}
@@ -120,15 +120,19 @@ export function joinNameParts(parts: string[]) {
 
 export default class Data {
 	chain: string[];
-	data: Hash;
+	data: Record<string, any>;
 
-	constructor(chain: string[], data: Hash) {
+	constructor(chain: string[], data: Record<string, any>) {
 		this.chain = chain;
 		this.data = data;
 	}
 
 	set(variableName: string, value: any): void {
 		this.data[formatVariable(variableName)] = value;
+	}
+
+	delete(variableName: string): void {
+		delete this.data[formatVariable(variableName)];
 	}
 
 	chainSet(variableNames: string[], value: any): void {
@@ -192,7 +196,11 @@ export default class Data {
 	}
 
 	hasKey(variableName: string): boolean {
-		return formatVariable(variableName) in this.data;
+		return this.data && formatVariable(variableName) in this.data;
+	}
+
+	getKey(variableName: string): string | Record<string, any> | null | boolean | any[] {
+		return this.data[formatVariable(variableName)];
 	}
 
 	merge(other: Data): Data {
@@ -200,11 +208,11 @@ export default class Data {
 		return new Data(this.chain, clone);
 	}
 
-	createSubdata(variableName: string, data?: Hash): Data {
+	createSubdata(variableName: string, data?: Record<string, any>): Data {
 		return new Data(this.getChain(formatVariable(variableName)), data || {});
 	}
 
-	toJSON(): Hash {
+	toJSON(): Record<string, any> {
 		return this.data;
 	}
 }
