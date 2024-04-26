@@ -4,7 +4,11 @@ import {
 	ASTAttributeList,
 	ASTValueNode,
 	ASTConditionalNode,
-	ASTLoopNode
+	ASTLoopNode,
+	ASTTextNode,
+	ASTVariableNode,
+	ASTInlineMarkdownNode,
+	ASTAttribute
 } from '../types';
 import { invalidLoopTags, findRepeatedIndex } from './loops';
 import { isAttrEquivalent } from './node-helper';
@@ -24,6 +28,7 @@ import {
 import { booleanAttributes } from './attributes';
 import { Logger, nodeDebugString } from '../logger';
 import { convertTreeToComponents, convertElementToComponent } from './component-builder';
+import { liftVariables } from './variable-lifting';
 
 export function diffBasicNode(
 	firstData: Data,
@@ -150,16 +155,14 @@ export function diffNodes(
 		secondNode.type === 'text' &&
 		(firstNode.type === 'variable' || firstNode.type === 'inline-markdown-variable')
 	) {
-		secondData.chainSet(firstNode.reference, secondNode.value.trim());
-		return firstNode;
+		return diffTextAndVariableNode(secondNode, firstNode, secondData);
 	}
 
 	if (
 		firstNode.type === 'text' &&
 		(secondNode.type === 'variable' || secondNode.type === 'inline-markdown-variable')
 	) {
-		firstData.chainSet(secondNode.reference, firstNode.value.trim());
-		return secondNode;
+		return diffTextAndVariableNode(firstNode, secondNode, firstData);
 	}
 
 	if (secondNode.type === 'element' && firstNode.type === 'loop') {
@@ -224,6 +227,15 @@ export function diffNodes(
 	throw new Error(`Cannot diff nodes ${firstNode.type} and ${secondNode.type}`);
 }
 
+function diffTextAndVariableNode(
+	textNode: ASTTextNode,
+	variableNode: ASTVariableNode | ASTInlineMarkdownNode,
+	textNodeData: Data
+): ASTVariableNode | ASTInlineMarkdownNode {
+	textNodeData.chainSet(variableNode.reference, textNode.value.trim());
+	return variableNode;
+}
+
 function diffConditionalAndElementNode(
 	conditionalNode: ASTConditionalNode,
 	elementNode: ASTElementNode,
@@ -247,8 +259,13 @@ function diffConditionalAndElementNode(
 	if (existingValue === null || typeof existingValue !== 'object') {
 		return conditionalNode;
 	}
+	const liftedVariables = liftVariables(elementNode, elementData);
+	Object.keys(liftedVariables).forEach((variableName) => {
+		elementData.delete(variableName);
+	});
+
 	const existingData = new Data([], structuredClone(existingValue));
-	const newData = new Data([], {});
+	const newData = new Data([], structuredClone(liftedVariables));
 
 	const template = diffElementNode(
 		existingData,
@@ -312,6 +329,7 @@ function diffConditionalNodes(
 		[],
 		secondSubData === null || typeof secondSubData !== 'object' ? {} : secondSubData
 	);
+
 	const template = diffElementNode(
 		newData,
 		otherData,
@@ -359,12 +377,82 @@ function diffLoopAndElementNode(
 	if (!Array.isArray(existingItems)) {
 		throw new Error('Found loop variable that is not array');
 	}
+	const liftedVariables = liftVariables(elementNode, elementData);
+	Object.keys(liftedVariables).forEach((variableName) => {
+		elementData.delete(variableName);
+	});
+
 	const existingData = new Data([], existingItems[0]);
-	const newData = new Data([], {});
+	const newData = new Data([], structuredClone(liftedVariables));
 
 	diffElementNode(existingData, newData, loopNode.template, elementNode, parentElements, logger);
 	elementData.chainSet(loopNode.reference, [newData.toJSON()]);
 	return loopNode;
+}
+
+function mergeAttribute(
+	attrName: string,
+	element: ASTElementNode,
+	firstAttr: ASTAttribute,
+	secondAttr: ASTAttribute | undefined,
+	firstData: Data,
+	secondData: Data,
+	logger: Logger
+): ASTAttribute {
+	const variableName = firstData.getVariableName([element], '', attrName);
+	if (firstAttr.type !== 'attribute') {
+		logger?.warn('TODO: add relevant null state for !secondAttr');
+		if (secondAttr?.type === 'attribute') {
+			secondData.chainSet(firstAttr.reference, secondAttr.value);
+		}
+		return firstAttr;
+	}
+
+	if (secondAttr && secondAttr.type !== 'attribute') {
+		if (firstAttr.type === 'attribute') {
+			firstData.chainSet(secondAttr.reference, firstAttr.value);
+		}
+		return secondAttr;
+	}
+
+	if (
+		booleanAttributes[attrName] &&
+		(!secondAttr || !isAttrEquivalent(attrName, firstAttr, secondAttr))
+	) {
+		firstData.set(variableName, !!firstAttr);
+		secondData.set(variableName, !!secondAttr);
+		return {
+			type: 'conditional-attribute',
+			name: attrName,
+			reference: firstData.getChain(variableName)
+		};
+	}
+
+	if (!secondAttr) {
+		firstData.set(variableName, firstAttr.value.trim());
+		secondData.set(variableName, null);
+		return {
+			type: 'conditional-attribute',
+			name: attrName,
+			reference: firstData.getChain(variableName)
+		};
+	}
+
+	if (isAttrEquivalent(attrName, firstAttr, secondAttr)) {
+		return {
+			type: 'attribute',
+			name: attrName,
+			value: secondAttr.value
+		};
+	}
+
+	firstData.set(variableName, firstAttr.value.trim());
+	secondData.set(variableName, secondAttr.value.trim());
+	return {
+		type: 'variable-attribute',
+		name: attrName,
+		reference: firstData.getChain(variableName)
+	};
 }
 
 export function mergeAttrs(
@@ -379,92 +467,39 @@ export function mergeAttrs(
 	const combined = {} as ASTAttributeList;
 
 	Object.keys(firstAttrs).forEach((attrName) => {
-		const variableName = firstData.getVariableName([firstElement], '', attrName);
 		const firstAttr = firstAttrs[attrName];
 		const secondAttr = secondAttrs[attrName];
 		if (!firstAttr) {
 			return;
 		}
-		if (firstAttr.type !== 'attribute') {
-			logger?.warn('TODO: add relevant null state for !secondAttr');
-			if (secondAttr?.type === 'attribute') {
-				secondData.chainSet(firstAttr.reference, secondAttr.value);
-			}
-			combined[attrName] = firstAttr;
-			return;
-		}
 
-		if (secondAttr && secondAttr.type !== 'attribute') {
-			if (firstAttr.type === 'attribute') {
-				firstData.chainSet(secondAttr.reference, firstAttr.value);
-			}
-			combined[attrName] = secondAttr;
-			return;
-		}
-
-		if (booleanAttributes[attrName] && !isAttrEquivalent(attrName, firstAttr, secondAttr)) {
-			firstData.set(variableName, !!firstAttr);
-			secondData.set(variableName, !!secondAttr);
-			combined[attrName] = {
-				type: 'conditional-attribute',
-				name: attrName,
-				reference: firstData.getChain(variableName)
-			};
-			return;
-		}
-
-		if (!secondAttr) {
-			firstData.set(variableName, firstAttr.value.trim());
-			secondData.set(variableName, null);
-			combined[attrName] = {
-				type: 'conditional-attribute',
-				name: attrName,
-				reference: firstData.getChain(variableName)
-			};
-			return;
-		}
-
-		if (isAttrEquivalent(attrName, firstAttr, secondAttr)) {
-			combined[attrName] = {
-				type: 'attribute',
-				name: attrName,
-				value: secondAttr.value
-			};
-		} else {
-			firstData.set(variableName, firstAttr.value.trim());
-			secondData.set(variableName, secondAttr.value.trim());
-			combined[attrName] = {
-				type: 'variable-attribute',
-				name: attrName,
-				reference: firstData.getChain(variableName)
-			};
-		}
+		combined[attrName] = mergeAttribute(
+			attrName,
+			firstElement,
+			firstAttr,
+			secondAttr,
+			firstData,
+			secondData,
+			logger
+		);
 	});
 
 	Object.keys(secondAttrs).forEach((attrName) => {
-		const variableName = firstData.getVariableName([firstElement], '', attrName);
 		const firstAttr = firstAttrs[attrName];
 		const secondAttr = secondAttrs[attrName];
 		if (combined[attrName] || !secondAttr) {
 			return;
 		}
 
-		if (secondAttr && secondAttr.type !== 'attribute') {
-			logger.warn('TODO: add relevant null state for !secondAttr');
-			if (firstAttr?.type === 'attribute') {
-				firstData.chainSet(secondAttr.reference, firstAttr.value.trim());
-			}
-			combined[attrName] = secondAttr;
-			return secondAttr;
-		}
-
-		firstData.set(variableName, null);
-		secondData.set(variableName, secondAttr.value.trim());
-		combined[attrName] = {
-			type: 'conditional-attribute',
-			name: attrName,
-			reference: firstData.getChain(variableName)
-		};
+		combined[attrName] = mergeAttribute(
+			attrName,
+			firstElement,
+			secondAttr,
+			firstAttr,
+			secondData,
+			firstData,
+			logger
+		);
 	});
 
 	logger.debug(JSON.stringify(combined));

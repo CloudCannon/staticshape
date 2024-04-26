@@ -105,47 +105,35 @@ export default class Collection {
 			await this.logger.writeLog('diffed.json', JSON.stringify(next, null, '\t'));
 			this.logger.log(`Comparing layouts`);
 
-			// Merge the next and current layouts
-
-			// console.dir({ current, next }, { depth: null });
-			const currentMergeData = new Data([], structuredClone(current.base.data.data));
-			const nextMergeData = new Data([], structuredClone(next.base.data.data));
+			const currentPreMergeData = structuredClone(current.base.data.data);
+			const nextPreMergeData = structuredClone(next.base.data.data);
+			// Merge the next and current bases
 			const layout = mergeTree(
-				currentMergeData,
-				nextMergeData,
+				current.base.data,
+				next.base.data,
 				current.layout,
 				next.layout,
 				[],
 				this.logger
 			);
 
-			if (!currentMergeData.empty() || !nextMergeData.empty()) {
-				this.logger.warn('Layout merge produced data');
-				this.logger.warn('currentMergeData', JSON.stringify(currentMergeData.toJSON()));
-				this.logger.warn('nextMergeData', JSON.stringify(nextMergeData.toJSON()));
-				this.logger.warn('current', JSON.stringify(current.pages, null, 2));
-				this.logger.warn('next', JSON.stringify(next.pages, null, 2));
+			for (let i = 0; i < current.pages.length; i++) {
+				const page = current.pages[i];
+				const nextData = new Data([], structuredClone(nextPreMergeData));
+				mergeTree(page.data, nextData, current.layout, next.layout, [], this.logger);
 			}
 
-			// Merge the next and current bases
-			const base = current.base.mergeData(next.base.data);
+			for (let i = 0; i < next.pages.length; i++) {
+				const page = next.pages[i];
+				const currentData = new Data([], structuredClone(currentPreMergeData));
+				mergeTree(page.data, currentData, next.layout, current.layout, [], this.logger);
+			}
 
-			// Merge current pages with the next base
-			const oldPages = current.pages.map((page) => page.mergeData(currentMergeData));
-
-			// Merge the next pages with the current base
-			const newPages = next.pages.map((page) => page.mergeData(nextMergeData));
-
-			// const layout = current.layout.merge(next.layout);
 			await this.logger.writeLog('merged.json', JSON.stringify(current, null, '\t'));
 
-			console.log(
-				'...oldPages, ...newPages: ',
-				JSON.stringify([...oldPages, ...newPages], null, '  ')
-			);
 			current = {
-				base,
-				pages: [...oldPages, ...newPages],
+				base: current.base,
+				pages: [...current.pages, ...next.pages],
 				layout
 			};
 		}

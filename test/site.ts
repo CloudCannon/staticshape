@@ -84,6 +84,8 @@ test('three-pages-title-variable', (t: ExecutionContext) =>
 test('three-pages-attr-variable', (t: ExecutionContext) => runTest(t, 'three-pages-attr-variable'));
 test('three-pages-body-content', (t: ExecutionContext) => runTest(t, 'three-pages-body-content'));
 test('three-pages-conditional', (t: ExecutionContext) => runTest(t, 'three-pages-conditional'));
+test('three-pages-conditional-alternative-order', (t: ExecutionContext) =>
+	runTest(t, 'three-pages-conditional-alternative-order'));
 test('four-pages-conditional', (t: ExecutionContext) => runTest(t, 'four-pages-conditional'));
 
 // test('three-pages-xkcd-news', (t: ExecutionContext) => runTest(t, 'three-pages-xkcd-news'));

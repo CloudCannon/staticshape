@@ -1,5 +1,5 @@
 import { ASTNode } from './types';
-import Data, { Hash } from './helpers/Data';
+import Data from './helpers/Data';
 
 interface PageOptions {
 	pathname: string;
@@ -9,7 +9,7 @@ interface PageOptions {
 
 export interface PageJSON {
 	pathname: string;
-	data: Hash;
+	data: Record<string, any>;
 	content: ASTNode[];
 }
 

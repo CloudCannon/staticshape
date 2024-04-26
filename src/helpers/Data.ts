@@ -88,8 +88,6 @@ export function getVariableNames(element: ASTElementNode): string[] {
 	return options;
 }
 
-export type Hash = Record<string, any>;
-
 // Merges for loops
 export function mergeHash(data: Record<string, any>, other: Record<string, any>) {
 	if (!data) {
@@ -167,15 +165,6 @@ export default class Data {
 	getVariableName(parentElements: ASTElementNode[], prefix?: string, suffix?: string): string {
 		const length = parentElements.length;
 
-		// console.log(parentElements[parentElements.length - 1]);
-		// const variableNames =
-		// 	length > 0 ? getVariableNames(parentElements[parentElements.length - 1]) : [];
-		// for (let i = 0; i < variableNames.length; i++) {
-		// 	const element = variableNames[i];
-		// 	if (!this.hasKey(element)) {
-		// 		return element;
-		// 	}
-		// }
 		const signature =
 			length > 0 ? getElementSignature(parentElements[parentElements.length - 1]) : '';
 		return this.versionedVarableName(joinNameParts([prefix || '', signature, suffix || '']));
