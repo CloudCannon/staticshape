@@ -105,8 +105,7 @@ export default class HugoExportEngine extends HtmlExportEngine {
 	}
 
 	renderContent(_node: ASTContentNode, variableScope: string): string {
-		// TODO: support different render types (markdown vs blocks vs basic)
-		return `{{ content }}`; // TODO: make this the actual render
+		return `{{ .Content }}`; 
 	}
 
 	renderVariableAttribute(attr: ASTVariableAttribute | ASTConditionalAttribute, variableScope: string): string {
