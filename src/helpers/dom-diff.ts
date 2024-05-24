@@ -364,7 +364,7 @@ function diffLoopAndElementNode(
 	const variableName = loopNode.reference[0];
 	if (!loopData.hasKey(variableName)) {
 		logger.log(
-			'💿 Failed value inheritance',
+			'💿 Failed loop value inheritance',
 			JSON.stringify(loopNode.reference),
 			variableName,
 			JSON.stringify(loopData)

@@ -26,7 +26,7 @@ function renderFrontMatter(data: Record<string, any>) {
  * @returns a string that is hugo formatted
  */
 function formatParam(node: ASTVariableNode | ASTMarkdownNode | ASTInlineMarkdownNode | ASTConditionalNode | ASTLoopNode | ASTVariableAttribute | ASTConditionalAttribute){
-	return node.reference.join('.').replaceAll(/([\-\:])+/g, '_');
+	return node.reference.join('.').replaceAll(/([\-\:\s\@])+/g, '_');
 }
 
 export default class HugoExportEngine extends HtmlExportEngine {

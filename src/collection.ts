@@ -97,45 +97,53 @@ export default class Collection {
 		await this.logger.writeLog('layout.json', JSON.stringify(current.layout, null, '\t'));
 		for (let i = 2; i < documents.length; i++) {
 			await this.logger.rotateLog();
-			const next = baseDoc.diff(documents[i]);
-			await this.logger.writeLog(
-				`${slugify(documents[i].pathname)}.json`,
-				JSON.stringify(documents[1].layout, null, '\t')
-			);
-			await this.logger.writeLog('diffed.json', JSON.stringify(next, null, '\t'));
-			this.logger.log(`Comparing layouts`);
+			try
+			{
+				const next = baseDoc.diff(documents[i]);
+				await this.logger.writeLog(
+					`${slugify(documents[i].pathname)}.json`,
+					JSON.stringify(documents[1].layout, null, '\t')
+				);
+				await this.logger.writeLog('diffed.json', JSON.stringify(next, null, '\t'));
+				this.logger.log(`Comparing layouts`);
 
-			const currentPreMergeData = structuredClone(current.base.data.data);
-			const nextPreMergeData = structuredClone(next.base.data.data);
-			// Merge the next and current bases
-			const layout = mergeTree(
-				current.base.data,
-				next.base.data,
-				current.layout,
-				next.layout,
-				[],
-				this.logger
-			);
+				const currentPreMergeData = structuredClone(current.base.data.data);
+				const nextPreMergeData = structuredClone(next.base.data.data);
+				// Merge the next and current bases
+				const layout = mergeTree(
+					current.base.data,
+					next.base.data,
+					current.layout,
+					next.layout,
+					[],
+					this.logger
+				);
 
-			for (let i = 0; i < current.pages.length; i++) {
-				const page = current.pages[i];
-				const nextData = new Data([], structuredClone(nextPreMergeData));
-				mergeTree(page.data, nextData, current.layout, next.layout, [], this.logger);
+				for (let i = 0; i < current.pages.length; i++) {
+					const page = current.pages[i];
+					const nextData = new Data([], structuredClone(nextPreMergeData));
+					mergeTree(page.data, nextData, current.layout, next.layout, [], this.logger);
+				}
+
+				for (let i = 0; i < next.pages.length; i++) {
+					const page = next.pages[i];
+					const currentData = new Data([], structuredClone(currentPreMergeData));
+					mergeTree(page.data, currentData, next.layout, current.layout, [], this.logger);
+				}
+
+				await this.logger.writeLog('merged.json', JSON.stringify(current, null, '\t'));
+
+				current = {
+					base: current.base,
+					pages: [...current.pages, ...next.pages],
+					layout
+				};
 			}
-
-			for (let i = 0; i < next.pages.length; i++) {
-				const page = next.pages[i];
-				const currentData = new Data([], structuredClone(currentPreMergeData));
-				mergeTree(page.data, currentData, next.layout, current.layout, [], this.logger);
+			catch(err){
+				console.error("Error hit exporting log")
+				await this.logger.rotateLog();
+				throw err;
 			}
-
-			await this.logger.writeLog('merged.json', JSON.stringify(current, null, '\t'));
-
-			current = {
-				base: current.base,
-				pages: [...current.pages, ...next.pages],
-				layout
-			};
 		}
 		await this.logger.rotateLog();
 
