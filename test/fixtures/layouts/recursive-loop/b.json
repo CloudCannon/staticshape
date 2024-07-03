@@ -1,0 +1,24 @@
+[
+	{
+		"type": "element",
+		"name": "h1",
+		"attrs": {},
+		"children": [
+			{
+				"type": "text",
+				"value": "b"
+			}
+		]
+	},
+	{
+		"type": "element",
+		"name": "div",
+		"attrs": {},
+		"children": [
+			{
+				"type": "text",
+				"value": "\n\t"
+			}
+		]
+	}
+]

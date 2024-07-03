@@ -1,0 +1,173 @@
+{
+	"staticFiles": [],
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "about.html",
+					"data": {
+						"body_items": [
+							{
+								"div_first_class": "first",
+								"div_second_items": [
+									{
+										"p_test_inline_markdown": "Test 1"
+									}
+								]
+							},
+							{
+								"div_first_class": "second",
+								"div_second_items": [
+									{
+										"p_test_inline_markdown": "Test 2"
+									},
+									{
+										"p_test_inline_markdown": "Test 3"
+									}
+								]
+							},
+							{
+								"div_first_class": "third",
+								"div_second_items": [
+									{
+										"p_test_inline_markdown": "Test 4"
+									},
+									{
+										"p_test_inline_markdown": "Test 5"
+									},
+									{
+										"p_test_inline_markdown": "Test 6"
+									}
+								]
+							}
+						]
+					},
+					"content": []
+				},
+				{
+					"pathname": "index.html",
+					"data": {
+						"body_items": []
+					},
+					"content": []
+				}
+			],
+			"layout": [
+				{
+					"type": "doctype",
+					"value": "html"
+				},
+				{
+					"type": "element",
+					"name": "html",
+					"attrs": {},
+					"children": [
+						{
+							"type": "element",
+							"name": "head",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "text",
+									"value": "\n\t"
+								},
+								{
+									"type": "element",
+									"name": "title",
+									"attrs": {},
+									"children": [
+										{
+											"type": "text",
+											"value": "Test"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n\n"
+						},
+						{
+							"type": "element",
+							"name": "body",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t"
+								},
+								{
+									"type": "loop",
+									"reference": [
+										"body_items"
+									],
+									"template": {
+										"type": "element",
+										"name": "div",
+										"attrs": {
+											"class": {
+												"type": "variable-attribute",
+												"name": "class",
+												"reference": [
+													"div_first_class"
+												]
+											}
+										},
+										"children": [
+											{
+												"type": "text",
+												"value": "\n\t\t"
+											},
+											{
+												"type": "loop",
+												"reference": [
+													"div_second_items"
+												],
+												"template": {
+													"type": "element",
+													"name": "p",
+													"attrs": {
+														"class": {
+															"type": "attribute",
+															"name": "class",
+															"value": "test"
+														}
+													},
+													"children": [
+														{
+															"type": "inline-markdown-variable",
+															"reference": [
+																"p_test_inline_markdown"
+															]
+														}
+													]
+												}
+											},
+											{
+												"type": "text",
+												"value": "\n\t"
+											}
+										]
+									}
+								},
+								{
+									"type": "text",
+									"value": "\n\n\n"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
+}

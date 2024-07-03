@@ -1,0 +1,23 @@
+{
+	"div_items": [
+		{
+			"div_first_class": "first",
+			"div_second_items": [
+				{
+					"p_test_inline_markdown": "Test 1"
+				}
+			]
+		},
+		{
+			"div_first_class": "second",
+			"div_second_items": [
+				{
+					"p_test_inline_markdown": "Test 2"
+				},
+				{
+					"p_test_inline_markdown": "Test 3"
+				}
+			]
+		}
+	]
+}
