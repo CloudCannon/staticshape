@@ -36,7 +36,7 @@ export interface HtmlProcessorConfig {
 	excludedTypes?: NodeType[];
 }
 
-class htmlProcessor {
+export class htmlProcessor {
 	contentsConfig: PageContentsConfig | null;
 	htmlProcessorConfig: HtmlProcessorConfig | null;
 	contents: ASTNode[];
