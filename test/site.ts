@@ -49,6 +49,7 @@ async function runTest(t: ExecutionContext, testName: string) {
 			'utf-8'
 		)
 	);
+
 	sortCollectionPages(output.collections);
 	sortCollectionPages(expected.collections);
 
@@ -73,6 +74,8 @@ test('two-pages-conditional-object', (t: ExecutionContext) =>
 	runTest(t, 'two-pages-conditional-object'));
 test('two-pages-conditional-loop', (t: ExecutionContext) =>
 	runTest(t, 'two-pages-conditional-loop'));
+test('two-pages-recursive-loop', (t: ExecutionContext) =>
+	runTest(t, 'two-pages-recursive-loop'));
 
 // TODO the following items work but have alternating variable names between tests
 // test('two-pages-fuzzy-image', (t: ExecutionContext) => runTest(t, 'two-pages-fuzzy-image'));

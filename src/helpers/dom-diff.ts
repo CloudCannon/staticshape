@@ -380,6 +380,7 @@ function diffLoopAndElementNode(
 	const liftedVariables = liftVariables(elementNode, elementData);
 	Object.keys(liftedVariables).forEach((variableName) => {
 		elementData.delete(variableName);
+		loopData.delete(variableName);
 	});
 
 	const existingData = new Data([], existingItems[0]);
@@ -923,6 +924,16 @@ export function mergeTree(
 						continue;
 					}
 				}
+			}
+
+			if (other.type === 'loop' && current.type === 'loop') {
+				logger.log(
+					'🤔 ?????????????????????????',
+					JSON.stringify(current),
+					'\nvs\n',
+					JSON.stringify(other),
+					'?????????????????????????'
+					);
 			}
 
 			merged.push(diffNodes(firstData, secondData, current, other, parentElements, logger));

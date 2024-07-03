@@ -12,6 +12,7 @@ import {
 } from './markdown';
 import { diffNodes } from './dom-diff';
 import { Logger, nodeDebugString } from '../logger';
+import { liftVariables } from './variable-lifting';
 
 export interface ComponentBuilderConfig {
 	disableMarkdown?: boolean;
@@ -92,16 +93,34 @@ interface LoopState {
 function buildLoop(
 	elements: ASTElementNode[],
 	parentElements: ASTElementNode[],
-	config: ComponentBuilderConfig = {},
+	inputData: Data,
+	outputData: Data,
+	config: ComponentBuilderConfig,
 	logger: Logger
 ): Loop | null {
 	const data = [] as Data[];
 	const base = elements[0];
 	let current: LoopState | null = null;
+
+	let inputBaseData: Record<string, any> = {};
+	
+	const baseLiftedVariables = liftVariables(base, inputData);
+	Object.keys(baseLiftedVariables).forEach((variableName) => {
+		inputBaseData[variableName] = inputData.getKey(variableName);
+		outputData.delete(variableName);
+	});
+
 	for (let i = 1; i < elements.length; i++) {
 		const loopEl = elements[i];
-		const newBaseData = new Data([], {});
-		const otherData = new Data([], {});
+		const newBaseData = new Data([], structuredClone(inputBaseData));
+		const inputLoopData: Record<string, any> = {};
+		const liftedVariables = liftVariables(loopEl, inputData);
+		Object.keys(liftedVariables).forEach((variableName) => {
+			inputLoopData[variableName] = inputData.getKey(variableName);
+			outputData.delete(variableName);
+		});
+
+		const otherData = new Data([], structuredClone(inputLoopData));
 		const template = diffNodes(
 			newBaseData,
 			otherData,
@@ -259,6 +278,8 @@ export function convertTreeToComponents(
 						const loopData = buildLoop(
 							repeatedElements,
 							parentElements,
+							existingData,
+							data,
 							config,
 							logger
 						);

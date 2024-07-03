@@ -12,12 +12,6 @@ function merge(a: ASTNode[], b: ASTNode[], aData: Data, bData: Data) {
 }
 
 async function runTest(t: ExecutionContext, testName: string) {
-	const expected = JSON.parse(
-		(await fs.promises.readFile(`./test/fixtures/layouts/${testName}/merged.json`)).toString(
-			'utf-8'
-		)
-	);
-
 	const a = JSON.parse(
 		(await fs.promises.readFile(`./test/fixtures/layouts/${testName}/a.json`)).toString('utf-8')
 	);
@@ -42,7 +36,45 @@ async function runTest(t: ExecutionContext, testName: string) {
 	let bData = new Data([], structuredClone(bDataContents));
 
 	const forwards = merge(a, b, aData, bData);
+	if (!fs.existsSync(`./test/fixtures/layouts/${testName}/merged.json`)) {
+		await fs.promises.writeFile(
+			`./test/fixtures/layouts/${testName}/merged.json`,
+			JSON.stringify(forwards, null, '\t')
+		);
+	}
+	if (!fs.existsSync(`./test/fixtures/layouts/${testName}/a-data-merged.json`)) {
+		await fs.promises.writeFile(
+			`./test/fixtures/layouts/${testName}/a-data-merged.json`,
+			JSON.stringify(aData, null, '\t')
+		);
+	}
+	if (!fs.existsSync(`./test/fixtures/layouts/${testName}/b-data-merged.json`)) {
+		await fs.promises.writeFile(
+			`./test/fixtures/layouts/${testName}/b-data-merged.json`,
+			JSON.stringify(bData, null, '\t')
+		);
+	}
+	const expected = JSON.parse(
+		(await fs.promises.readFile(`./test/fixtures/layouts/${testName}/merged.json`)).toString(
+			'utf-8'
+		)
+	);
+
 	t.deepEqual(forwards, expected);
+	const expectedAData = JSON.parse(
+		(await fs.promises.readFile(`./test/fixtures/layouts/${testName}/a-data-merged.json`)).toString(
+			'utf-8'
+		)
+	);
+
+	t.deepEqual(aData.toJSON(), expectedAData);
+	const expectedBData = JSON.parse(
+		(await fs.promises.readFile(`./test/fixtures/layouts/${testName}/b-data-merged.json`)).toString(
+			'utf-8'
+		)
+	);
+
+	t.deepEqual(bData.toJSON(), expectedBData);
 
 	aData = new Data([], structuredClone(aDataContents));
 	bData = new Data([], structuredClone(bDataContents));
@@ -67,3 +99,4 @@ test('conditional-to-element', (t: ExecutionContext) => runTest(t, 'conditional-
 test('conditional-attribute', (t: ExecutionContext) => runTest(t, 'conditional-attribute'));
 test('conditional-empty', (t: ExecutionContext) => runTest(t, 'conditional-empty'));
 test('loop', (t: ExecutionContext) => runTest(t, 'loop'));
+test('recursive-loop', (t: ExecutionContext) => runTest(t, 'recursive-loop'));

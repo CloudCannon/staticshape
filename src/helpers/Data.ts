@@ -163,6 +163,7 @@ export default class Data {
 	}
 
 	getVariableName(parentElements: ASTElementNode[], prefix?: string, suffix?: string): string {
+
 		const length = parentElements.length;
 
 		const signature =
