@@ -1,6 +1,6 @@
-import HtmlExportEngine from '../export-engines/html';
-import { ASTElementNode, ASTNode } from '../types';
-import { findLastNonWhitespaceIndex } from './node-helper';
+import HtmlExportEngine from '../export-engines/html.js';
+import { ASTElementNode, ASTNode } from '../types.js';
+import { findLastNonWhitespaceIndex } from './node-helper.js';
 import * as Turndown from 'turndown';
 const TurndownService = (Turndown as any).default;
 

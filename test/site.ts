@@ -3,7 +3,7 @@ import Site from '../src/site';
 import * as path from 'path';
 import * as fs from 'fs';
 import { CollectionResponse } from '../src/collection';
-import { TestLogger } from './helpers/test-logger';
+import { TestLogger } from './helpers/test-logger.js';
 
 function sortCollectionPages(collections: Record<string, CollectionResponse>) {
 	Object.keys(collections).forEach((key) => {

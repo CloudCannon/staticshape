@@ -1,5 +1,5 @@
-import { ASTElementNode } from '../types';
-import Data from './Data';
+import { ASTElementNode } from '../types.js';
+import Data from './Data.js';
 
 export function liftVariables(elementNode: ASTElementNode, elementData: Data): Record<string, any> {
 	let liftedVariables: Record<string, any> = liftAttributeVariables(elementNode, elementData);

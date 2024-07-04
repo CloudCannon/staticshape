@@ -1,4 +1,4 @@
-import { CollectionResponse } from '../collection';
+import { CollectionResponse } from '../collection.js';
 import {
 	ASTConditionalAttribute,
 	ASTConditionalNode,
@@ -9,8 +9,8 @@ import {
 	ASTNode,
 	ASTVariableAttribute,
 	ASTVariableNode
-} from '../types';
-import HtmlExportEngine, { FileExport } from './html';
+} from '../types.js';
+import HtmlExportEngine, { FileExport } from './html.js';
 import { dump } from 'js-yaml';
 
 function renderFrontMatter(data: Record<string, any>) {

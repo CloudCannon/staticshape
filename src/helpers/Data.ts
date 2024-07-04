@@ -1,6 +1,6 @@
-import { ASTAttribute, ASTElementNode } from '../types';
-import { getElementSignature } from './getElementSignature';
-import { getClassList } from './node-helper';
+import { ASTAttribute, ASTElementNode } from '../types.js';
+import { getElementSignature } from './getElementSignature.js';
+import { getClassList } from './node-helper.js';
 
 const htmlTagToVariableSuffix: Record<string, string> = {
 	ol: 'list',
@@ -32,7 +32,7 @@ function getAttributeSignature(attr: ASTAttribute | undefined): string | null {
  * @returns a string that is formatted to work across various ssgs.
  */
 function formatVariable(variable: String){
-	return variable.replaceAll(/([\-\:])+/g, '_');
+	return variable.replaceAll(/([\[\]\(\),\-\:])+/g, '_');
 }
 
 export function getVariableNames(element: ASTElementNode): string[] {

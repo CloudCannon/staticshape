@@ -2,9 +2,9 @@
 import * as p from '@clack/prompts';
 import * as path from 'path';
 import * as fs from 'fs';
-import Site from './site';
-import Exporter, { Engine } from './exporter';
-import { Logger } from './logger';
+import Site from './site.js';
+import Exporter, { Engine } from './exporter.js';
+import { Logger } from './logger.js';
 
 p.intro(`Welcome to the StaticShape`);
 

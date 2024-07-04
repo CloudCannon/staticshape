@@ -1,6 +1,6 @@
-import { ASTElementNode, ASTNode, ASTAttributeList } from '../types';
-import { invalidLoopTags, findRepeatedIndex } from './loops';
-import Data from './Data';
+import { ASTElementNode, ASTNode, ASTAttributeList } from '../types.js';
+import { invalidLoopTags, findRepeatedIndex } from './loops.js';
+import Data from './Data.js';
 import {
 	findEndOfMarkdownIndex,
 	invalidMarkdownParentTags,
@@ -9,10 +9,10 @@ import {
 	markdownify,
 	validMarkdownBlockTags,
 	validMarkdownInlineTags
-} from './markdown';
-import { diffNodes } from './dom-diff';
-import { Logger, nodeDebugString } from '../logger';
-import { liftVariables } from './variable-lifting';
+} from './markdown.js';
+import { diffNodes } from './dom-diff.js';
+import { Logger, nodeDebugString } from '../logger.js';
+import { liftVariables } from './variable-lifting.js';
 
 export interface ComponentBuilderConfig {
 	disableMarkdown?: boolean;

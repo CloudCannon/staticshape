@@ -1,12 +1,12 @@
-import File from './file';
-import { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser';
-import Document from './document';
-import { PageJSON } from './page';
-import { Logger } from './logger';
+import File from './file.js';
+import { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser.js';
+import Document from './document.js';
+import { PageJSON } from './page.js';
+import { Logger } from './logger.js';
 import slugify from 'slugify';
-import Data from './helpers/Data';
-import { mergeTree } from './helpers/dom-diff';
-import { ASTNode } from './types';
+import Data from './helpers/Data.js';
+import { mergeTree } from './helpers/dom-diff.js';
+import { ASTNode } from './types.js';
 
 export interface CollectionConfig {
 	name: string;

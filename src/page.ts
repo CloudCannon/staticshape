@@ -1,5 +1,5 @@
-import { ASTNode } from './types';
-import Data from './helpers/Data';
+import { ASTNode } from './types.js';
+import Data from './helpers/Data.js';
 
 interface PageOptions {
 	pathname: string;

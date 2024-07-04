@@ -1,7 +1,7 @@
-import Directory from './directory';
-import Collection, { CollectionResponse, CollectionConfig } from './collection';
-import { Logger } from './logger';
-import { HtmlProcessorConfig } from './helpers/html-parser';
+import Directory from './directory.js';
+import Collection, { CollectionResponse, CollectionConfig } from './collection.js';
+import { Logger } from './logger.js';
+import { HtmlProcessorConfig } from './helpers/html-parser.js';
 
 interface SiteOptions {
 	basePath: string;

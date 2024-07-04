@@ -1,9 +1,9 @@
 import { distance, closest } from 'fastest-levenshtein';
-import { normalizeClassList } from './node-helper';
-import { ASTAttributeList, ASTElementNode, ASTNode } from '../types';
-import { nodeDebugString } from '../logger';
-import { booleanAttributes } from './attributes';
-import { Logger } from '../logger';
+import { normalizeClassList } from './node-helper.js';
+import { ASTAttributeList, ASTElementNode, ASTNode } from '../types.js';
+import { nodeDebugString } from '../logger.js';
+import { booleanAttributes } from './attributes.js';
+import { Logger } from '../logger.js';
 
 export const loopThreshold = 0.89;
 // TODO: increase for mismatches

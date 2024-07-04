@@ -9,26 +9,26 @@ import {
 	ASTVariableNode,
 	ASTInlineMarkdownNode,
 	ASTAttribute
-} from '../types';
-import { invalidLoopTags, findRepeatedIndex } from './loops';
-import { isAttrEquivalent } from './node-helper';
+} from '../types.js';
+import { invalidLoopTags, findRepeatedIndex } from './loops.js';
+import { isAttrEquivalent } from './node-helper.js';
 import {
 	nodeEquivalencyScore,
 	isBestMatch,
 	loopThreshold,
 	nodeTreeEquivalencyScore
-} from './node-equivalency';
-import Data from './Data';
+} from './node-equivalency.js';
+import Data from './Data.js';
 import {
 	findEndOfMarkdownIndex,
 	isMarkdownElement,
 	markdownify,
 	invalidMarkdownParentTags
-} from './markdown';
-import { booleanAttributes } from './attributes';
-import { Logger, nodeDebugString } from '../logger';
-import { convertTreeToComponents, convertElementToComponent } from './component-builder';
-import { liftVariables } from './variable-lifting';
+} from './markdown.js';
+import { booleanAttributes } from './attributes.js';
+import { Logger, nodeDebugString } from '../logger.js';
+import { convertTreeToComponents, convertElementToComponent } from './component-builder.js';
+import { liftVariables } from './variable-lifting.js';
 
 export function diffBasicNode(
 	firstData: Data,

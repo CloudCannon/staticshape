@@ -1,6 +1,6 @@
-import { CollectionResponse } from '../collection';
-import Page from '../page';
-import { SiteResponse } from '../site';
+import { CollectionResponse } from '../collection.js';
+import Page from '../page.js';
+import { SiteResponse } from '../site.js';
 import {
 	ASTConditionalNode,
 	ASTContentNode,
@@ -17,7 +17,7 @@ import {
 	ASTAttributeList,
 	ASTMarkdownNode,
 	ASTInlineMarkdownNode
-} from '../types';
+} from '../types.js';
 
 interface ExportEngineOptions {
 	sourceBasePath: string;
