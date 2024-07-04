@@ -32,7 +32,7 @@ function getAttributeSignature(attr: ASTAttribute | undefined): string | null {
  * @returns a string that is formatted to work across various ssgs.
  */
 function formatVariable(variable: String){
-	return variable.replaceAll(/([\[\]\(\),\-\:])+/g, '_');
+	return variable.replaceAll(/([\[\]\(\)%—,\-\:])+/g, '_');
 }
 
 export function getVariableNames(element: ASTElementNode): string[] {
