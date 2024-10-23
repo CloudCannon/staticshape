@@ -1,0 +1,12 @@
+{
+	"ul_badges_items": [
+		{
+			"li_badge_badge_blue_class": "badge badge-blue",
+			"li_badge_badge_blue": "beach"
+		},
+		{
+			"li_badge_badge_blue_class": "badge badge-navy",
+			"li_badge_badge_blue": "wildlife"
+		}
+	]
+}

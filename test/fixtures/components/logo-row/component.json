@@ -16,7 +16,7 @@
 		{
 			"type": "loop",
 			"reference": [
-				"div_flex-wrap_gap-4_justify-between_logo-ticker-Vli6fD9QnHgFOSC1LE0O_md:flex_items"
+				"div_flex_wrap_gap_4_justify_between_logo_ticker_Vli6fD9QnHgFOSC1LE0O_md_flex_items"
 			],
 			"template": {
 				"type": "element",
@@ -25,7 +25,7 @@
 					"class": {
 						"type": "variable-attribute",
 						"name": "class",
-						"reference": ["div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class"]
+						"reference": ["div_logo_BHQmp18o5wQcKFFPg3fY_px_3_py_5_relative_class"]
 					},
 					"title": {
 						"type": "attribute",
@@ -55,7 +55,7 @@
 							"data-cms-original-src": {
 								"type": "variable-attribute",
 								"name": "data-cms-original-src",
-								"reference": ["img_h-8_mx-auto_w-full_data-cms-original-src"]
+								"reference": ["img_h_8_mx_auto_w_full_data_cms_original_src"]
 							},
 							"decoding": {
 								"type": "attribute",
@@ -65,7 +65,7 @@
 							"height": {
 								"type": "variable-attribute",
 								"name": "height",
-								"reference": ["img_h-8_mx-auto_w-full_height"]
+								"reference": ["img_h_8_mx_auto_w_full_height"]
 							},
 							"loading": {
 								"type": "attribute",
@@ -75,12 +75,12 @@
 							"src": {
 								"type": "variable-attribute",
 								"name": "src",
-								"reference": ["img_h-8_mx-auto_w-full_src"]
+								"reference": ["img_h_8_mx_auto_w_full_src"]
 							},
 							"width": {
 								"type": "variable-attribute",
 								"name": "width",
-								"reference": ["img_h-8_mx-auto_w-full_width"]
+								"reference": ["img_h_8_mx_auto_w_full_width"]
 							}
 						},
 						"children": []

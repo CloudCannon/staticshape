@@ -14,7 +14,7 @@ async function runTest(t: ExecutionContext, testName: string) {
 		'utf-8'
 	);
 
-	const { layout } = htmlToAST(html, {});
+	const { layout } = htmlToAST(html, {}, {});
 
 	const htmlEl = layout.find(
 		(node) => node.type === 'element' && node.name === 'html'

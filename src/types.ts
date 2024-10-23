@@ -83,12 +83,12 @@ export interface ASTLoopNode {
 export type ASTAttribute = ASTVariableAttribute | ASTStaticAttribute | ASTConditionalAttribute;
 export type ASTValueNode = ASTTextNode | ASTDoctypeNode | ASTCommentNode | ASTCDataNode;
 export type ASTBasicNode = ASTValueNode | ASTElementNode;
-export type ASTVaraibleNode =
+export type ASTNode =
+	| ASTBasicNode
 	| ASTVariableNode
 	| ASTConditionalNode
 	| ASTContentNode
 	| ASTMarkdownNode
 	| ASTInlineMarkdownNode
 	| ASTLoopNode;
-export type ASTNode = ASTBasicNode | ASTVaraibleNode;
 export type ASTAttributeList = Record<string, ASTAttribute>;

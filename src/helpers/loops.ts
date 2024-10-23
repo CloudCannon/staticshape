@@ -1,5 +1,5 @@
-import { ASTNode } from '../types';
-import { nodeEquivalencyScore, loopThreshold } from './node-equivalency';
+import { ASTNode } from '../types.js';
+import { nodeEquivalencyScore, loopThreshold } from './node-equivalency.js';
 
 export const invalidLoopTags: Record<string, boolean> = {
 	link: true,

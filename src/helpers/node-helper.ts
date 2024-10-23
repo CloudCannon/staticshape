@@ -1,4 +1,4 @@
-import { ASTElementNode, ASTNode, ASTStaticAttribute } from '../types';
+import { ASTElementNode, ASTNode, ASTStaticAttribute } from '../types.js';
 
 export function normalizeClassList(value: string) {
 	const classList = (value || '')

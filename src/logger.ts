@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { ASTNode } from './types';
+import { ASTNode } from './types.js';
 
 export type Level = number;
 const levels: Record<string, Level> = {

@@ -147,3 +147,7 @@ pagefind_ui/modular/_dev_files/_pagefind/modular.*
 pagefind_ui/modular/_dev_files/_pagefind/pagefind.js
 pagefind_ui/modular/_dev_files/pagefind/modular.*
 pagefind_ui/modular/_dev_files/pagefind/pagefind.js
+
+_site
+_test
+.tsimp

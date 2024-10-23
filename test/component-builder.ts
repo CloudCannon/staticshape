@@ -10,7 +10,7 @@ async function runTest(t: ExecutionContext, testName: string) {
 	const html = (
 		await fs.promises.readFile(`./test/fixtures/components/${testName}/component.html`)
 	).toString('utf-8');
-	const { layout } = htmlToAST(html, {});
+	const { layout } = htmlToAST(html, {}, {});
 	const htmlEl = layout.find(
 		(node) => node.type === 'element' && node.name === 'html'
 	) as ASTElementNode;
@@ -22,7 +22,15 @@ async function runTest(t: ExecutionContext, testName: string) {
 	const element = ast.find((node) => node.type === 'element') as ASTElementNode;
 
 	const data = new Data([], {});
-	const component = convertElementToComponent(data, element, [], {}, new TestLogger());
+	const existingData = new Data([], {});
+	const component = convertElementToComponent(
+		data,
+		element,
+		[],
+		{},
+		existingData,
+		new TestLogger()
+	);
 
 	if (!fs.existsSync(`./test/fixtures/components/${testName}/component.json`)) {
 		await fs.promises.writeFile(
@@ -58,6 +66,7 @@ test('ul', (t: ExecutionContext) => runTest(t, 'ul'));
 test('img', (t: ExecutionContext) => runTest(t, 'img'));
 test('markdown', (t: ExecutionContext) => runTest(t, 'markdown'));
 test('logo-row', (t: ExecutionContext) => runTest(t, 'logo-row'));
+test('recursive-loop', (t: ExecutionContext) => runTest(t, 'recursive-loop'));
 test('dunedinattractions-grid', (t: ExecutionContext) => runTest(t, 'dunedinattractions-grid'));
 test('hugo-showcase', (t: ExecutionContext) => runTest(t, 'hugo-showcase'));
 test('hugo-testimonials', (t: ExecutionContext) => runTest(t, 'hugo-testimonials'));

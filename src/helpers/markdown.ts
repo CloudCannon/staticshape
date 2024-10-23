@@ -1,6 +1,6 @@
-import HtmlExportEngine from '../export-engines/html';
-import { ASTElementNode, ASTNode } from '../types';
-import { findLastNonWhitespaceIndex } from './node-helper';
+import HtmlExportEngine from '../export-engines/html.js';
+import { ASTElementNode, ASTNode } from '../types.js';
+import { findLastNonWhitespaceIndex } from './node-helper.js';
 import * as Turndown from 'turndown';
 const TurndownService = (Turndown as any).default;
 
@@ -137,9 +137,10 @@ export function isMarkdownElement(el: ASTElementNode): boolean {
 	return isMarkdownInlineTree(el.children, validMarkdownInlineTags, true);
 }
 
+// Converts to HTML
 export function markdownify(ast: ASTNode[]): string {
 	const exportEngine = new HtmlExportEngine();
-	const html = ast.map((node) => exportEngine.renderASTNode(node)).join('');
+	const html = ast.map((node) => exportEngine.renderASTNode(node, '')).join('');
 	const service = new TurndownService({
 		headingStyle: 'atx'
 	});

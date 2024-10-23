@@ -1,5 +1,5 @@
-import { ASTNode } from './types';
-import Data, { Hash } from './helpers/Data';
+import { ASTNode } from './types.js';
+import Data from './helpers/Data.js';
 
 interface PageOptions {
 	pathname: string;
@@ -9,7 +9,7 @@ interface PageOptions {
 
 export interface PageJSON {
 	pathname: string;
-	data: Hash;
+	data: Record<string, any>;
 	content: ASTNode[];
 }
 
@@ -24,18 +24,10 @@ export default class Page {
 		this.content = options.content;
 	}
 
-	merge(other: Page): Page {
+	mergeData(data: Data): Page {
 		return new Page({
 			pathname: this.pathname,
-			data: this.data.merge(other.data),
-			content: this.content
-		});
-	}
-
-	mergeData(other: Data): Page {
-		return new Page({
-			pathname: this.pathname,
-			data: this.data.merge(other),
+			data: this.data.merge(data),
 			content: this.content
 		});
 	}

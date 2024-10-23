@@ -1,0 +1,82 @@
+[
+	{
+		"type": "element",
+		"name": "h1",
+		"attrs": {},
+		"children": [
+			{
+				"type": "inline-markdown-variable",
+				"reference": ["h1_inline_markdown"]
+			}
+		]
+	},
+	{
+		"type": "element",
+		"name": "div",
+		"attrs": {},
+		"children": [
+			{
+				"type": "text",
+				"value": "\n\t"
+			},
+			{
+				"type": "loop",
+				"reference": [
+					"div_items"
+				],
+				"template": {
+					"type": "element",
+					"name": "div",
+					"attrs": {
+						"class": {
+							"type": "variable-attribute",
+							"name": "class",
+							"reference": [
+								"div_first_class"
+							]
+						}
+					},
+					"children": [
+						{
+							"type": "text",
+							"value": "\n\t\t"
+						},
+						{
+							"type": "loop",
+							"reference": [
+								"div_second_items"
+							],
+							"template": {
+								"type": "element",
+								"name": "p",
+								"attrs": {
+									"class": {
+										"type": "attribute",
+										"name": "class",
+										"value": "test"
+									}
+								},
+								"children": [
+									{
+										"type": "inline-markdown-variable",
+										"reference": [
+											"p_test_inline_markdown"
+										]
+									}
+								]
+							}
+						},
+						{
+							"type": "text",
+							"value": "\n\t"
+						}
+					]
+				}
+			},
+			{
+				"type": "text",
+				"value": "\n"
+			}
+		]
+	}
+]

@@ -41,7 +41,7 @@
 					"children": [
 						{
 							"type": "inline-markdown-variable",
-							"reference": ["h1_primary-color-dark_inline_markdown"]
+							"reference": ["h1_primary_color_dark_inline_markdown"]
 						}
 					]
 				},
@@ -88,7 +88,7 @@
 				},
 				{
 					"type": "loop",
-					"reference": ["section_flex-ns_flex-wrap_justify-between_v-top_w-100_items"],
+					"reference": ["section_flex_ns_flex_wrap_justify_between_v_top_w_100_items"],
 					"template": {
 						"type": "element",
 						"name": "a",
@@ -97,7 +97,7 @@
 								"type": "variable-attribute",
 								"name": "href",
 								"reference": [
-									"a_b--moon-gray_ba_bg-animate_bg-white_db_flex-auto-ns_hover-bg-near-white_mb3_mr3_w-100_w-30-l_href"
+									"a_b_moon_gray_ba_bg_animate_bg_white_db_flex_auto_ns_hover_bg_near_white_mb3_mr3_w_100_w_30_l_href"
 								]
 							},
 							"class": {
@@ -149,14 +149,14 @@
 												"type": "variable-attribute",
 												"name": "data-srcset",
 												"reference": [
-													"img_grow_img_lazyautosizes_lazyloaded_data-srcset"
+													"img_grow_img_lazyautosizes_lazyloaded_data_srcset"
 												]
 											},
 											"data-bg": {
 												"type": "variable-attribute",
 												"name": "data-bg",
 												"reference": [
-													"img_grow_img_lazyautosizes_lazyloaded_data-bg"
+													"img_grow_img_lazyautosizes_lazyloaded_data_bg"
 												]
 											},
 											"class": {

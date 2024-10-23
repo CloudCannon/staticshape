@@ -1,0 +1,105 @@
+{
+	"type": "element",
+	"name": "div",
+	"attrs": {},
+	"children": [
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "element",
+			"name": "div",
+			"attrs": {
+				"class": {
+					"type": "attribute",
+					"name": "class",
+					"value": "first"
+				}
+			},
+			"children": [
+				{
+					"type": "text",
+					"value": "\n\t\t"
+				},
+				{
+					"type": "element",
+					"name": "p",
+					"attrs": {
+						"class": {
+							"type": "attribute",
+							"name": "class",
+							"value": "test"
+						}
+					},
+					"children": [
+						{
+							"type": "inline-markdown-variable",
+							"reference": [
+								"p_test_inline_markdown"
+							]
+						}
+					]
+				},
+				{
+					"type": "text",
+					"value": "\n\t"
+				}
+			]
+		},
+		{
+			"type": "text",
+			"value": "\n\t"
+		},
+		{
+			"type": "element",
+			"name": "div",
+			"attrs": {
+				"class": {
+					"type": "attribute",
+					"name": "class",
+					"value": "second"
+				}
+			},
+			"children": [
+				{
+					"type": "text",
+					"value": "\n\t\t"
+				},
+				{
+					"type": "loop",
+					"reference": [
+						"div_second_items"
+					],
+					"template": {
+						"type": "element",
+						"name": "p",
+						"attrs": {
+							"class": {
+								"type": "attribute",
+								"name": "class",
+								"value": "test"
+							}
+						},
+						"children": [
+							{
+								"type": "inline-markdown-variable",
+								"reference": [
+									"p_test_inline_markdown"
+								]
+							}
+						]
+					}
+				},
+				{
+					"type": "text",
+					"value": "\n\t"
+				}
+			]
+		},
+		{
+			"type": "text",
+			"value": "\n"
+		}
+	]
+}

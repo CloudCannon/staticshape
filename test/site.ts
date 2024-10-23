@@ -3,7 +3,7 @@ import Site from '../src/site';
 import * as path from 'path';
 import * as fs from 'fs';
 import { CollectionResponse } from '../src/collection';
-import { TestLogger } from './helpers/test-logger';
+import { TestLogger } from './helpers/test-logger.js';
 
 function sortCollectionPages(collections: Record<string, CollectionResponse>) {
 	Object.keys(collections).forEach((key) => {
@@ -49,6 +49,7 @@ async function runTest(t: ExecutionContext, testName: string) {
 			'utf-8'
 		)
 	);
+
 	sortCollectionPages(output.collections);
 	sortCollectionPages(expected.collections);
 
@@ -69,6 +70,13 @@ test('two-pages-markdown-variable', (t: ExecutionContext) =>
 	runTest(t, 'two-pages-markdown-variable'));
 test('two-pages-loop', (t: ExecutionContext) => runTest(t, 'two-pages-loop'));
 
+test('two-pages-conditional-object', (t: ExecutionContext) =>
+	runTest(t, 'two-pages-conditional-object'));
+test('two-pages-conditional-loop', (t: ExecutionContext) =>
+	runTest(t, 'two-pages-conditional-loop'));
+test('two-pages-recursive-loop', (t: ExecutionContext) =>
+	runTest(t, 'two-pages-recursive-loop'));
+
 // TODO the following items work but have alternating variable names between tests
 // test('two-pages-fuzzy-image', (t: ExecutionContext) => runTest(t, 'two-pages-fuzzy-image'));
 // test('two-pages-fuzzy-loop', (t: ExecutionContext) => runTest(t, 'two-pages-fuzzy-loop'));
@@ -79,6 +87,8 @@ test('three-pages-title-variable', (t: ExecutionContext) =>
 test('three-pages-attr-variable', (t: ExecutionContext) => runTest(t, 'three-pages-attr-variable'));
 test('three-pages-body-content', (t: ExecutionContext) => runTest(t, 'three-pages-body-content'));
 test('three-pages-conditional', (t: ExecutionContext) => runTest(t, 'three-pages-conditional'));
+test('three-pages-conditional-alternative-order', (t: ExecutionContext) =>
+	runTest(t, 'three-pages-conditional-alternative-order'));
 test('four-pages-conditional', (t: ExecutionContext) => runTest(t, 'four-pages-conditional'));
 
 // test('three-pages-xkcd-news', (t: ExecutionContext) => runTest(t, 'three-pages-xkcd-news'));

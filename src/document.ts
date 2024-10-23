@@ -1,10 +1,10 @@
-import Page from './page';
+import Page from './page.js';
 
-import { mergeTree } from './helpers/dom-diff';
-import htmlToAST, { PageContentsConfig } from './helpers/html-parser';
-import { ASTNode } from './types';
-import Data from './helpers/Data';
-import { Logger } from './logger';
+import { mergeTree } from './helpers/dom-diff.js';
+import htmlToAST, { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser.js';
+import { ASTNode } from './types.js';
+import Data from './helpers/Data.js';
+import { Logger } from './logger.js';
 
 export interface ASTTree {
 	base: Page;
@@ -20,11 +20,12 @@ export interface DocumentOptions {
 	pathname: string;
 	content: string;
 	config: DocumentConfig;
-	logger?: Logger;
+	processorConfig: HtmlProcessorConfig;
+	logger: Logger;
 }
 
 export default class Document {
-	logger?: Logger;
+	logger: Logger;
 	pathname: string;
 	data: Data;
 	layout: ASTNode[];
@@ -33,7 +34,11 @@ export default class Document {
 	constructor(options: DocumentOptions) {
 		this.logger = options.logger;
 		this.pathname = options.pathname;
-		const { layout, contents } = htmlToAST(options.content, options.config);
+		const { layout, contents } = htmlToAST(
+			options.content,
+			options.config,
+			options.processorConfig
+		);
 		this.layout = layout;
 		this.contents = contents;
 		this.data = new Data([], {});
@@ -42,7 +47,7 @@ export default class Document {
 	diff(other: Document): ASTTree {
 		this.data = new Data([], {});
 
-		this.logger?.log(`Comparing ${this.pathname} and ${other.pathname}`);
+		this.logger.log(`Comparing ${this.pathname} and ${other.pathname}`);
 		const tree = mergeTree(this.data, other.data, this.layout, other.layout, [], this.logger);
 		return {
 			base: new Page({

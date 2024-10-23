@@ -8,7 +8,9 @@
 					"content": [],
 					"data": {
 						"title": "Home | Test",
-						"meta_description": {},
+						"meta_description": {
+							"meta_description_content": "Home"
+						},
 						"h1_inline_markdown": "Home"
 					}
 				},
@@ -26,7 +28,9 @@
 					"content": [],
 					"data": {
 						"title": "Test",
-						"meta_description": null,
+						"meta_description": {
+							"meta_description_content": "Fixed"
+						},
 						"h1_inline_markdown": "Contact"
 					}
 				}
@@ -78,9 +82,9 @@
 												"value": "description"
 											},
 											"content": {
-												"type": "attribute",
-												"name": "content",
-												"value": "Home"
+												"type": "variable-attribute",
+												"reference": ["meta_description_content"],
+												"name": "content"
 											}
 										},
 										"children": []

@@ -1,4 +1,4 @@
-import File from './file';
+import File from './file.js';
 import * as fs from 'fs';
 import * as path from 'path';
 

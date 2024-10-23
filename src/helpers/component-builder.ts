@@ -1,6 +1,6 @@
-import { ASTElementNode, ASTNode, ASTAttributeList } from '../types';
-import { invalidLoopTags, findRepeatedIndex } from './loops';
-import Data from './Data';
+import { ASTElementNode, ASTNode, ASTAttributeList } from '../types.js';
+import { invalidLoopTags, findRepeatedIndex } from './loops.js';
+import Data from './Data.js';
 import {
 	findEndOfMarkdownIndex,
 	invalidMarkdownParentTags,
@@ -9,9 +9,10 @@ import {
 	markdownify,
 	validMarkdownBlockTags,
 	validMarkdownInlineTags
-} from './markdown';
-import { diffNodes } from './dom-diff';
-import { Logger, nodeDebugString } from '../logger';
+} from './markdown.js';
+import { diffNodes } from './dom-diff.js';
+import { Logger, nodeDebugString } from '../logger.js';
+import { liftVariables } from './variable-lifting.js';
 
 export interface ComponentBuilderConfig {
 	disableMarkdown?: boolean;
@@ -32,7 +33,8 @@ export const editableAttrs: Record<string, boolean> = {
 export function convertAttrsToVariables(
 	data: Data,
 	element: ASTElementNode,
-	logger?: Logger
+	existingData: Data,
+	logger: Logger
 ): ASTAttributeList {
 	const converted = {} as ASTAttributeList;
 	Object.keys(element.attrs).forEach((attrName) => {
@@ -45,6 +47,31 @@ export function convertAttrsToVariables(
 				name: attrName,
 				reference: data.getChain(variableName)
 			};
+		} else if (attr && attr.type !== 'attribute') {
+			logger.log(
+				'📀 Inheriting attribute variables',
+				JSON.stringify(attr),
+				'from',
+				JSON.stringify(existingData)
+			);
+
+			const variableName = attr.reference[0];
+			if (!existingData.hasKey(variableName)) {
+				logger.log(
+					'💿 Failed attr inheritance',
+					JSON.stringify(attr.reference),
+					variableName,
+					JSON.stringify(existingData)
+				);
+				throw new Error('Found attr variable but could not find existing value');
+			}
+
+			if (data !== existingData) {
+				logger.log('💿 SETTING ', variableName, `${existingData.getKey(variableName)}`);
+				data.set(variableName, existingData.getKey(variableName));
+				logger.log('💿 DELETING ', variableName);
+				existingData.delete(variableName);
+			}
 		} else {
 			converted[attrName] = attr;
 		}
@@ -66,16 +93,34 @@ interface LoopState {
 function buildLoop(
 	elements: ASTElementNode[],
 	parentElements: ASTElementNode[],
-	config: ComponentBuilderConfig = {},
-	logger?: Logger
+	inputData: Data,
+	outputData: Data,
+	config: ComponentBuilderConfig,
+	logger: Logger
 ): Loop | null {
 	const data = [] as Data[];
 	const base = elements[0];
 	let current: LoopState | null = null;
+
+	let inputBaseData: Record<string, any> = {};
+	
+	const baseLiftedVariables = liftVariables(base, inputData);
+	Object.keys(baseLiftedVariables).forEach((variableName) => {
+		inputBaseData[variableName] = inputData.getKey(variableName);
+		outputData.delete(variableName);
+	});
+
 	for (let i = 1; i < elements.length; i++) {
 		const loopEl = elements[i];
-		const newBaseData = new Data([], {});
-		const otherData = new Data([], {});
+		const newBaseData = new Data([], structuredClone(inputBaseData));
+		const inputLoopData: Record<string, any> = {};
+		const liftedVariables = liftVariables(loopEl, inputData);
+		Object.keys(liftedVariables).forEach((variableName) => {
+			inputLoopData[variableName] = inputData.getKey(variableName);
+			outputData.delete(variableName);
+		});
+
+		const otherData = new Data([], structuredClone(inputLoopData));
 		const template = diffNodes(
 			newBaseData,
 			otherData,
@@ -111,15 +156,15 @@ function buildLoop(
 				parentElements,
 				logger
 			) as ASTElementNode;
-			logger?.log(
+			logger.log(
 				'🤔 Diffing loop templates',
 				nodeDebugString(current.template, 0, 4),
 				'vs',
 				nodeDebugString(template, 0, 4)
 			);
-			logger?.log('🐓', nodeDebugString(current.template, 0, 4));
-			logger?.log('🐄', nodeDebugString(template, 0, 4));
-			logger?.log('🥂', nodeDebugString(merged, 0, 4));
+			logger.log('🐓', nodeDebugString(current.template, 0, 4));
+			logger.log('🐄', nodeDebugString(template, 0, 4));
+			logger.log('🥂', nodeDebugString(merged, 0, 4));
 			current = {
 				template: merged,
 				blocks: [...oldBlocks, newBlock],
@@ -144,19 +189,21 @@ export function convertElementToComponent(
 	element: ASTElementNode,
 	parentElements: ASTElementNode[] = [],
 	config: ComponentBuilderConfig = {},
-	logger?: Logger
+	existingData: Data,
+	logger: Logger
 ): ASTElementNode {
 	return {
 		type: 'element',
 		name: element.name,
 		attrs: config.disableAttributeVariables
 			? element.attrs
-			: convertAttrsToVariables(data, element, logger),
+			: convertAttrsToVariables(data, element, existingData, logger),
 		children: convertTreeToComponents(
 			data,
 			element.children,
 			[...parentElements, element],
 			config,
+			existingData,
 			logger
 		)
 	};
@@ -167,11 +214,18 @@ export function convertTreeToComponents(
 	tree: ASTNode[],
 	parentElements: ASTElementNode[] = [],
 	config: ComponentBuilderConfig = {},
-	logger?: Logger
+	existingData: Data,
+	logger: Logger
 ): ASTNode[] {
 	const parent = parentElements[parentElements.length - 1];
 	if (parent && validMarkdownBlockTags[parent?.name] && !config.disableInlineMarkdown) {
 		if (tree.length > 0 && isMarkdownInlineTree(tree, validMarkdownInlineTags, true)) {
+			logger.log(
+				'📀 Inheriting markdown variables',
+				JSON.stringify(tree),
+				'from',
+				JSON.stringify(existingData)
+			);
 			const variableName = data.getVariableName(parentElements, '', 'inline_markdown');
 			data.set(variableName, markdownify(tree));
 			return [
@@ -187,6 +241,9 @@ export function convertTreeToComponents(
 	let index = 0;
 	while (index < tree.length) {
 		const node = tree[index];
+		logger.log('📀 Componenting', nodeDebugString(node));
+		logger.log(JSON.stringify(existingData));
+
 		const remainingNodes = tree.slice(index);
 		if (node.type === 'element') {
 			if (
@@ -221,6 +278,8 @@ export function convertTreeToComponents(
 						const loopData = buildLoop(
 							repeatedElements,
 							parentElements,
+							existingData,
+							data,
 							config,
 							logger
 						);
@@ -244,7 +303,9 @@ export function convertTreeToComponents(
 				}
 			}
 
-			converted.push(convertElementToComponent(data, node, parentElements, config, logger));
+			converted.push(
+				convertElementToComponent(data, node, parentElements, config, existingData, logger)
+			);
 			index += 1;
 		} else if (node.type === 'text' && node.value.trim() && !config.disableTextVariables) {
 			const variableName = data.getVariableName(parentElements);
@@ -255,6 +316,28 @@ export function convertTreeToComponents(
 			});
 			index += 1;
 		} else {
+			if (
+				node.type === 'conditional' ||
+				node.type === 'markdown-variable' ||
+				node.type === 'variable' ||
+				node.type === 'loop' ||
+				node.type === 'inline-markdown-variable'
+			) {
+				logger.log(
+					'📀 Inheriting node variables',
+					JSON.stringify(node),
+					'from',
+					JSON.stringify(existingData)
+				);
+
+				const variableName = node.reference[0];
+				if (existingData.hasKey(variableName) && data !== existingData) {
+					logger.log('💿 SETTING ', variableName, `${existingData.getKey(variableName)}`);
+					data.set(variableName, existingData.getKey(variableName));
+					logger.log('💿 DELETING ', variableName);
+					existingData.delete(variableName);
+				}
+			}
 			converted.push(node);
 			index += 1;
 		}

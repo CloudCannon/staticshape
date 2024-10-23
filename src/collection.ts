@@ -1,12 +1,12 @@
-import File from './file';
-import { PageContentsConfig } from './helpers/html-parser';
-import Document from './document';
-import { PageJSON } from './page';
-import { Logger } from './logger';
+import File from './file.js';
+import { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser.js';
+import Document from './document.js';
+import { PageJSON } from './page.js';
+import { Logger } from './logger.js';
 import slugify from 'slugify';
-import Data from './helpers/Data';
-import { mergeTree } from './helpers/dom-diff';
-import { ASTNode } from './types';
+import Data from './helpers/Data.js';
+import { mergeTree } from './helpers/dom-diff.js';
+import { ASTNode } from './types.js';
 
 export interface CollectionConfig {
 	name: string;
@@ -18,7 +18,7 @@ export interface CollectionConfig {
 }
 
 export interface CollectionOptions {
-	logger?: Logger;
+	logger: Logger;
 }
 
 export interface CollectionResponse {
@@ -28,12 +28,19 @@ export interface CollectionResponse {
 
 export default class Collection {
 	content?: PageContentsConfig;
-	logger?: Logger;
+	processorConfig?: HtmlProcessorConfig;
+	logger: Logger;
 	files: File[];
 
-	constructor(files: File[], config: CollectionConfig, options: CollectionOptions) {
+	constructor(
+		files: File[],
+		processorConfig: HtmlProcessorConfig,
+		config: CollectionConfig,
+		options: CollectionOptions
+	) {
 		this.logger = options.logger;
 		this.content = config.content;
+		this.processorConfig = processorConfig;
 
 		this.files = files.filter((file) => {
 			if (!file.isHtml()) {
@@ -67,6 +74,7 @@ export default class Collection {
 					config: {
 						content: this.content
 					},
+					processorConfig: this.processorConfig || {},
 					logger: this.logger
 				});
 			})
@@ -78,63 +86,66 @@ export default class Collection {
 
 		const baseDoc = documents[0];
 		let current = baseDoc.diff(documents[1]);
-		await this.logger?.writeLog(
+		await this.logger.writeLog(
 			`base-${slugify(baseDoc.pathname)}.json`,
 			JSON.stringify(baseDoc.layout, null, '\t')
 		);
-		await this.logger?.writeLog(
+		await this.logger.writeLog(
 			`${slugify(documents[1].pathname)}.json`,
 			JSON.stringify(documents[1].layout, null, '\t')
 		);
-		await this.logger?.writeLog('layout.json', JSON.stringify(current.layout, null, '\t'));
+		await this.logger.writeLog('layout.json', JSON.stringify(current.layout, null, '\t'));
 		for (let i = 2; i < documents.length; i++) {
-			await this.logger?.rotateLog();
-			const next = baseDoc.diff(documents[i]);
-			await this.logger?.writeLog(
-				`${slugify(documents[i].pathname)}.json`,
-				JSON.stringify(documents[1].layout, null, '\t')
-			);
-			await this.logger?.writeLog('diffed.json', JSON.stringify(next, null, '\t'));
-			this.logger?.log(`Comparing layouts`);
+			await this.logger.rotateLog();
+			try
+			{
+				const next = baseDoc.diff(documents[i]);
+				await this.logger.writeLog(
+					`${slugify(documents[i].pathname)}.json`,
+					JSON.stringify(documents[1].layout, null, '\t')
+				);
+				await this.logger.writeLog('diffed.json', JSON.stringify(next, null, '\t'));
+				this.logger.log(`Comparing layouts`);
 
-			// Merge the next and current layouts
-			const currentMergeData = new Data([], {});
-			const nextMergeData = new Data([], {});
-			const layout = mergeTree(
-				currentMergeData,
-				nextMergeData,
-				current.layout,
-				next.layout,
-				[],
-				this.logger
-			);
+				const currentPreMergeData = structuredClone(current.base.data.data);
+				const nextPreMergeData = structuredClone(next.base.data.data);
+				// Merge the next and current bases
+				const layout = mergeTree(
+					current.base.data,
+					next.base.data,
+					current.layout,
+					next.layout,
+					[],
+					this.logger
+				);
 
-			if (!currentMergeData.empty() || !nextMergeData.empty()) {
-				this.logger?.warn('Layout merge produced data');
-				this.logger?.warn('currentMergeData', JSON.stringify(currentMergeData.toJSON()));
-				this.logger?.warn('nextMergeData', JSON.stringify(nextMergeData.toJSON()));
-				this.logger?.warn('current', JSON.stringify(current.pages, null, 2));
-				this.logger?.warn('next', JSON.stringify(next.pages, null, 2));
+				for (let i = 0; i < current.pages.length; i++) {
+					const page = current.pages[i];
+					const nextData = new Data([], structuredClone(nextPreMergeData));
+					mergeTree(page.data, nextData, current.layout, next.layout, [], this.logger);
+				}
+
+				for (let i = 0; i < next.pages.length; i++) {
+					const page = next.pages[i];
+					const currentData = new Data([], structuredClone(currentPreMergeData));
+					mergeTree(page.data, currentData, next.layout, current.layout, [], this.logger);
+				}
+
+				await this.logger.writeLog('merged.json', JSON.stringify(current, null, '\t'));
+
+				current = {
+					base: current.base,
+					pages: [...current.pages, ...next.pages],
+					layout
+				};
 			}
-
-			// Merge the next and current bases
-			const base = current.base.merge(next.base);
-			// Merge current pages with the next base
-			const oldPages = current.pages.map((page) => page.mergeData(currentMergeData));
-
-			// Merge the next pages with the current base
-			const newPages = next.pages.map((page) => page.mergeData(nextMergeData));
-
-			// const layout = current.layout.merge(next.layout);
-			await this.logger?.writeLog('merged.json', JSON.stringify(current, null, '\t'));
-
-			current = {
-				base,
-				pages: [...oldPages, ...newPages],
-				layout
-			};
+			catch(err){
+				console.error("Error hit exporting log")
+				await this.logger.rotateLog();
+				throw err;
+			}
 		}
-		await this.logger?.rotateLog();
+		await this.logger.rotateLog();
 
 		return {
 			pages: [current.base.toJSON(), ...current.pages.map((page) => page.toJSON())],

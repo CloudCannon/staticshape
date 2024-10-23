@@ -1,46 +1,46 @@
 {
-	"div_flex-wrap_gap-4_justify-between_logo-ticker-Vli6fD9QnHgFOSC1LE0O_md:flex_items": [
+	"div_flex_wrap_gap_4_justify_between_logo_ticker_Vli6fD9QnHgFOSC1LE0O_md_flex_items": [
 		{
-			"div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class": "px-3 py-5 relative logo-BHQmp18o5wQcKFFPg3fY",
-			"img_h-8_mx-auto_w-full_data-cms-original-src": "/images/logos/netflix.svg",
-			"img_h-8_mx-auto_w-full_height": "32",
-			"img_h-8_mx-auto_w-full_src": "/images/logos/netflix.svg?_cchid=d436b8e53b230ba8c13f49f52480480d",
-			"img_h-8_mx-auto_w-full_width": "118"
+			"div_logo_BHQmp18o5wQcKFFPg3fY_px_3_py_5_relative_class": "px-3 py-5 relative logo-BHQmp18o5wQcKFFPg3fY",
+			"img_h_8_mx_auto_w_full_data_cms_original_src": "/images/logos/netflix.svg",
+			"img_h_8_mx_auto_w_full_height": "32",
+			"img_h_8_mx_auto_w_full_src": "/images/logos/netflix.svg?_cchid=d436b8e53b230ba8c13f49f52480480d",
+			"img_h_8_mx_auto_w_full_width": "118"
 		},
 		{
-			"div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class": "px-3 py-5 relative logo-jQPy60PSs16b39ZJMznl",
-			"img_h-8_mx-auto_w-full_data-cms-original-src": "/images/logos/twitch.svg",
-			"img_h-8_mx-auto_w-full_height": "150",
-			"img_h-8_mx-auto_w-full_src": "/images/logos/twitch.svg?_cchid=bb66f5f13379e5858ad9db6c9cc07e0e",
-			"img_h-8_mx-auto_w-full_width": "300"
+			"div_logo_BHQmp18o5wQcKFFPg3fY_px_3_py_5_relative_class": "px-3 py-5 relative logo-jQPy60PSs16b39ZJMznl",
+			"img_h_8_mx_auto_w_full_data_cms_original_src": "/images/logos/twitch.svg",
+			"img_h_8_mx_auto_w_full_height": "150",
+			"img_h_8_mx_auto_w_full_src": "/images/logos/twitch.svg?_cchid=bb66f5f13379e5858ad9db6c9cc07e0e",
+			"img_h_8_mx_auto_w_full_width": "300"
 		},
 		{
-			"div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class": "px-3 py-5 relative logo-z1h5njuLzizv8yt6ryJb",
-			"img_h-8_mx-auto_w-full_data-cms-original-src": "/images/logos/newdynamic.svg",
-			"img_h-8_mx-auto_w-full_height": "150",
-			"img_h-8_mx-auto_w-full_src": "/images/logos/newdynamic.svg?_cchid=7bfcf5c11a16cbde79fe07f77f50c205",
-			"img_h-8_mx-auto_w-full_width": "300"
+			"div_logo_BHQmp18o5wQcKFFPg3fY_px_3_py_5_relative_class": "px-3 py-5 relative logo-z1h5njuLzizv8yt6ryJb",
+			"img_h_8_mx_auto_w_full_data_cms_original_src": "/images/logos/newdynamic.svg",
+			"img_h_8_mx_auto_w_full_height": "150",
+			"img_h_8_mx_auto_w_full_src": "/images/logos/newdynamic.svg?_cchid=7bfcf5c11a16cbde79fe07f77f50c205",
+			"img_h_8_mx_auto_w_full_width": "300"
 		},
 		{
-			"div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class": "px-3 py-5 relative logo-DHZ92AYbh9NMPTSr0QLY",
-			"img_h-8_mx-auto_w-full_data-cms-original-src": "/images/logos/ocupop.svg",
-			"img_h-8_mx-auto_w-full_height": "41",
-			"img_h-8_mx-auto_w-full_src": "/images/logos/ocupop.svg?_cchid=723d94ded1b09aff3d144c7da4909d6a",
-			"img_h-8_mx-auto_w-full_width": "156"
+			"div_logo_BHQmp18o5wQcKFFPg3fY_px_3_py_5_relative_class": "px-3 py-5 relative logo-DHZ92AYbh9NMPTSr0QLY",
+			"img_h_8_mx_auto_w_full_data_cms_original_src": "/images/logos/ocupop.svg",
+			"img_h_8_mx_auto_w_full_height": "41",
+			"img_h_8_mx_auto_w_full_src": "/images/logos/ocupop.svg?_cchid=723d94ded1b09aff3d144c7da4909d6a",
+			"img_h_8_mx_auto_w_full_width": "156"
 		},
 		{
-			"div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class": "px-3 py-5 relative logo-47BewaDaXrAu3rlfX7NX",
-			"img_h-8_mx-auto_w-full_data-cms-original-src": null,
-			"img_h-8_mx-auto_w-full_height": "38.6",
-			"img_h-8_mx-auto_w-full_src": "https://cc-dam.imgix.net/hnry-logo.svg?auto=compress&auto=format&w=1216&dpr=1",
-			"img_h-8_mx-auto_w-full_width": "108.34"
+			"div_logo_BHQmp18o5wQcKFFPg3fY_px_3_py_5_relative_class": "px-3 py-5 relative logo-47BewaDaXrAu3rlfX7NX",
+			"img_h_8_mx_auto_w_full_data_cms_original_src": null,
+			"img_h_8_mx_auto_w_full_height": "38.6",
+			"img_h_8_mx_auto_w_full_src": "https://cc-dam.imgix.net/hnry-logo.svg?auto=compress&auto=format&w=1216&dpr=1",
+			"img_h_8_mx_auto_w_full_width": "108.34"
 		},
 		{
-			"div_logo-BHQmp18o5wQcKFFPg3fY_px-3_py-5_relative_class": "px-3 py-5 relative logo-7ZxDDxZmhjOXGagi2Nyr",
-			"img_h-8_mx-auto_w-full_data-cms-original-src": null,
-			"img_h-8_mx-auto_w-full_height": "39",
-			"img_h-8_mx-auto_w-full_src": "https://cc-dam.imgix.net/Papercut-logo.svg?auto=compress&auto=format&w=1216&dpr=1",
-			"img_h-8_mx-auto_w-full_width": "125"
+			"div_logo_BHQmp18o5wQcKFFPg3fY_px_3_py_5_relative_class": "px-3 py-5 relative logo-7ZxDDxZmhjOXGagi2Nyr",
+			"img_h_8_mx_auto_w_full_data_cms_original_src": null,
+			"img_h_8_mx_auto_w_full_height": "39",
+			"img_h_8_mx_auto_w_full_src": "https://cc-dam.imgix.net/Papercut-logo.svg?auto=compress&auto=format&w=1216&dpr=1",
+			"img_h_8_mx_auto_w_full_width": "125"
 		}
 	]
 }
