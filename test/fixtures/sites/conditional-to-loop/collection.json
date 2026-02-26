@@ -6,10 +6,10 @@
 					"pathname": "a.html",
 					"data": {
 						"title": "Page A",
-						"nav": "Nav A",
-						"div_card": [
+						"navigation": "Nav A",
+						"card": [
 							{
-								"div_card": "Card A"
+								"text": "Card A"
 							}
 						]
 					},
@@ -19,27 +19,27 @@
 					"pathname": "b.html",
 					"data": {
 						"title": "Page B",
-						"nav": "Nav B",
-						"div_card": []
+						"navigation": "Nav B",
+						"card": []
 					},
 					"content": []
 				},
 				{
 					"pathname": "c.html",
 					"data": {
-						"div_items": [
+						"items": [
 							{
-								"div_card": "Card C1"
+								"text": "Card C1"
 							},
 							{
-								"div_card": "Card C2"
+								"text": "Card C2"
 							},
 							{
-								"div_card": "Card C3"
+								"text": "Card C3"
 							}
 						],
 						"title": "Page C",
-						"nav": "Nav C"
+						"navigation": "Nav C"
 					},
 					"content": []
 				}
@@ -112,7 +112,7 @@
 												{
 													"type": "variable",
 													"reference": [
-														"nav"
+														"navigation"
 													]
 												}
 											]
@@ -124,7 +124,7 @@
 										{
 											"type": "loop",
 											"reference": [
-												"div_card"
+												"card"
 											],
 											"template": {
 												"type": "element",
@@ -140,7 +140,7 @@
 													{
 														"type": "variable",
 														"reference": [
-															"div_card"
+															"text"
 														]
 													}
 												]

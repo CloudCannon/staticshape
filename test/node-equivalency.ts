@@ -1,6 +1,10 @@
 import { test } from 'node:test';
 import * as assert from 'node:assert/strict';
-import { isBestMatch, nodeEquivalencyScore, loopThreshold } from '../src/helpers/node-equivalency.ts';
+import {
+	isBestMatch,
+	nodeEquivalencyScore,
+	loopThreshold
+} from '../src/helpers/node-equivalency.ts';
 import { ASTElementNode, ASTNode, ASTTextNode } from '../src/types.ts';
 import { TestLogger } from './helpers/test-logger.ts';
 

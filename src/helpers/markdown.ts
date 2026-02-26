@@ -1,6 +1,5 @@
 import HtmlExportEngine from '../export-engines/html.ts';
 import { ASTElementNode, ASTNode } from '../types.ts';
-import { findLastNonWhitespaceIndex } from './node-helper.ts';
 import * as Turndown from 'turndown';
 const TurndownService = (Turndown as any).default;
 
@@ -106,8 +105,7 @@ export function isMarkdownInlineTree(
 }
 
 export function isMarkdownTree(nodes: ASTNode[]): boolean {
-	const nonWhitespaceIndex = findLastNonWhitespaceIndex(nodes);
-	const { lastElIndex, lastCheckedIndex } = findEndOfMarkdownIndex(nodes);
+	const { lastCheckedIndex } = findEndOfMarkdownIndex(nodes);
 
 	return lastCheckedIndex === nodes.length - 1;
 }

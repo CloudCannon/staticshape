@@ -29,6 +29,7 @@ import { booleanAttributes } from './attributes.ts';
 import { Logger, nodeDebugString } from '../logger.ts';
 import { convertTreeToComponents, convertElementToComponent } from './component-builder.ts';
 import { liftVariables } from './variable-lifting.ts';
+import { extractStaticContext } from './variation-map.ts';
 
 export function diffBasicNode(
 	firstData: Data,
@@ -36,7 +37,7 @@ export function diffBasicNode(
 	firstNode: ASTValueNode,
 	secondNode: ASTValueNode,
 	parentElements: ASTElementNode[],
-	logger: Logger
+	_logger: Logger
 ): ASTNode {
 	const valuesMatch = firstNode.value.trim() === secondNode.value.trim();
 	if (valuesMatch) {
@@ -278,7 +279,11 @@ function diffConditionalAndElementNode(
 	});
 
 	const existingData = new Data([], structuredClone(existingValue));
+	existingData.variationMap = conditionalData.variationMap;
+	existingData.variationScope = variableName;
 	const newData = new Data([], structuredClone(liftedVariables));
+	newData.variationMap = elementData.variationMap;
+	newData.variationScope = variableName;
 
 	const template = diffElementNode(
 		existingData,
@@ -338,10 +343,14 @@ function diffConditionalNodes(
 		[],
 		firstSubData === null || typeof firstSubData !== 'object' ? {} : firstSubData
 	);
+	newData.variationMap = firstData.variationMap;
+	newData.variationScope = variableName;
 	const otherData = new Data(
 		[],
 		secondSubData === null || typeof secondSubData !== 'object' ? {} : secondSubData
 	);
+	otherData.variationMap = secondData.variationMap;
+	otherData.variationScope = variableName;
 
 	const template = diffElementNode(
 		newData,
@@ -398,7 +407,11 @@ function diffLoopAndElementNode(
 	});
 
 	const existingData = new Data([], existingItems[0]);
+	existingData.variationMap = loopData.variationMap;
+	existingData.variationScope = variableName;
 	const newData = new Data([], structuredClone(liftedVariables));
+	newData.variationMap = elementData.variationMap;
+	newData.variationScope = variableName;
 
 	diffElementNode(existingData, newData, loopNode.template, elementNode, parentElements, logger);
 	elementData.chainSet(loopNode.reference, [newData.toJSON()]);
@@ -416,10 +429,7 @@ function diffConditionalAndLoopNode(
 	const variableName = conditionalNode.reference[0];
 	if (conditionalData.hasKey(variableName)) {
 		const existingValue = conditionalData.getKey(variableName);
-		conditionalData.set(
-			variableName,
-			existingValue != null ? [existingValue] : []
-		);
+		conditionalData.set(variableName, existingValue != null ? [existingValue] : []);
 	}
 
 	const promotedLoop: ASTLoopNode = {
@@ -448,6 +458,13 @@ function mergeAttribute(
 	logger: Logger
 ): ASTAttribute {
 	const variableName = firstData.getVariableName([element], '', attrName);
+	if (firstData.variationMap) {
+		firstData.variationMap.record(variableName, {
+			sourceElement: extractStaticContext(element),
+			attrName,
+			scope: firstData.variationScope
+		});
+	}
 	if (firstAttr.type !== 'attribute') {
 		logger?.warn('TODO: add relevant null state for !secondAttr');
 		if (secondAttr?.type === 'attribute') {
@@ -575,7 +592,9 @@ function buildLoop(
 	firstEls: ASTElementNode[],
 	secondEls: ASTElementNode[],
 	parentElements: ASTElementNode[],
-	logger: Logger
+	logger: Logger,
+	variationMap?: import('./variation-map.ts').default,
+	scopeHint?: string
 ): Loop | null {
 	const firstItems = [] as Data[];
 	const secondItems = [] as Data[];
@@ -599,7 +618,11 @@ function buildLoop(
 	for (let i = 1; i < elements.length; i++) {
 		const loopEl = elements[i];
 		const newBaseData = new Data([], {});
+		newBaseData.variationMap = variationMap;
+		if (scopeHint) newBaseData.variationScope = scopeHint;
 		const otherData = new Data([], {});
+		otherData.variationMap = variationMap;
+		if (scopeHint) otherData.variationScope = scopeHint;
 		const template = diffNodes(
 			newBaseData,
 			otherData,
@@ -742,7 +765,10 @@ export function mergeTree(
 		const parents = [...parentElements];
 		if (node.type === 'element') {
 			parents.push(node);
+			const variableName = firstData.getVariableName(parents);
 			const newData = new Data([], {});
+			newData.variationMap = firstData.variationMap;
+			newData.variationScope = variableName;
 			const config = {}; // TODO pass component config
 			const template = convertElementToComponent(
 				newData,
@@ -752,7 +778,6 @@ export function mergeTree(
 				firstData,
 				logger
 			);
-			const variableName = firstData.getVariableName(parents);
 			firstData.set(variableName, newData.toJSON());
 			secondData.set(variableName, null);
 			merged.push({
@@ -828,19 +853,22 @@ export function mergeTree(
 
 							// TODO: Object building
 							if (!isExactMatch) {
+								const anticipatedLoopVar = firstData.getVariableName(
+									parentElements,
+									'',
+									'items'
+								);
 								const loopData = buildLoop(
 									firstEls,
 									secondEls,
 									parentElements,
-									logger
+									logger,
+									firstData.variationMap,
+									anticipatedLoopVar
 								);
 								if (loopData) {
 									const { firstItems, secondItems, template } = loopData;
-									const variableName = firstData.getVariableName(
-										parentElements,
-										'',
-										'items'
-									);
+									const variableName = anticipatedLoopVar;
 									firstData.set(
 										variableName,
 										firstItems.map((item: Data) => item.toJSON())
@@ -897,7 +925,14 @@ export function mergeTree(
 						.slice(0, repeatedIndex + 1)
 						.filter((node) => node.type === 'element') as ASTElementNode[];
 					if (elements.length > 1) {
-						const loopData = buildLoop(elements, [], parentElements, logger);
+						const loopData = buildLoop(
+							elements,
+							[],
+							parentElements,
+							logger,
+							firstData.variationMap,
+							other.reference[0]
+						);
 						if (loopData) {
 							const { firstItems, template } = loopData;
 							firstData.chainSet(
@@ -939,7 +974,14 @@ export function mergeTree(
 					.slice(0, repeatedIndex + 1)
 					.filter((node) => node.type === 'element') as ASTElementNode[];
 				if (elements.length > 1) {
-					const loopData = buildLoop(elements, [], parentElements, logger);
+					const loopData = buildLoop(
+						elements,
+						[],
+						parentElements,
+						logger,
+						secondData.variationMap,
+						current.reference[0]
+					);
 					if (loopData) {
 						const { secondItems, template } = loopData;
 						secondData.chainSet(
@@ -980,7 +1022,7 @@ export function mergeTree(
 					'\nvs\n',
 					JSON.stringify(other),
 					'?????????????????????????'
-					);
+				);
 			}
 
 			merged.push(diffNodes(firstData, secondData, current, other, parentElements, logger));

@@ -8,13 +8,13 @@
 						"div": {
 							"div_items": [
 								{
-									"div_markdown": "Lorem Ipsum 1\n\n![](https://placebear.com/250/50)"
+									"markdown": "Lorem Ipsum 1\n\n![](https://placebear.com/250/50)"
 								},
 								{
-									"div_markdown": "Lorem Ipsum 2\n\n![](https://placebear.com/150/50)"
+									"markdown": "Lorem Ipsum 2\n\n![](https://placebear.com/150/50)"
 								},
 								{
-									"div_markdown": "Lorem Ipsum 3\n\n![](https://placebear.com/50/50)"
+									"markdown": "Lorem Ipsum 3\n\n![](https://placebear.com/50/50)"
 								}
 							]
 						}
@@ -109,7 +109,7 @@
 														{
 															"type": "markdown-variable",
 															"reference": [
-																"div_markdown"
+																"markdown"
 															]
 														},
 														{

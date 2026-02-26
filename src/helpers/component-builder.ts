@@ -13,6 +13,7 @@ import {
 import { diffNodes } from './dom-diff.ts';
 import { Logger, nodeDebugString } from '../logger.ts';
 import { liftVariables } from './variable-lifting.ts';
+import { extractStaticContext } from './variation-map.ts';
 
 export interface ComponentBuilderConfig {
 	disableMarkdown?: boolean;
@@ -41,6 +42,13 @@ export function convertAttrsToVariables(
 		const attr = element.attrs[attrName];
 		if (attr && attr.type === 'attribute' && editableAttrs[attrName]) {
 			const variableName = data.getVariableName([element], '', attrName);
+			if (data.variationMap) {
+				data.variationMap.record(variableName, {
+					sourceElement: extractStaticContext(element),
+					attrName,
+					scope: data.variationScope
+				});
+			}
 			data.set(variableName, attr.value);
 			converted[attrName] = {
 				type: 'variable-attribute',
@@ -96,15 +104,16 @@ function buildLoop(
 	parentElements: ASTElementNode[],
 	inputData: Data,
 	outputData: Data,
-	config: ComponentBuilderConfig,
-	logger: Logger
+	_config: ComponentBuilderConfig,
+	logger: Logger,
+	scopeHint?: string
 ): Loop | null {
 	const data = [] as Data[];
 	const base = elements[0];
 	let current: LoopState | null = null;
 
 	let inputBaseData: Record<string, any> = {};
-	
+
 	const baseLiftedVariables = liftVariables(base, inputData);
 	Object.keys(baseLiftedVariables).forEach((variableName) => {
 		inputBaseData[variableName] = inputData.getKey(variableName);
@@ -114,6 +123,8 @@ function buildLoop(
 	for (let i = 1; i < elements.length; i++) {
 		const loopEl = elements[i];
 		const newBaseData = new Data([], structuredClone(inputBaseData));
+		newBaseData.variationMap = outputData.variationMap;
+		if (scopeHint) newBaseData.variationScope = scopeHint;
 		const inputLoopData: Record<string, any> = {};
 		const liftedVariables = liftVariables(loopEl, inputData);
 		Object.keys(liftedVariables).forEach((variableName) => {
@@ -122,6 +133,8 @@ function buildLoop(
 		});
 
 		const otherData = new Data([], structuredClone(inputLoopData));
+		otherData.variationMap = outputData.variationMap;
+		if (scopeHint) otherData.variationScope = scopeHint;
 		const template = diffNodes(
 			newBaseData,
 			otherData,
@@ -276,17 +289,23 @@ export function convertTreeToComponents(
 						.filter((node) => node.type === 'element') as ASTElementNode[];
 
 					if (repeatedElements.length > 1) {
+						const anticipatedLoopVar = data.getVariableName(
+							parentElements,
+							'',
+							'items'
+						);
 						const loopData = buildLoop(
 							repeatedElements,
 							parentElements,
 							existingData,
 							data,
 							config,
-							logger
+							logger,
+							anticipatedLoopVar
 						);
 						if (loopData) {
 							const { itemData, template } = loopData;
-							const variableName = data.getVariableName(parentElements, '', 'items');
+							const variableName = anticipatedLoopVar;
 							data.set(
 								variableName,
 								itemData.map((item: Data) => item.toJSON())

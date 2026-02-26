@@ -6,7 +6,7 @@
 					"pathname": "about.html",
 					"data": {
 						"title": "Goose Admirer",
-						"img_alt": "Their goose"
+						"alt": "Their goose"
 					},
 					"content": []
 				},
@@ -14,7 +14,7 @@
 					"pathname": "contact.html",
 					"data": {
 						"title": "Another Goose Admirer",
-						"img_alt": "Their goose"
+						"alt": "Their goose"
 					},
 					"content": []
 				},
@@ -22,7 +22,7 @@
 					"pathname": "index.html",
 					"data": {
 						"title": "Goose Owner",
-						"img_alt": "Our goose"
+						"alt": "Our goose"
 					},
 					"content": []
 				}
@@ -91,7 +91,7 @@
 											"type": "variable-attribute",
 											"name": "alt",
 											"reference": [
-												"img_alt"
+												"alt"
 											]
 										}
 									},

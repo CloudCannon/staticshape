@@ -5,7 +5,7 @@
 				{
 					"pathname": "about.html",
 					"data": {
-						"div_twoColumn": {
+						"twoColumn": {
 							"div_twoColumn_left_markdown": "Lorem ipsum dolor sit amet",
 							"div_twoColumn_right_markdown": "Etiam nibh metus, imperdiet eu eros vel, congue aliquet eros."
 						}
@@ -15,7 +15,7 @@
 				{
 					"pathname": "index.html",
 					"data": {
-						"div_twoColumn": null
+						"twoColumn": null
 					},
 					"content": []
 				}
@@ -72,7 +72,7 @@
 								{
 									"type": "conditional",
 									"reference": [
-										"div_twoColumn"
+										"twoColumn"
 									],
 									"template": {
 										"type": "element",

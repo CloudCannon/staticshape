@@ -5,8 +5,8 @@
 				{
 					"pathname": "about.html",
 					"data": {
-						"h1_inline_markdown": "About",
-						"div_markdown": "## About h2\n\nAbout p",
+						"inline_markdown": "About",
+						"markdown": "## About h2\n\nAbout p",
 						"title": "About | Test"
 					},
 					"content": []
@@ -14,8 +14,8 @@
 				{
 					"pathname": "index.html",
 					"data": {
-						"h1_inline_markdown": "Home",
-						"div_markdown": "## Home h2\n\nHome p",
+						"inline_markdown": "Home",
+						"markdown": "## Home h2\n\nHome p",
 						"title": "Home | Test"
 					},
 					"content": []
@@ -80,7 +80,7 @@
 										{
 											"type": "inline-markdown-variable",
 											"reference": [
-												"h1_inline_markdown"
+												"inline_markdown"
 											]
 										}
 									]
@@ -101,7 +101,7 @@
 										{
 											"type": "markdown-variable",
 											"reference": [
-												"div_markdown"
+												"markdown"
 											]
 										},
 										{

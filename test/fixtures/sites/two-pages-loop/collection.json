@@ -5,16 +5,16 @@
 				{
 					"pathname": "about.html",
 					"data": {
-						"h1_inline_markdown": "About",
-						"div_items": [
+						"inline_markdown": "About",
+						"items": [
 							{
-								"div_block": "About first item"
+								"text": "About first item"
 							},
 							{
-								"div_block": "About second item"
+								"text": "About second item"
 							},
 							{
-								"div_block": "About third item"
+								"text": "About third item"
 							}
 						],
 						"title": "About | Test"
@@ -24,11 +24,11 @@
 				{
 					"pathname": "index.html",
 					"data": {
-						"h1_inline_markdown": "Home",
+						"inline_markdown": "Home",
 						"title": "Home | Test",
-						"div_items": [
+						"items": [
 							{
-								"div_block": "Home first item"
+								"text": "Home first item"
 							}
 						]
 					},
@@ -94,7 +94,7 @@
 										{
 											"type": "inline-markdown-variable",
 											"reference": [
-												"h1_inline_markdown"
+												"inline_markdown"
 											]
 										}
 									]
@@ -115,7 +115,7 @@
 										{
 											"type": "loop",
 											"reference": [
-												"div_items"
+												"items"
 											],
 											"template": {
 												"type": "element",
@@ -131,7 +131,7 @@
 													{
 														"type": "variable",
 														"reference": [
-															"div_block"
+															"text"
 														]
 													}
 												]

@@ -139,7 +139,9 @@ export function nodeTreeEquivalencyScore(firstTree: ASTNode[], secondTree: ASTNo
 
 export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
 	if (first.type === 'conditional' && second.type === 'conditional') {
-		return first.reference.join('') === second.reference.join('') ? (1 + nodeEquivalencyScore(first.template, second.template))/2 : 0;
+		return first.reference.join('') === second.reference.join('')
+			? (1 + nodeEquivalencyScore(first.template, second.template)) / 2
+			: 0;
 	}
 
 	if (second.type === 'conditional') {

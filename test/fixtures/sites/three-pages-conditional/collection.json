@@ -5,8 +5,8 @@
 				{
 					"pathname": "about.html",
 					"data": {
-						"h1_inline_markdown": "About",
-						"meta_description": null,
+						"inline_markdown": "About",
+						"meta": null,
 						"title": "Test"
 					},
 					"content": []
@@ -14,9 +14,9 @@
 				{
 					"pathname": "contact.html",
 					"data": {
-						"h1_inline_markdown": "Contact",
-						"meta_description": {
-							"meta_description_content": "Fixed"
+						"inline_markdown": "Contact",
+						"meta": {
+							"description": "Fixed"
 						},
 						"title": "Test"
 					},
@@ -25,10 +25,10 @@
 				{
 					"pathname": "index.html",
 					"data": {
-						"h1_inline_markdown": "Home",
+						"inline_markdown": "Home",
 						"title": "Home | Test",
-						"meta_description": {
-							"meta_description_content": "Home"
+						"meta": {
+							"description": "Home"
 						}
 					},
 					"content": []
@@ -73,7 +73,7 @@
 								{
 									"type": "conditional",
 									"reference": [
-										"meta_description"
+										"meta"
 									],
 									"template": {
 										"type": "element",
@@ -88,7 +88,7 @@
 												"type": "variable-attribute",
 												"name": "content",
 												"reference": [
-													"meta_description_content"
+													"description"
 												]
 											}
 										},
@@ -122,7 +122,7 @@
 										{
 											"type": "inline-markdown-variable",
 											"reference": [
-												"h1_inline_markdown"
+												"inline_markdown"
 											]
 										}
 									]

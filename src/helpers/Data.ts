@@ -1,6 +1,7 @@
 import { ASTAttribute, ASTElementNode } from '../types.ts';
 import { getElementSignature } from './getElementSignature.ts';
 import { getClassList } from './node-helper.ts';
+import VariationMap, { extractStaticContext } from './variation-map.ts';
 
 const htmlTagToVariableSuffix: Record<string, string> = {
 	ol: 'list',
@@ -27,11 +28,11 @@ function getAttributeSignature(attr: ASTAttribute | undefined): string | null {
 }
 
 /**
- * 
- * @param variable string containing a variable name. 
+ *
+ * @param variable string containing a variable name.
  * @returns a string that is formatted to work across various ssgs.
  */
-function formatVariable(variable: String){
+function formatVariable(variable: String) {
 	return variable.replaceAll(/([\[\]\(\)%—,\-\:])+/g, '_');
 }
 
@@ -119,14 +120,19 @@ export function joinNameParts(parts: string[]) {
 export default class Data {
 	chain: string[];
 	data: Record<string, any>;
+	variationMap?: VariationMap;
+	variationScope: string;
 
 	constructor(chain: string[], data: Record<string, any>) {
 		this.chain = chain;
 		this.data = data;
+		this.variationScope = '';
 	}
 
 	set(variableName: string, value: any): void {
-		this.data[formatVariable(variableName)] = value;
+		const formatted = formatVariable(variableName);
+		this.data[formatted] = value;
+		this.variationMap?.recordValue(formatted, value, this.variationScope);
 	}
 
 	delete(variableName: string): void {
@@ -163,12 +169,23 @@ export default class Data {
 	}
 
 	getVariableName(parentElements: ASTElementNode[], prefix?: string, suffix?: string): string {
-
 		const length = parentElements.length;
+		const lastElement = length > 0 ? parentElements[length - 1] : undefined;
 
-		const signature =
-			length > 0 ? getElementSignature(parentElements[parentElements.length - 1]) : '';
-		return this.versionedVarableName(joinNameParts([prefix || '', signature, suffix || '']));
+		const signature = lastElement ? getElementSignature(lastElement) : '';
+		const key = this.versionedVarableName(
+			joinNameParts([prefix || '', signature, suffix || ''])
+		);
+
+		if (this.variationMap && lastElement) {
+			this.variationMap.record(key, {
+				sourceElement: extractStaticContext(lastElement),
+				suffix: suffix || undefined,
+				scope: this.variationScope
+			});
+		}
+
+		return key;
 	}
 
 	versionedVarableName(variableName: string): string {
@@ -195,11 +212,27 @@ export default class Data {
 
 	merge(other: Data): Data {
 		const clone = mergeHash(this.data, other.data);
-		return new Data(this.chain, clone);
+		const merged = new Data(this.chain, clone);
+		merged.variationMap = this.variationMap ?? other.variationMap;
+		merged.variationScope = this.variationScope;
+		return merged;
 	}
 
 	createSubdata(variableName: string, data?: Record<string, any>): Data {
-		return new Data(this.getChain(formatVariable(variableName)), data || {});
+		const sub = new Data(this.getChain(formatVariable(variableName)), data || {});
+		sub.variationMap = this.variationMap;
+		sub.variationScope = formatVariable(variableName);
+		return sub;
+	}
+
+	withVariationMap(map: VariationMap): Data {
+		this.variationMap = map;
+		return this;
+	}
+
+	withScope(scope: string): Data {
+		this.variationScope = scope;
+		return this;
 	}
 
 	toJSON(): Record<string, any> {

@@ -5,18 +5,18 @@
 				{
 					"pathname": "about.html",
 					"data": {
-						"h1_inline_markdown": "About",
+						"inline_markdown": "About",
 						"title": "Test",
-						"meta_description": null
+						"meta": null
 					},
 					"content": []
 				},
 				{
 					"pathname": "index.html",
 					"data": {
-						"h1_inline_markdown": "Home",
+						"inline_markdown": "Home",
 						"title": "Home | Test",
-						"meta_description": {}
+						"meta": {}
 					},
 					"content": []
 				}
@@ -60,7 +60,7 @@
 								{
 									"type": "conditional",
 									"reference": [
-										"meta_description"
+										"meta"
 									],
 									"template": {
 										"type": "element",
@@ -107,7 +107,7 @@
 										{
 											"type": "inline-markdown-variable",
 											"reference": [
-												"h1_inline_markdown"
+												"inline_markdown"
 											]
 										}
 									]

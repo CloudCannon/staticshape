@@ -5,25 +5,25 @@
 				{
 					"pathname": "about.html",
 					"data": {
-						"body_items": [
+						"items": [
 							{
-								"div_first_class": "first",
+								"first_class": "first",
 								"div_second_items": [
 									{
-										"p_test_inline_markdown": "Test 1"
+										"inline_markdown": "Test 1"
 									}
 								]
 							},
 							{
 								"div_second_items": [
 									{
-										"p_test_inline_markdown": "Test 2"
+										"inline_markdown": "Test 2"
 									},
 									{
-										"p_test_inline_markdown": "Test 3"
+										"inline_markdown": "Test 3"
 									}
 								],
-								"div_first_class": "second"
+								"first_class": "second"
 							}
 						]
 					},
@@ -32,7 +32,7 @@
 				{
 					"pathname": "index.html",
 					"data": {
-						"body_items": []
+						"items": []
 					},
 					"content": []
 				}
@@ -93,7 +93,7 @@
 								{
 									"type": "loop",
 									"reference": [
-										"body_items"
+										"items"
 									],
 									"template": {
 										"type": "element",
@@ -103,7 +103,7 @@
 												"type": "variable-attribute",
 												"name": "class",
 												"reference": [
-													"div_first_class"
+													"first_class"
 												]
 											}
 										},
@@ -131,7 +131,7 @@
 														{
 															"type": "inline-markdown-variable",
 															"reference": [
-																"p_test_inline_markdown"
+																"inline_markdown"
 															]
 														}
 													]
