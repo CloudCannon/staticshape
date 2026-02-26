@@ -26,7 +26,7 @@
 	},
 	"scripts": {
 		"publish": "npm run build && np",
-		"test": "c8 tsx --test test/site.ts test/dom-diff.ts test/layout.ts test/component-builder.ts test/node-equivalency.ts test/loops.ts test/markdown.ts",
+		"test": "c8 tsx --test test/site.ts test/dom-diff.ts test/layout.ts test/component-builder.ts test/node-equivalency.ts test/loops.ts test/markdown.ts test/hugo-export.ts test/site-improvements.ts",
 		"build": "tsc",
 		"start": "tsc && node lib/cli.js",
 		"prettier-format": "prettier --config .prettierrc 'src/**/*.ts' 'test/**/*.ts' 'test/**/*.json' --write"
