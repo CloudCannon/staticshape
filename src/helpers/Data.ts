@@ -28,11 +28,11 @@ function getAttributeSignature(attr: ASTAttribute | undefined): string | null {
 }
 
 /**
- * 
- * @param variable string containing a variable name. 
+ *
+ * @param variable string containing a variable name.
  * @returns a string that is formatted to work across various ssgs.
  */
-function formatVariable(variable: String){
+function formatVariable(variable: String) {
 	return variable.replaceAll(/([\[\]\(\)%—,\-\:])+/g, '_');
 }
 
@@ -173,7 +173,9 @@ export default class Data {
 		const lastElement = length > 0 ? parentElements[length - 1] : undefined;
 
 		const signature = lastElement ? getElementSignature(lastElement) : '';
-		const key = this.versionedVarableName(joinNameParts([prefix || '', signature, suffix || '']));
+		const key = this.versionedVarableName(
+			joinNameParts([prefix || '', signature, suffix || ''])
+		);
 
 		if (this.variationMap && lastElement) {
 			this.variationMap.record(key, {

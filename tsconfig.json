@@ -5,6 +5,8 @@
 		"moduleResolution": "nodenext",
 		"rewriteRelativeImportExtensions": true,
 		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
 		"outDir": "./lib"
 	},
 	"include": ["src"],

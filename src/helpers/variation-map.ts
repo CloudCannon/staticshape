@@ -89,7 +89,8 @@ export default class VariationMap {
 		} else {
 			const existing = scopeMap.get(key)!;
 			if (meta.attrName && !existing.attrName) existing.attrName = meta.attrName;
-			if (meta.sourceElement && !existing.sourceElement) existing.sourceElement = meta.sourceElement;
+			if (meta.sourceElement && !existing.sourceElement)
+				existing.sourceElement = meta.sourceElement;
 			if (meta.suffix && !existing.suffix) existing.suffix = meta.suffix;
 		}
 	}
@@ -182,11 +183,7 @@ export default class VariationMap {
 			let chosen: string | null = null;
 			for (const candidate of candidates) {
 				const formatted = formatForSSG(candidate);
-				if (
-					formatted &&
-					!taken.has(formatted) &&
-					formatted !== parentDisplayName
-				) {
+				if (formatted && !taken.has(formatted) && formatted !== parentDisplayName) {
 					chosen = formatted;
 					break;
 				}
@@ -310,9 +307,7 @@ export default class VariationMap {
 	}
 
 	private findStableClasses(entry: VariationEntry): string[] {
-		const stringValues = entry.values.filter(
-			(v): v is string => typeof v === 'string'
-		);
+		const stringValues = entry.values.filter((v): v is string => typeof v === 'string');
 		if (stringValues.length === 0) {
 			return entry.sourceElement?.staticClasses ?? [];
 		}
@@ -333,9 +328,7 @@ export function remapData(
 		const newKey = nameMap?.get(key) ?? key;
 		if (Array.isArray(value)) {
 			result[newKey] = value.map((item) =>
-				typeof item === 'object' && item !== null
-					? remapData(item, scopeMap, key)
-					: item
+				typeof item === 'object' && item !== null ? remapData(item, scopeMap, key) : item
 			);
 		} else if (typeof value === 'object' && value !== null) {
 			result[newKey] = remapData(value, scopeMap, key);
@@ -375,7 +368,11 @@ function remapASTNode(
 			return {
 				...node,
 				reference: remapReference(node.reference, nameMap),
-				template: remapASTNode(node.template, scopeMap, innerScope) as import('../types.ts').ASTElementNode
+				template: remapASTNode(
+					node.template,
+					scopeMap,
+					innerScope
+				) as import('../types.ts').ASTElementNode
 			};
 		}
 		case 'loop': {
@@ -383,7 +380,11 @@ function remapASTNode(
 			return {
 				...node,
 				reference: remapReference(node.reference, nameMap),
-				template: remapASTNode(node.template, scopeMap, innerScope) as import('../types.ts').ASTElementNode
+				template: remapASTNode(
+					node.template,
+					scopeMap,
+					innerScope
+				) as import('../types.ts').ASTElementNode
 			};
 		}
 		case 'element':

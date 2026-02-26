@@ -37,7 +37,7 @@ export function diffBasicNode(
 	firstNode: ASTValueNode,
 	secondNode: ASTValueNode,
 	parentElements: ASTElementNode[],
-	logger: Logger
+	_logger: Logger
 ): ASTNode {
 	const valuesMatch = firstNode.value.trim() === secondNode.value.trim();
 	if (valuesMatch) {
@@ -429,10 +429,7 @@ function diffConditionalAndLoopNode(
 	const variableName = conditionalNode.reference[0];
 	if (conditionalData.hasKey(variableName)) {
 		const existingValue = conditionalData.getKey(variableName);
-		conditionalData.set(
-			variableName,
-			existingValue != null ? [existingValue] : []
-		);
+		conditionalData.set(variableName, existingValue != null ? [existingValue] : []);
 	}
 
 	const promotedLoop: ASTLoopNode = {
@@ -854,32 +851,32 @@ export function mergeTree(
 								firstEls.length === secondEls.length &&
 								nodeTreeEquivalencyScore(firstEls, secondEls) === 1;
 
-						// TODO: Object building
-						if (!isExactMatch) {
-							const anticipatedLoopVar = firstData.getVariableName(
-								parentElements,
-								'',
-								'items'
-							);
-							const loopData = buildLoop(
-								firstEls,
-								secondEls,
-								parentElements,
-								logger,
-								firstData.variationMap,
-								anticipatedLoopVar
-							);
-							if (loopData) {
-								const { firstItems, secondItems, template } = loopData;
-								const variableName = anticipatedLoopVar;
-								firstData.set(
-									variableName,
-									firstItems.map((item: Data) => item.toJSON())
+							// TODO: Object building
+							if (!isExactMatch) {
+								const anticipatedLoopVar = firstData.getVariableName(
+									parentElements,
+									'',
+									'items'
 								);
-								secondData.set(
-									variableName,
-									secondItems.map((item: Data) => item.toJSON())
+								const loopData = buildLoop(
+									firstEls,
+									secondEls,
+									parentElements,
+									logger,
+									firstData.variationMap,
+									anticipatedLoopVar
 								);
+								if (loopData) {
+									const { firstItems, secondItems, template } = loopData;
+									const variableName = anticipatedLoopVar;
+									firstData.set(
+										variableName,
+										firstItems.map((item: Data) => item.toJSON())
+									);
+									secondData.set(
+										variableName,
+										secondItems.map((item: Data) => item.toJSON())
+									);
 
 									logger.log('🔄 Added loop', nodeDebugString(template));
 									merged.push({
@@ -921,14 +918,21 @@ export function mergeTree(
 				nodeDebugString(other, 0, 0)
 			);
 
-		if (current.type === 'element' && other.type === 'loop') {
-			const repeatedIndex = findRepeatedIndex(firstRemainingNodes);
-			if (repeatedIndex > 0) {
-				const elements = firstRemainingNodes
-					.slice(0, repeatedIndex + 1)
-					.filter((node) => node.type === 'element') as ASTElementNode[];
-				if (elements.length > 1) {
-					const loopData = buildLoop(elements, [], parentElements, logger, firstData.variationMap, other.reference[0]);
+			if (current.type === 'element' && other.type === 'loop') {
+				const repeatedIndex = findRepeatedIndex(firstRemainingNodes);
+				if (repeatedIndex > 0) {
+					const elements = firstRemainingNodes
+						.slice(0, repeatedIndex + 1)
+						.filter((node) => node.type === 'element') as ASTElementNode[];
+					if (elements.length > 1) {
+						const loopData = buildLoop(
+							elements,
+							[],
+							parentElements,
+							logger,
+							firstData.variationMap,
+							other.reference[0]
+						);
 						if (loopData) {
 							const { firstItems, template } = loopData;
 							firstData.chainSet(
@@ -970,11 +974,18 @@ export function mergeTree(
 					.slice(0, repeatedIndex + 1)
 					.filter((node) => node.type === 'element') as ASTElementNode[];
 				if (elements.length > 1) {
-				const loopData = buildLoop(elements, [], parentElements, logger, secondData.variationMap, current.reference[0]);
-				if (loopData) {
-					const { secondItems, template } = loopData;
-					secondData.chainSet(
-						current.reference,
+					const loopData = buildLoop(
+						elements,
+						[],
+						parentElements,
+						logger,
+						secondData.variationMap,
+						current.reference[0]
+					);
+					if (loopData) {
+						const { secondItems, template } = loopData;
+						secondData.chainSet(
+							current.reference,
 							secondItems.map((item: Data) => item.toJSON())
 						);
 
@@ -1011,7 +1022,7 @@ export function mergeTree(
 					'\nvs\n',
 					JSON.stringify(other),
 					'?????????????????????????'
-					);
+				);
 			}
 
 			merged.push(diffNodes(firstData, secondData, current, other, parentElements, logger));

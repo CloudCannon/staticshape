@@ -24,14 +24,14 @@ async function runTest(testName: string) {
 				(
 					await fs.promises.readFile(`./test/fixtures/layouts/${testName}/a-data.json`)
 				).toString('utf-8')
-		  )
+			)
 		: {};
 	const bDataContents = fs.existsSync(`./test/fixtures/layouts/${testName}/b-data.json`)
 		? JSON.parse(
 				(
 					await fs.promises.readFile(`./test/fixtures/layouts/${testName}/b-data.json`)
 				).toString('utf-8')
-		  )
+			)
 		: {};
 	let aData = new Data([], structuredClone(aDataContents));
 	let bData = new Data([], structuredClone(bDataContents));
@@ -63,16 +63,16 @@ async function runTest(testName: string) {
 
 	assert.deepStrictEqual(forwards, expected);
 	const expectedAData = JSON.parse(
-		(await fs.promises.readFile(`./test/fixtures/layouts/${testName}/a-data-merged.json`)).toString(
-			'utf-8'
-		)
+		(
+			await fs.promises.readFile(`./test/fixtures/layouts/${testName}/a-data-merged.json`)
+		).toString('utf-8')
 	);
 
 	assert.deepStrictEqual(aData.toJSON(), expectedAData);
 	const expectedBData = JSON.parse(
-		(await fs.promises.readFile(`./test/fixtures/layouts/${testName}/b-data-merged.json`)).toString(
-			'utf-8'
-		)
+		(
+			await fs.promises.readFile(`./test/fixtures/layouts/${testName}/b-data-merged.json`)
+		).toString('utf-8')
 	);
 
 	assert.deepStrictEqual(bData.toJSON(), expectedBData);
@@ -81,10 +81,22 @@ async function runTest(testName: string) {
 	bData = new Data([], structuredClone(bDataContents));
 	const backwards = merge(b, a, bData, aData);
 	assert.deepStrictEqual(backwards, expected);
-	assert.deepStrictEqual(merge(backwards, a, bData, new Data([], structuredClone(aDataContents))), expected);
-	assert.deepStrictEqual(merge(backwards, b, bData, new Data([], structuredClone(bDataContents))), expected);
-	assert.deepStrictEqual(merge(forwards, a, bData, new Data([], structuredClone(aDataContents))), expected);
-	assert.deepStrictEqual(merge(forwards, b, bData, new Data([], structuredClone(bDataContents))), expected);
+	assert.deepStrictEqual(
+		merge(backwards, a, bData, new Data([], structuredClone(aDataContents))),
+		expected
+	);
+	assert.deepStrictEqual(
+		merge(backwards, b, bData, new Data([], structuredClone(bDataContents))),
+		expected
+	);
+	assert.deepStrictEqual(
+		merge(forwards, a, bData, new Data([], structuredClone(aDataContents))),
+		expected
+	);
+	assert.deepStrictEqual(
+		merge(forwards, b, bData, new Data([], structuredClone(bDataContents))),
+		expected
+	);
 	assert.deepStrictEqual(merge(forwards, backwards, bData, aData), expected);
 	assert.deepStrictEqual(merge(forwards, forwards, bData, aData), expected);
 	assert.deepStrictEqual(merge(backwards, forwards, bData, aData), expected);

@@ -21,11 +21,20 @@ function renderFrontMatter(data: Record<string, any>) {
 }
 
 /**
- * 
- * @param node 
+ *
+ * @param node
  * @returns a string that is hugo formatted
  */
-function formatParam(node: ASTVariableNode | ASTMarkdownNode | ASTInlineMarkdownNode | ASTConditionalNode | ASTLoopNode | ASTVariableAttribute | ASTConditionalAttribute){
+function formatParam(
+	node:
+		| ASTVariableNode
+		| ASTMarkdownNode
+		| ASTInlineMarkdownNode
+		| ASTConditionalNode
+		| ASTLoopNode
+		| ASTVariableAttribute
+		| ASTConditionalAttribute
+) {
 	return node.reference.join('.').replaceAll(/([\-\:\s\@])+/g, '_');
 }
 
@@ -50,19 +59,19 @@ export default class HugoExportEngine extends HtmlExportEngine {
 
 	exportLayout(
 		layout: ASTNode[],
-		collection: CollectionResponse,
+		_collection: CollectionResponse,
 		collectionKey: string
 	): FileExport {
 		return {
 			// TODO: this logic is currently fixed to use a default layout (list.html)
 			pathname: `layouts/${collectionKey}/list.html`,
-			contents: this.renderAST(layout, ".Params.")
+			contents: this.renderAST(layout, '.Params.')
 		};
 	}
 
 	exportCollectionItem(
 		item: Record<string, any>,
-		collection: CollectionResponse,
+		_collection: CollectionResponse,
 		collectionKey: string
 	): FileExport {
 		const folder = collectionKey !== 'pages' ? `${collectionKey}/` : '';
@@ -73,10 +82,13 @@ export default class HugoExportEngine extends HtmlExportEngine {
 		};
 		return {
 			pathname: `content/${folder}${item.pathname.replace('index', '_index')}`,
-			contents: [renderFrontMatter(frontMatter), this.renderAST(item.content, ".Params.")].join('\n')
+			contents: [
+				renderFrontMatter(frontMatter),
+				this.renderAST(item.content, '.Params.')
+			].join('\n')
 		};
 	}
-	
+
 	renderVariable(node: ASTVariableNode, variableScope: string): string {
 		return `{{ ${variableScope}${formatParam(node)} }}`;
 	}
@@ -89,29 +101,33 @@ export default class HugoExportEngine extends HtmlExportEngine {
 		// return `{{ .Params.${formatParam(node)} | fake_inline_markdownify_filter }}`;
 		// TODO: fix fake_inline_markdownify_filter
 		return `{{ ${variableScope}${formatParam(node)} | markdownify }}`;
-
 	}
 
 	renderConditional(node: ASTConditionalNode, variableScope: string): string {
 		return `{{ with ${variableScope}${formatParam(node)} }} ${this.renderASTNode(
-			node.template, "."
+			node.template,
+			'.'
 		)}{{ end }}`;
 	}
 
 	renderLoop(node: ASTLoopNode, variableScope: string): string {
 		return `{{ range ${variableScope}${formatParam(node)} }}${this.renderASTNode(
-			node.template, "."
+			node.template,
+			'.'
 		)}{{ end }}`;
 	}
 
-	renderContent(_node: ASTContentNode, variableScope: string): string {
-		return `{{ .Content }}`; 
+	renderContent(_node: ASTContentNode, _variableScope: string): string {
+		return `{{ .Content }}`;
 	}
 
-	renderVariableAttribute(attr: ASTVariableAttribute | ASTConditionalAttribute, variableScope: string): string {
+	renderVariableAttribute(
+		attr: ASTVariableAttribute | ASTConditionalAttribute,
+		variableScope: string
+	): string {
 		return [attr.name, `"{{ ${variableScope}${formatParam(attr)} }}"`].join('=');
 	}
-	
+
 	renderConditionalAttribute(attr: ASTConditionalAttribute, variableScope: string): string {
 		return `{{ with ${variableScope}${formatParam(attr)} }}{{ . }}{{ end }}`;
 	}

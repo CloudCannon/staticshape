@@ -104,7 +104,7 @@ function buildLoop(
 	parentElements: ASTElementNode[],
 	inputData: Data,
 	outputData: Data,
-	config: ComponentBuilderConfig,
+	_config: ComponentBuilderConfig,
 	logger: Logger,
 	scopeHint?: string
 ): Loop | null {
@@ -113,7 +113,7 @@ function buildLoop(
 	let current: LoopState | null = null;
 
 	let inputBaseData: Record<string, any> = {};
-	
+
 	const baseLiftedVariables = liftVariables(base, inputData);
 	Object.keys(baseLiftedVariables).forEach((variableName) => {
 		inputBaseData[variableName] = inputData.getKey(variableName);
@@ -288,20 +288,24 @@ export function convertTreeToComponents(
 						.slice(0, repeatedIndex + 1)
 						.filter((node) => node.type === 'element') as ASTElementNode[];
 
-				if (repeatedElements.length > 1) {
-					const anticipatedLoopVar = data.getVariableName(parentElements, '', 'items');
-					const loopData = buildLoop(
-						repeatedElements,
-						parentElements,
-						existingData,
-						data,
-						config,
-						logger,
-						anticipatedLoopVar
-					);
-					if (loopData) {
-						const { itemData, template } = loopData;
-						const variableName = anticipatedLoopVar;
+					if (repeatedElements.length > 1) {
+						const anticipatedLoopVar = data.getVariableName(
+							parentElements,
+							'',
+							'items'
+						);
+						const loopData = buildLoop(
+							repeatedElements,
+							parentElements,
+							existingData,
+							data,
+							config,
+							logger,
+							anticipatedLoopVar
+						);
+						if (loopData) {
+							const { itemData, template } = loopData;
+							const variableName = anticipatedLoopVar;
 							data.set(
 								variableName,
 								itemData.map((item: Data) => item.toJSON())

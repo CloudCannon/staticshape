@@ -8,7 +8,7 @@ const slugify = (_slugify as any).default as (str: string) => string;
 import Data from './helpers/Data.ts';
 import { mergeTree } from './helpers/dom-diff.ts';
 import { ASTNode } from './types.ts';
-import VariationMap, { remapData, remapASTReferences, ScopedNameMap } from './helpers/variation-map.ts';
+import VariationMap, { remapData, remapASTReferences } from './helpers/variation-map.ts';
 
 export interface CollectionConfig {
 	name: string;
@@ -109,8 +109,7 @@ export default class Collection {
 		await this.logger.writeLog('layout.json', JSON.stringify(current.layout, null, '\t'));
 		for (let i = 2; i < documents.length; i++) {
 			await this.logger.rotateLog();
-			try
-			{
+			try {
 				const next = baseDoc.diff(documents[i]);
 				await this.logger.writeLog(
 					`${slugify(documents[i].pathname)}.json`,
@@ -151,9 +150,8 @@ export default class Collection {
 					pages: [...current.pages, ...next.pages],
 					layout
 				};
-			}
-			catch(err){
-				console.error("Error hit exporting log")
+			} catch (err) {
+				console.error('Error hit exporting log');
 				await this.logger.rotateLog();
 				throw err;
 			}
@@ -162,12 +160,14 @@ export default class Collection {
 
 		const displayNames = variationMap.generateDisplayNames();
 		const remappedLayout = remapASTReferences(current.layout, displayNames);
-		const remappedPages = [current.base.toJSON(), ...current.pages.map((page) => page.toJSON())]
-			.map((page) => ({
-				...page,
-				data: remapData(page.data, displayNames),
-				content: remapASTReferences(page.content, displayNames)
-			}));
+		const remappedPages = [
+			current.base.toJSON(),
+			...current.pages.map((page) => page.toJSON())
+		].map((page) => ({
+			...page,
+			data: remapData(page.data, displayNames),
+			content: remapASTReferences(page.content, displayNames)
+		}));
 
 		return {
 			pages: remappedPages,

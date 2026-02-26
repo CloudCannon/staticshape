@@ -96,7 +96,7 @@ export default class HtmlExportEngine {
 		throw new Error(`${node.type} render: not yet implemented`);
 	}
 
-	renderDoctype(doctype: ASTDoctypeNode, variableScope: string): string {
+	renderDoctype(doctype: ASTDoctypeNode, _variableScope: string): string {
 		return `<!DOCTYPE ${doctype.value}>`;
 	}
 
@@ -119,15 +119,18 @@ export default class HtmlExportEngine {
 			.join(' ')}`;
 	}
 
-	renderAttribute(attr: ASTStaticAttribute, variableScope: string): string {
+	renderAttribute(attr: ASTStaticAttribute, _variableScope: string): string {
 		return [attr.name, `"${attr.value}"`].join('=');
 	}
 
-	renderVariableAttribute(_attr: ASTVariableAttribute | ASTConditionalAttribute, variableScope: string): string {
+	renderVariableAttribute(
+		_attr: ASTVariableAttribute | ASTConditionalAttribute,
+		_variableScope: string
+	): string {
 		throw new Error('Not yet implemented');
 	}
 
-	renderConditionalAttribute(_attr: ASTConditionalAttribute, variableScope: string): string {
+	renderConditionalAttribute(_attr: ASTConditionalAttribute, _variableScope: string): string {
 		throw new Error('Not yet implemented');
 	}
 
@@ -138,53 +141,54 @@ export default class HtmlExportEngine {
 			name = name.substring(5);
 		}
 
-		// Elements that don't need closing tags 
-		if(name === "meta" || name === "link" || name === "img"){
+		// Elements that don't need closing tags
+		if (name === 'meta' || name === 'link' || name === 'img') {
 			return `<${name}${this.renderAttributes(element.attrs, variableScope)}>${this.renderAST(element.children, variableScope)}`;
 		}
-		// // TODO: Fix style tags 
+		// // TODO: Fix style tags
 		// if(name === "style"){
 		// 	return `<!-- Style was here -->`;
 		// }
 
 		// TODO: Fix scripts
-		if(name === "script"){
+		if (name === 'script') {
 			return `<!-- Script was here -->`;
 		}
 		return `<${name}${this.renderAttributes(element.attrs, variableScope)}>${this.renderAST(
-			element.children, variableScope
+			element.children,
+			variableScope
 		)}</${name}>`;
 	}
 
-	renderText(text: ASTTextNode, variableScope: string): string {
+	renderText(text: ASTTextNode, _variableScope: string): string {
 		return text.value;
 	}
 
-	renderComment(text: ASTCommentNode, variableScope: string): string {
+	renderComment(text: ASTCommentNode, _variableScope: string): string {
 		return `<!-- ${text.value} -->`;
 	}
 
-	renderVariable(_node: ASTVariableNode, variableScope: string): string {
+	renderVariable(_node: ASTVariableNode, _variableScope: string): string {
 		throw new Error('Variable render not yet implemented');
 	}
 
-	renderMarkdownVariable(_node: ASTMarkdownNode, variableScope: string): string {
+	renderMarkdownVariable(_node: ASTMarkdownNode, _variableScope: string): string {
 		throw new Error('Markdown render not yet implemented');
 	}
 
-	renderInlineMarkdownVariable(_node: ASTInlineMarkdownNode, variableScope: string): string {
+	renderInlineMarkdownVariable(_node: ASTInlineMarkdownNode, _variableScope: string): string {
 		throw new Error('Inline markdown render not yet implemented');
 	}
 
-	renderConditional(_node: ASTConditionalNode, variableScope: string): string {
+	renderConditional(_node: ASTConditionalNode, _variableScope: string): string {
 		throw new Error('Conditional render not yet implemented');
 	}
 
-	renderLoop(_node: ASTLoopNode, variableScope: string): string {
+	renderLoop(_node: ASTLoopNode, _variableScope: string): string {
 		throw new Error('Loop render not yet implemented');
 	}
 
-	renderContent(_node: ASTContentNode, variableScope: string): string {
+	renderContent(_node: ASTContentNode, _variableScope: string): string {
 		throw new Error('Content render not yet implemented');
 	}
 }

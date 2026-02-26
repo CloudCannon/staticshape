@@ -11,7 +11,16 @@ import {
 } from '../types.ts';
 import { DocumentConfig } from '../document.ts';
 
-type NodeType = 'element' | 'attribute' | 'text' | 'cdata' | 'PROCESSING_INSTRUCTION_NODE' | 'comment' | 'DOCUMENT_NODE' | 'docType' | 'DOCUMENT_FRAGMENT_NODE';
+type NodeType =
+	| 'element'
+	| 'attribute'
+	| 'text'
+	| 'cdata'
+	| 'PROCESSING_INSTRUCTION_NODE'
+	| 'comment'
+	| 'DOCUMENT_NODE'
+	| 'docType'
+	| 'DOCUMENT_FRAGMENT_NODE';
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
 const nodeTypes = {
@@ -180,7 +189,11 @@ interface HTMLProcessorResponse {
 	contents: ASTNode[];
 }
 
-export default function htmlToAST(html: string, documentConfig: DocumentConfig, processorConfig: HtmlProcessorConfig): HTMLProcessorResponse {
+export default function htmlToAST(
+	html: string,
+	documentConfig: DocumentConfig,
+	processorConfig: HtmlProcessorConfig
+): HTMLProcessorResponse {
 	const processor = new htmlProcessor(documentConfig.content || {}, processorConfig);
 	const layout = processor.parse(html);
 
