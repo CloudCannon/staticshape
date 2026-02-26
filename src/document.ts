@@ -5,6 +5,7 @@ import htmlToAST, { HtmlProcessorConfig, PageContentsConfig } from './helpers/ht
 import { ASTNode } from './types.ts';
 import Data from './helpers/Data.ts';
 import { Logger } from './logger.ts';
+import VariationMap from './helpers/variation-map.ts';
 
 export interface ASTTree {
 	base: Page;
@@ -22,6 +23,7 @@ export interface DocumentOptions {
 	config: DocumentConfig;
 	processorConfig: HtmlProcessorConfig;
 	logger: Logger;
+	variationMap?: VariationMap;
 }
 
 export default class Document {
@@ -30,10 +32,12 @@ export default class Document {
 	data: Data;
 	layout: ASTNode[];
 	contents: ASTNode[];
+	variationMap?: VariationMap;
 
 	constructor(options: DocumentOptions) {
 		this.logger = options.logger;
 		this.pathname = options.pathname;
+		this.variationMap = options.variationMap;
 		const { layout, contents } = htmlToAST(
 			options.content,
 			options.config,
@@ -42,10 +46,12 @@ export default class Document {
 		this.layout = layout;
 		this.contents = contents;
 		this.data = new Data([], {});
+		this.data.variationMap = this.variationMap;
 	}
 
 	diff(other: Document): ASTTree {
 		this.data = new Data([], {});
+		this.data.variationMap = this.variationMap;
 
 		this.logger.log(`Comparing ${this.pathname} and ${other.pathname}`);
 		const tree = mergeTree(this.data, other.data, this.layout, other.layout, [], this.logger);

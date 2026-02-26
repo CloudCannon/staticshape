@@ -8,6 +8,7 @@ const slugify = (_slugify as any).default as (str: string) => string;
 import Data from './helpers/Data.ts';
 import { mergeTree } from './helpers/dom-diff.ts';
 import { ASTNode } from './types.ts';
+import VariationMap, { remapData, remapASTReferences, ScopedNameMap } from './helpers/variation-map.ts';
 
 export interface CollectionConfig {
 	name: string;
@@ -65,6 +66,8 @@ export default class Collection {
 	}
 
 	async build(): Promise<CollectionResponse> {
+		const variationMap = new VariationMap();
+
 		const documents = await Promise.all(
 			this.files.map(async (file) => {
 				const html = await file.read();
@@ -76,7 +79,8 @@ export default class Collection {
 						content: this.content
 					},
 					processorConfig: this.processorConfig || {},
-					logger: this.logger
+					logger: this.logger,
+					variationMap
 				});
 			})
 		);
@@ -117,7 +121,6 @@ export default class Collection {
 
 				const currentPreMergeData = structuredClone(current.base.data.data);
 				const nextPreMergeData = structuredClone(next.base.data.data);
-				// Merge the next and current bases
 				const layout = mergeTree(
 					current.base.data,
 					next.base.data,
@@ -130,12 +133,14 @@ export default class Collection {
 				for (let i = 0; i < current.pages.length; i++) {
 					const page = current.pages[i];
 					const nextData = new Data([], structuredClone(nextPreMergeData));
+					nextData.variationMap = variationMap;
 					mergeTree(page.data, nextData, current.layout, next.layout, [], this.logger);
 				}
 
 				for (let i = 0; i < next.pages.length; i++) {
 					const page = next.pages[i];
 					const currentData = new Data([], structuredClone(currentPreMergeData));
+					currentData.variationMap = variationMap;
 					mergeTree(page.data, currentData, next.layout, current.layout, [], this.logger);
 				}
 
@@ -155,9 +160,18 @@ export default class Collection {
 		}
 		await this.logger.rotateLog();
 
+		const displayNames = variationMap.generateDisplayNames();
+		const remappedLayout = remapASTReferences(current.layout, displayNames);
+		const remappedPages = [current.base.toJSON(), ...current.pages.map((page) => page.toJSON())]
+			.map((page) => ({
+				...page,
+				data: remapData(page.data, displayNames),
+				content: remapASTReferences(page.content, displayNames)
+			}));
+
 		return {
-			pages: [current.base.toJSON(), ...current.pages.map((page) => page.toJSON())],
-			layout: current.layout
+			pages: remappedPages,
+			layout: remappedLayout
 		};
 	}
 }

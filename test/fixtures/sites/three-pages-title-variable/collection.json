@@ -1,31 +1,30 @@
 {
-	"staticFiles": [],
 	"collections": {
 		"pages": {
 			"pages": [
 				{
-					"pathname": "index.html",
-					"content": [],
-					"data": {
-						"title": "Home | Test",
-						"h1_inline_markdown": "Home"
-					}
-				},
-				{
 					"pathname": "about.html",
-					"content": [],
 					"data": {
-						"title": "Test",
-						"h1_inline_markdown": "About"
-					}
+						"inline_markdown": "About",
+						"title": "Test"
+					},
+					"content": []
 				},
 				{
 					"pathname": "contact.html",
-					"content": [],
 					"data": {
-						"title": "Test",
-						"h1_inline_markdown": "Contact"
-					}
+						"inline_markdown": "Contact",
+						"title": "Test"
+					},
+					"content": []
+				},
+				{
+					"pathname": "index.html",
+					"data": {
+						"inline_markdown": "Home",
+						"title": "Home | Test"
+					},
+					"content": []
 				}
 			],
 			"layout": [
@@ -54,7 +53,9 @@
 									"children": [
 										{
 											"type": "variable",
-											"reference": ["title"]
+											"reference": [
+												"title"
+											]
 										}
 									]
 								},
@@ -84,7 +85,9 @@
 									"children": [
 										{
 											"type": "inline-markdown-variable",
-											"reference": ["h1_inline_markdown"]
+											"reference": [
+												"inline_markdown"
+											]
 										}
 									]
 								},
@@ -98,5 +101,6 @@
 				}
 			]
 		}
-	}
+	},
+	"staticFiles": []
 }

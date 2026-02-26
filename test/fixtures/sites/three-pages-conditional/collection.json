@@ -1,38 +1,37 @@
 {
-	"staticFiles": [],
 	"collections": {
 		"pages": {
 			"pages": [
 				{
-					"pathname": "index.html",
-					"content": [],
-					"data": {
-						"title": "Home | Test",
-						"meta_description": {
-							"meta_description_content": "Home"
-						},
-						"h1_inline_markdown": "Home"
-					}
-				},
-				{
 					"pathname": "about.html",
-					"content": [],
 					"data": {
-						"title": "Test",
-						"meta_description": null,
-						"h1_inline_markdown": "About"
-					}
+						"inline_markdown": "About",
+						"meta": null,
+						"title": "Test"
+					},
+					"content": []
 				},
 				{
 					"pathname": "contact.html",
-					"content": [],
 					"data": {
-						"title": "Test",
-						"meta_description": {
-							"meta_description_content": "Fixed"
+						"inline_markdown": "Contact",
+						"meta": {
+							"description": "Fixed"
 						},
-						"h1_inline_markdown": "Contact"
-					}
+						"title": "Test"
+					},
+					"content": []
+				},
+				{
+					"pathname": "index.html",
+					"data": {
+						"inline_markdown": "Home",
+						"title": "Home | Test",
+						"meta": {
+							"description": "Home"
+						}
+					},
+					"content": []
 				}
 			],
 			"layout": [
@@ -61,7 +60,9 @@
 									"children": [
 										{
 											"type": "variable",
-											"reference": ["title"]
+											"reference": [
+												"title"
+											]
 										}
 									]
 								},
@@ -71,7 +72,9 @@
 								},
 								{
 									"type": "conditional",
-									"reference": ["meta_description"],
+									"reference": [
+										"meta"
+									],
 									"template": {
 										"type": "element",
 										"name": "meta",
@@ -83,8 +86,10 @@
 											},
 											"content": {
 												"type": "variable-attribute",
-												"reference": ["meta_description_content"],
-												"name": "content"
+												"name": "content",
+												"reference": [
+													"description"
+												]
 											}
 										},
 										"children": []
@@ -116,7 +121,9 @@
 									"children": [
 										{
 											"type": "inline-markdown-variable",
-											"reference": ["h1_inline_markdown"]
+											"reference": [
+												"inline_markdown"
+											]
 										}
 									]
 								},
@@ -130,5 +137,6 @@
 				}
 			]
 		}
-	}
+	},
+	"staticFiles": []
 }

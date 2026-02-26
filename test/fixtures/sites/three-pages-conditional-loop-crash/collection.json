@@ -5,21 +5,21 @@
 				{
 					"pathname": "about.html",
 					"data": {
-						"h1_inline_markdown": "Beta",
-						"ul_items": [
+						"inline_markdown": "Beta",
+						"items": [
 							{
-								"li": "Beta description",
-								"strong": null
+								"item": "Beta description",
+								"text": null
 							},
 							{
-								"li": "",
-								"strong": {
+								"item": "",
+								"text": {
 									"strong": "Beta closed"
 								}
 							},
 							{
-								"li": "Beta time",
-								"strong": null
+								"item": "Beta time",
+								"text": null
 							}
 						],
 						"title": "Beta | Test"
@@ -29,16 +29,16 @@
 				{
 					"pathname": "contact.html",
 					"data": {
-						"h1_inline_markdown": "Gamma",
-						"ul_items": [
+						"inline_markdown": "Gamma",
+						"items": [
 							{
-								"li": "Gamma description"
+								"item": "Gamma description"
 							},
 							{
-								"li": "Gamma open"
+								"item": "Gamma open"
 							},
 							{
-								"li": "Gamma time"
+								"item": "Gamma time"
 							}
 						],
 						"title": "Gamma | Test"
@@ -48,16 +48,16 @@
 				{
 					"pathname": "index.html",
 					"data": {
-						"h1_inline_markdown": "Alpha",
-						"ul_items": [
+						"inline_markdown": "Alpha",
+						"items": [
 							{
-								"li": "Alpha description"
+								"item": "Alpha description"
 							},
 							{
-								"li": "Alpha open"
+								"item": "Alpha open"
 							},
 							{
-								"li": "Alpha time"
+								"item": "Alpha time"
 							}
 						],
 						"title": "Alpha | Test"
@@ -124,7 +124,7 @@
 										{
 											"type": "inline-markdown-variable",
 											"reference": [
-												"h1_inline_markdown"
+												"inline_markdown"
 											]
 										}
 									]
@@ -145,7 +145,7 @@
 										{
 											"type": "loop",
 											"reference": [
-												"ul_items"
+												"items"
 											],
 											"template": {
 												"type": "element",
@@ -174,13 +174,13 @@
 													{
 														"type": "variable",
 														"reference": [
-															"li"
+															"item"
 														]
 													},
 													{
 														"type": "conditional",
 														"reference": [
-															"strong"
+															"text"
 														],
 														"template": {
 															"type": "element",

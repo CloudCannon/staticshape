@@ -8,13 +8,13 @@
 						"div": {
 							"div_items": [
 								{
-									"div_markdown": "Lorem Ipsum 1\n\n![](https://placebear.com/250/50)"
+									"markdown": "Lorem Ipsum 1\n\n![](https://placebear.com/250/50)"
 								},
 								{
-									"div_markdown": "Lorem Ipsum 2\n\n![](https://placebear.com/150/50)"
+									"markdown": "Lorem Ipsum 2\n\n![](https://placebear.com/150/50)"
 								},
 								{
-									"div_markdown": "Lorem Ipsum 3\n\n![](https://placebear.com/50/50)"
+									"markdown": "Lorem Ipsum 3\n\n![](https://placebear.com/50/50)"
 								}
 							]
 						}
@@ -80,7 +80,9 @@
 								},
 								{
 									"type": "conditional",
-									"reference": ["div"],
+									"reference": [
+										"div"
+									],
 									"template": {
 										"type": "element",
 										"name": "div",
@@ -92,7 +94,9 @@
 											},
 											{
 												"type": "loop",
-												"reference": ["div_items"],
+												"reference": [
+													"div_items"
+												],
 												"template": {
 													"type": "element",
 													"name": "div",
@@ -104,7 +108,9 @@
 														},
 														{
 															"type": "markdown-variable",
-															"reference": ["div_markdown"]
+															"reference": [
+																"markdown"
+															]
 														},
 														{
 															"type": "text",

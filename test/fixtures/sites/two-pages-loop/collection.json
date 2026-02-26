@@ -1,39 +1,38 @@
 {
-	"staticFiles": [],
 	"collections": {
 		"pages": {
 			"pages": [
 				{
-					"pathname": "index.html",
-					"content": [],
+					"pathname": "about.html",
 					"data": {
-						"title": "Home | Test",
-						"h1_inline_markdown": "Home",
-						"div_items": [
+						"inline_markdown": "About",
+						"items": [
 							{
-								"div_block": "Home first item"
+								"text": "About first item"
+							},
+							{
+								"text": "About second item"
+							},
+							{
+								"text": "About third item"
 							}
-						]
-					}
+						],
+						"title": "About | Test"
+					},
+					"content": []
 				},
 				{
-					"pathname": "about.html",
-					"content": [],
+					"pathname": "index.html",
 					"data": {
-						"title": "About | Test",
-						"h1_inline_markdown": "About",
-						"div_items": [
+						"inline_markdown": "Home",
+						"title": "Home | Test",
+						"items": [
 							{
-								"div_block": "About first item"
-							},
-							{
-								"div_block": "About second item"
-							},
-							{
-								"div_block": "About third item"
+								"text": "Home first item"
 							}
 						]
-					}
+					},
+					"content": []
 				}
 			],
 			"layout": [
@@ -62,7 +61,9 @@
 									"children": [
 										{
 											"type": "variable",
-											"reference": ["title"]
+											"reference": [
+												"title"
+											]
 										}
 									]
 								},
@@ -92,7 +93,9 @@
 									"children": [
 										{
 											"type": "inline-markdown-variable",
-											"reference": ["h1_inline_markdown"]
+											"reference": [
+												"inline_markdown"
+											]
 										}
 									]
 								},
@@ -111,7 +114,9 @@
 										},
 										{
 											"type": "loop",
-											"reference": ["div_items"],
+											"reference": [
+												"items"
+											],
 											"template": {
 												"type": "element",
 												"name": "div",
@@ -125,7 +130,9 @@
 												"children": [
 													{
 														"type": "variable",
-														"reference": ["div_block"]
+														"reference": [
+															"text"
+														]
 													}
 												]
 											}
@@ -146,5 +153,6 @@
 				}
 			]
 		}
-	}
+	},
+	"staticFiles": []
 }

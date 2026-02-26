@@ -1,10 +1,12 @@
 {
-	"staticFiles": [],
 	"collections": {
 		"pages": {
 			"pages": [
 				{
 					"pathname": "about.html",
+					"data": {
+						"title": "About | Test"
+					},
 					"content": [
 						{
 							"type": "element",
@@ -21,13 +23,13 @@
 							"type": "text",
 							"value": "\n"
 						}
-					],
-					"data": {
-						"title": "About | Test"
-					}
+					]
 				},
 				{
 					"pathname": "index.html",
+					"data": {
+						"title": "Home | Test"
+					},
 					"content": [
 						{
 							"type": "element",
@@ -44,10 +46,7 @@
 							"type": "text",
 							"value": "\n"
 						}
-					],
-					"data": {
-						"title": "Home | Test"
-					}
+					]
 				}
 			],
 			"layout": [
@@ -76,7 +75,9 @@
 									"children": [
 										{
 											"type": "variable",
-											"reference": ["title"]
+											"reference": [
+												"title"
+											]
 										}
 									]
 								},
@@ -112,5 +113,6 @@
 				}
 			]
 		}
-	}
+	},
+	"staticFiles": []
 }

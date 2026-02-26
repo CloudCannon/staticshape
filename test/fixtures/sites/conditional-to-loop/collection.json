@@ -5,41 +5,41 @@
 				{
 					"pathname": "a.html",
 					"data": {
-					"title": "Page A",
-					"nav": "Nav A",
-					"div_card": [
-						{
-							"div_card": "Card A"
-						}
-					]
+						"title": "Page A",
+						"navigation": "Nav A",
+						"card": [
+							{
+								"text": "Card A"
+							}
+						]
 					},
 					"content": []
 				},
 				{
 					"pathname": "b.html",
 					"data": {
-					"title": "Page B",
-					"nav": "Nav B",
-					"div_card": []
+						"title": "Page B",
+						"navigation": "Nav B",
+						"card": []
 					},
 					"content": []
 				},
 				{
 					"pathname": "c.html",
 					"data": {
-					"div_items": [
-						{
-							"div_card": "Card C1"
-						},
-						{
-							"div_card": "Card C2"
-						},
-						{
-							"div_card": "Card C3"
-						}
-					],
-					"title": "Page C",
-					"nav": "Nav C"
+						"items": [
+							{
+								"text": "Card C1"
+							},
+							{
+								"text": "Card C2"
+							},
+							{
+								"text": "Card C3"
+							}
+						],
+						"title": "Page C",
+						"navigation": "Nav C"
 					},
 					"content": []
 				}
@@ -112,7 +112,7 @@
 												{
 													"type": "variable",
 													"reference": [
-														"nav"
+														"navigation"
 													]
 												}
 											]
@@ -123,28 +123,28 @@
 										},
 										{
 											"type": "loop",
-										"reference": [
-											"div_card"
-										],
-										"template": {
-											"type": "element",
-											"name": "div",
-											"attrs": {
-												"class": {
-													"type": "attribute",
-													"name": "class",
-													"value": "card"
-												}
-											},
-											"children": [
-												{
-													"type": "variable",
-													"reference": [
-														"div_card"
-													]
-												}
-											]
-										}
+											"reference": [
+												"card"
+											],
+											"template": {
+												"type": "element",
+												"name": "div",
+												"attrs": {
+													"class": {
+														"type": "attribute",
+														"name": "class",
+														"value": "card"
+													}
+												},
+												"children": [
+													{
+														"type": "variable",
+														"reference": [
+															"text"
+														]
+													}
+												]
+											}
 										},
 										{
 											"type": "text",
