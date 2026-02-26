@@ -1,28 +1,27 @@
 {
-	"staticFiles": ["assets/goose.jpg"],
 	"collections": {
 		"pages": {
 			"pages": [
 				{
 					"pathname": "about.html",
-					"content": [],
 					"data": {
 						"h1_inline_markdown": "About"
-					}
-				},
-				{
-					"pathname": "index.html",
-					"content": [],
-					"data": {
-						"h1_inline_markdown": "Home"
-					}
+					},
+					"content": []
 				},
 				{
 					"pathname": "contact.html",
-					"content": [],
 					"data": {
 						"h1_inline_markdown": "Contact"
-					}
+					},
+					"content": []
+				},
+				{
+					"pathname": "index.html",
+					"data": {
+						"h1_inline_markdown": "Home"
+					},
+					"content": []
 				}
 			],
 			"layout": [
@@ -81,7 +80,9 @@
 									"children": [
 										{
 											"type": "inline-markdown-variable",
-											"reference": ["h1_inline_markdown"]
+											"reference": [
+												"h1_inline_markdown"
+											]
 										}
 									]
 								},
@@ -95,5 +96,8 @@
 				}
 			]
 		}
-	}
+	},
+	"staticFiles": [
+		"assets/goose.jpg"
+	]
 }

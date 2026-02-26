@@ -80,7 +80,9 @@
 								},
 								{
 									"type": "conditional",
-									"reference": ["div"],
+									"reference": [
+										"div"
+									],
 									"template": {
 										"type": "element",
 										"name": "div",
@@ -92,7 +94,9 @@
 											},
 											{
 												"type": "loop",
-												"reference": ["div_items"],
+												"reference": [
+													"div_items"
+												],
 												"template": {
 													"type": "element",
 													"name": "div",
@@ -104,7 +108,9 @@
 														},
 														{
 															"type": "markdown-variable",
-															"reference": ["div_markdown"]
+															"reference": [
+																"div_markdown"
+															]
 														},
 														{
 															"type": "text",

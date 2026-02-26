@@ -1,38 +1,37 @@
 {
-	"staticFiles": [],
 	"collections": {
 		"pages": {
 			"pages": [
 				{
-					"pathname": "index.html",
-					"content": [],
-					"data": {
-						"title": "Home | Test",
-						"meta_description": {
-							"meta_description_content": "Home"
-						},
-						"h1_inline_markdown": "Home"
-					}
-				},
-				{
-					"pathname": "zabout.html",
-					"content": [],
-					"data": {
-						"title": "Test",
-						"meta_description": null,
-						"h1_inline_markdown": "About"
-					}
-				},
-				{
 					"pathname": "contact.html",
-					"content": [],
 					"data": {
+						"h1_inline_markdown": "Contact",
 						"title": "Test",
 						"meta_description": {
 							"meta_description_content": "Fixed"
-						},
-						"h1_inline_markdown": "Contact"
-					}
+						}
+					},
+					"content": []
+				},
+				{
+					"pathname": "index.html",
+					"data": {
+						"h1_inline_markdown": "Home",
+						"title": "Home | Test",
+						"meta_description": {
+							"meta_description_content": "Home"
+						}
+					},
+					"content": []
+				},
+				{
+					"pathname": "zabout.html",
+					"data": {
+						"h1_inline_markdown": "About",
+						"meta_description": null,
+						"title": "Test"
+					},
+					"content": []
 				}
 			],
 			"layout": [
@@ -61,7 +60,9 @@
 									"children": [
 										{
 											"type": "variable",
-											"reference": ["title"]
+											"reference": [
+												"title"
+											]
 										}
 									]
 								},
@@ -71,7 +72,9 @@
 								},
 								{
 									"type": "conditional",
-									"reference": ["meta_description"],
+									"reference": [
+										"meta_description"
+									],
 									"template": {
 										"type": "element",
 										"name": "meta",
@@ -83,8 +86,10 @@
 											},
 											"content": {
 												"type": "variable-attribute",
-												"reference": ["meta_description_content"],
-												"name": "content"
+												"name": "content",
+												"reference": [
+													"meta_description_content"
+												]
 											}
 										},
 										"children": []
@@ -116,7 +121,9 @@
 									"children": [
 										{
 											"type": "inline-markdown-variable",
-											"reference": ["h1_inline_markdown"]
+											"reference": [
+												"h1_inline_markdown"
+											]
 										}
 									]
 								},
@@ -130,5 +137,6 @@
 				}
 			]
 		}
-	}
+	},
+	"staticFiles": []
 }

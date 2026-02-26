@@ -1,5 +1,4 @@
 {
-	"staticFiles": [],
 	"collections": {
 		"pages": {
 			"pages": [
@@ -16,7 +15,6 @@
 								]
 							},
 							{
-								"div_first_class": "second",
 								"div_second_items": [
 									{
 										"p_test_inline_markdown": "Test 2"
@@ -24,7 +22,8 @@
 									{
 										"p_test_inline_markdown": "Test 3"
 									}
-								]
+								],
+								"div_first_class": "second"
 							}
 						]
 					},
@@ -155,5 +154,6 @@
 				}
 			]
 		}
-	}
+	},
+	"staticFiles": []
 }

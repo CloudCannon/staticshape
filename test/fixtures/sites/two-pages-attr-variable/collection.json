@@ -1,23 +1,22 @@
 {
-	"staticFiles": ["assets/goose.jpg"],
 	"collections": {
 		"pages": {
 			"pages": [
 				{
-					"pathname": "index.html",
-					"content": [],
-					"data": {
-						"title": "Goose Owner",
-						"img_alt": "Our goose"
-					}
-				},
-				{
 					"pathname": "about.html",
-					"content": [],
 					"data": {
 						"title": "Goose Admirer",
 						"img_alt": "Their goose"
-					}
+					},
+					"content": []
+				},
+				{
+					"pathname": "index.html",
+					"data": {
+						"title": "Goose Owner",
+						"img_alt": "Our goose"
+					},
+					"content": []
 				}
 			],
 			"layout": [
@@ -46,7 +45,9 @@
 									"children": [
 										{
 											"type": "variable",
-											"reference": ["title"]
+											"reference": [
+												"title"
+											]
 										}
 									]
 								},
@@ -81,7 +82,9 @@
 										"alt": {
 											"type": "variable-attribute",
 											"name": "alt",
-											"reference": ["img_alt"]
+											"reference": [
+												"img_alt"
+											]
 										}
 									},
 									"children": []
@@ -96,5 +99,8 @@
 				}
 			]
 		}
-	}
+	},
+	"staticFiles": [
+		"assets/goose.jpg"
+	]
 }

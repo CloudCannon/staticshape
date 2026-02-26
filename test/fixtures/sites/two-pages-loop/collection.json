@@ -1,26 +1,10 @@
 {
-	"staticFiles": [],
 	"collections": {
 		"pages": {
 			"pages": [
 				{
-					"pathname": "index.html",
-					"content": [],
-					"data": {
-						"title": "Home | Test",
-						"h1_inline_markdown": "Home",
-						"div_items": [
-							{
-								"div_block": "Home first item"
-							}
-						]
-					}
-				},
-				{
 					"pathname": "about.html",
-					"content": [],
 					"data": {
-						"title": "About | Test",
 						"h1_inline_markdown": "About",
 						"div_items": [
 							{
@@ -32,8 +16,23 @@
 							{
 								"div_block": "About third item"
 							}
+						],
+						"title": "About | Test"
+					},
+					"content": []
+				},
+				{
+					"pathname": "index.html",
+					"data": {
+						"h1_inline_markdown": "Home",
+						"title": "Home | Test",
+						"div_items": [
+							{
+								"div_block": "Home first item"
+							}
 						]
-					}
+					},
+					"content": []
 				}
 			],
 			"layout": [
@@ -62,7 +61,9 @@
 									"children": [
 										{
 											"type": "variable",
-											"reference": ["title"]
+											"reference": [
+												"title"
+											]
 										}
 									]
 								},
@@ -92,7 +93,9 @@
 									"children": [
 										{
 											"type": "inline-markdown-variable",
-											"reference": ["h1_inline_markdown"]
+											"reference": [
+												"h1_inline_markdown"
+											]
 										}
 									]
 								},
@@ -111,7 +114,9 @@
 										},
 										{
 											"type": "loop",
-											"reference": ["div_items"],
+											"reference": [
+												"div_items"
+											],
 											"template": {
 												"type": "element",
 												"name": "div",
@@ -125,7 +130,9 @@
 												"children": [
 													{
 														"type": "variable",
-														"reference": ["div_block"]
+														"reference": [
+															"div_block"
+														]
 													}
 												]
 											}
@@ -146,5 +153,6 @@
 				}
 			]
 		}
-	}
+	},
+	"staticFiles": []
 }

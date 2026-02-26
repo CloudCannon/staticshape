@@ -5,41 +5,41 @@
 				{
 					"pathname": "a.html",
 					"data": {
-					"title": "Page A",
-					"nav": "Nav A",
-					"div_items": [
-						{
-							"div_card": "Card A"
-						}
-					]
+						"title": "Page A",
+						"nav": "Nav A",
+						"div_items": [
+							{
+								"div_card": "Card A"
+							}
+						]
 					},
 					"content": []
 				},
 				{
 					"pathname": "b.html",
 					"data": {
-					"div_items": [
-						{
-							"div_card": "Card B1"
-						},
-						{
-							"div_card": "Card B2"
-						},
-						{
-							"div_card": "Card B3"
-						}
-					],
-					"title": "Page B",
-					"nav": "Nav B"
+						"div_items": [
+							{
+								"div_card": "Card B1"
+							},
+							{
+								"div_card": "Card B2"
+							},
+							{
+								"div_card": "Card B3"
+							}
+						],
+						"title": "Page B",
+						"nav": "Nav B"
 					},
 					"content": []
 				},
 				{
 					"pathname": "c.html",
 					"data": {
-					"title": "Page C",
-					"nav": "Nav C",
-					"div_card": []
+						"title": "Page C",
+						"nav": "Nav C",
+						"div_card": []
 					},
 					"content": []
 				}
@@ -123,28 +123,28 @@
 										},
 										{
 											"type": "loop",
-										"reference": [
-											"div_card"
-										],
-										"template": {
-											"type": "element",
-											"name": "div",
-											"attrs": {
-												"class": {
-													"type": "attribute",
-													"name": "class",
-													"value": "card"
-												}
-											},
-											"children": [
-												{
-													"type": "variable",
-													"reference": [
-														"div_card"
-													]
-												}
-											]
-										}
+											"reference": [
+												"div_card"
+											],
+											"template": {
+												"type": "element",
+												"name": "div",
+												"attrs": {
+													"class": {
+														"type": "attribute",
+														"name": "class",
+														"value": "card"
+													}
+												},
+												"children": [
+													{
+														"type": "variable",
+														"reference": [
+															"div_card"
+														]
+													}
+												]
+											}
 										},
 										{
 											"type": "text",
