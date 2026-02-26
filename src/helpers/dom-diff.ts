@@ -9,26 +9,26 @@ import {
 	ASTVariableNode,
 	ASTInlineMarkdownNode,
 	ASTAttribute
-} from '../types.js';
-import { invalidLoopTags, findRepeatedIndex } from './loops.js';
-import { isAttrEquivalent } from './node-helper.js';
+} from '../types.ts';
+import { invalidLoopTags, findRepeatedIndex } from './loops.ts';
+import { isAttrEquivalent } from './node-helper.ts';
 import {
 	nodeEquivalencyScore,
 	isBestMatch,
 	loopThreshold,
 	nodeTreeEquivalencyScore
-} from './node-equivalency.js';
-import Data from './Data.js';
+} from './node-equivalency.ts';
+import Data from './Data.ts';
 import {
 	findEndOfMarkdownIndex,
 	isMarkdownElement,
 	markdownify,
 	invalidMarkdownParentTags
-} from './markdown.js';
-import { booleanAttributes } from './attributes.js';
-import { Logger, nodeDebugString } from '../logger.js';
-import { convertTreeToComponents, convertElementToComponent } from './component-builder.js';
-import { liftVariables } from './variable-lifting.js';
+} from './markdown.ts';
+import { booleanAttributes } from './attributes.ts';
+import { Logger, nodeDebugString } from '../logger.ts';
+import { convertTreeToComponents, convertElementToComponent } from './component-builder.ts';
+import { liftVariables } from './variable-lifting.ts';
 
 export function diffBasicNode(
 	firstData: Data,
@@ -209,15 +209,27 @@ export function diffNodes(
 		);
 	}
 
-	// if (firstNode.type === 'conditional' && secondNode.type === 'loop') {
-	// 	logger.warn('TODO: merge conditional element and loop template for the new data for both');
-	// 	return secondNode;
-	// }
+	if (firstNode.type === 'conditional' && secondNode.type === 'loop') {
+		return diffConditionalAndLoopNode(
+			firstNode,
+			secondNode,
+			firstData,
+			secondData,
+			parentElements,
+			logger
+		);
+	}
 
-	// if (firstNode.type === 'loop' && secondNode.type === 'conditional') {
-	// 	logger.warn('TODO: merge conditional element and loop template for the new data for both');
-	// 	return firstNode;
-	// }
+	if (firstNode.type === 'loop' && secondNode.type === 'conditional') {
+		return diffConditionalAndLoopNode(
+			secondNode,
+			firstNode,
+			secondData,
+			firstData,
+			parentElements,
+			logger
+		);
+	}
 
 	const score = nodeEquivalencyScore(firstNode, secondNode);
 	logger.error(`Cannot diff nodes ${firstNode.type} and ${secondNode.type} (${score})`);
@@ -247,12 +259,13 @@ function diffConditionalAndElementNode(
 	const variableName = conditionalNode.reference[0];
 	if (!conditionalData.hasKey(variableName)) {
 		logger.log(
-			'💿 Failed value inheritance',
+			'💿 Conditional variable missing from data context, treating as absent',
 			JSON.stringify(conditionalNode.reference),
 			variableName,
 			JSON.stringify(conditionalData)
 		);
-		throw new Error('Found loop variable but could not find existing value');
+		elementData.chainSet(conditionalNode.reference, null);
+		return conditionalNode;
 	}
 
 	const existingValue = conditionalData.getKey(variableName);
@@ -270,7 +283,7 @@ function diffConditionalAndElementNode(
 	const template = diffElementNode(
 		existingData,
 		newData,
-		conditionalNode.child,
+		conditionalNode.template,
 		elementNode,
 		parentElements,
 		logger
@@ -281,7 +294,7 @@ function diffConditionalAndElementNode(
 
 	return {
 		...conditionalNode,
-		child: template
+		template
 	};
 }
 
@@ -333,8 +346,8 @@ function diffConditionalNodes(
 	const template = diffElementNode(
 		newData,
 		otherData,
-		firstNode.child,
-		secondNode.child,
+		firstNode.template,
+		secondNode.template,
 		parentElements,
 		logger
 	) as ASTElementNode;
@@ -342,7 +355,7 @@ function diffConditionalNodes(
 	secondData.chainSet(secondNode.reference, secondSubData ? otherData.toJSON() : null);
 	return {
 		...secondNode,
-		child: template
+		template
 	};
 }
 
@@ -364,12 +377,13 @@ function diffLoopAndElementNode(
 	const variableName = loopNode.reference[0];
 	if (!loopData.hasKey(variableName)) {
 		logger.log(
-			'💿 Failed loop value inheritance',
+			'💿 Loop variable missing from data context, treating as absent',
 			JSON.stringify(loopNode.reference),
 			variableName,
 			JSON.stringify(loopData)
 		);
-		throw new Error('Found loop variable but could not find existing value');
+		elementData.chainSet(loopNode.reference, null);
+		return loopNode;
 	}
 
 	const existingItems = loopData.getKey(variableName);
@@ -389,6 +403,39 @@ function diffLoopAndElementNode(
 	diffElementNode(existingData, newData, loopNode.template, elementNode, parentElements, logger);
 	elementData.chainSet(loopNode.reference, [newData.toJSON()]);
 	return loopNode;
+}
+
+function diffConditionalAndLoopNode(
+	conditionalNode: ASTConditionalNode,
+	loopNode: ASTLoopNode,
+	conditionalData: Data,
+	loopData: Data,
+	parentElements: ASTElementNode[],
+	logger: Logger
+): ASTLoopNode {
+	const variableName = conditionalNode.reference[0];
+	if (conditionalData.hasKey(variableName)) {
+		const existingValue = conditionalData.getKey(variableName);
+		conditionalData.set(
+			variableName,
+			existingValue != null ? [existingValue] : []
+		);
+	}
+
+	const promotedLoop: ASTLoopNode = {
+		type: 'loop',
+		reference: conditionalNode.reference,
+		template: conditionalNode.template
+	};
+
+	return diffNodes(
+		conditionalData,
+		loopData,
+		promotedLoop,
+		loopNode,
+		parentElements,
+		logger
+	) as ASTLoopNode;
 }
 
 function mergeAttribute(
@@ -711,7 +758,7 @@ export function mergeTree(
 			merged.push({
 				type: 'conditional',
 				reference: firstData.getChain(variableName),
-				child: template
+				template
 			});
 			return;
 		}

@@ -1,9 +1,10 @@
-import test, { ExecutionContext } from 'ava';
-import Site from '../src/site';
+import { test } from 'node:test';
+import * as assert from 'node:assert/strict';
+import Site from '../src/site.ts';
 import * as path from 'path';
 import * as fs from 'fs';
-import { CollectionResponse } from '../src/collection';
-import { TestLogger } from './helpers/test-logger.js';
+import { CollectionResponse } from '../src/collection.ts';
+import { TestLogger } from './helpers/test-logger.ts';
 
 function sortCollectionPages(collections: Record<string, CollectionResponse>) {
 	Object.keys(collections).forEach((key) => {
@@ -23,7 +24,7 @@ function sortCollectionPages(collections: Record<string, CollectionResponse>) {
 	});
 }
 
-async function runTest(t: ExecutionContext, testName: string) {
+async function runTest(testName: string) {
 	const basePath = path.resolve(`./test/fixtures/sites/${testName}/files`);
 	const config = JSON.parse(
 		(await fs.promises.readFile(`./test/fixtures/sites/${testName}/config.json`)).toString(
@@ -57,38 +58,36 @@ async function runTest(t: ExecutionContext, testName: string) {
 		.filter((pathname) => !pathname.toLowerCase().endsWith('.ds_store'))
 		.sort();
 	expected.staticFiles = expected.staticFiles.sort();
-	t.deepEqual(output, expected);
+	assert.deepStrictEqual(output, expected);
 }
 
-test('two-pages', (t: ExecutionContext) => runTest(t, 'two-pages'));
-test('two-pages-title-variable', (t: ExecutionContext) => runTest(t, 'two-pages-title-variable'));
-test('two-pages-attr-variable', (t: ExecutionContext) => runTest(t, 'two-pages-attr-variable'));
-test('two-pages-body-content', (t: ExecutionContext) => runTest(t, 'two-pages-body-content'));
-test('two-pages-conditional', (t: ExecutionContext) => runTest(t, 'two-pages-conditional'));
-test('two-pages-not-loop', (t: ExecutionContext) => runTest(t, 'two-pages-not-loop'));
-test('two-pages-markdown-variable', (t: ExecutionContext) =>
-	runTest(t, 'two-pages-markdown-variable'));
-test('two-pages-loop', (t: ExecutionContext) => runTest(t, 'two-pages-loop'));
+test('two-pages', () => runTest('two-pages'));
+test('two-pages-title-variable', () => runTest('two-pages-title-variable'));
+test('two-pages-attr-variable', () => runTest('two-pages-attr-variable'));
+test('two-pages-body-content', () => runTest('two-pages-body-content'));
+test('two-pages-conditional', () => runTest('two-pages-conditional'));
+test('two-pages-not-loop', () => runTest('two-pages-not-loop'));
+test('two-pages-markdown-variable', () => runTest('two-pages-markdown-variable'));
+test('two-pages-loop', () => runTest('two-pages-loop'));
 
-test('two-pages-conditional-object', (t: ExecutionContext) =>
-	runTest(t, 'two-pages-conditional-object'));
-test('two-pages-conditional-loop', (t: ExecutionContext) =>
-	runTest(t, 'two-pages-conditional-loop'));
-test('two-pages-recursive-loop', (t: ExecutionContext) =>
-	runTest(t, 'two-pages-recursive-loop'));
+test('two-pages-conditional-object', () => runTest('two-pages-conditional-object'));
+test('two-pages-conditional-loop', () => runTest('two-pages-conditional-loop'));
+test('two-pages-recursive-loop', () => runTest('two-pages-recursive-loop'));
 
 // TODO the following items work but have alternating variable names between tests
-// test('two-pages-fuzzy-image', (t: ExecutionContext) => runTest(t, 'two-pages-fuzzy-image'));
-// test('two-pages-fuzzy-loop', (t: ExecutionContext) => runTest(t, 'two-pages-fuzzy-loop'));
+// test('two-pages-fuzzy-image', () => runTest('two-pages-fuzzy-image'));
+// test('two-pages-fuzzy-loop', () => runTest('two-pages-fuzzy-loop'));
 
-test('three-pages', (t: ExecutionContext) => runTest(t, 'three-pages'));
-test('three-pages-title-variable', (t: ExecutionContext) =>
-	runTest(t, 'three-pages-title-variable'));
-test('three-pages-attr-variable', (t: ExecutionContext) => runTest(t, 'three-pages-attr-variable'));
-test('three-pages-body-content', (t: ExecutionContext) => runTest(t, 'three-pages-body-content'));
-test('three-pages-conditional', (t: ExecutionContext) => runTest(t, 'three-pages-conditional'));
-test('three-pages-conditional-alternative-order', (t: ExecutionContext) =>
-	runTest(t, 'three-pages-conditional-alternative-order'));
-test('four-pages-conditional', (t: ExecutionContext) => runTest(t, 'four-pages-conditional'));
+test('three-pages', () => runTest('three-pages'));
+test('three-pages-title-variable', () => runTest('three-pages-title-variable'));
+test('three-pages-attr-variable', () => runTest('three-pages-attr-variable'));
+test('three-pages-body-content', () => runTest('three-pages-body-content'));
+test('three-pages-conditional', () => runTest('three-pages-conditional'));
+test('three-pages-conditional-alternative-order', () =>
+	runTest('three-pages-conditional-alternative-order'));
+test('four-pages-conditional', () => runTest('four-pages-conditional'));
+test('three-pages-conditional-loop-crash', () => runTest('three-pages-conditional-loop-crash'));
+test('conditional-to-loop', () => runTest('conditional-to-loop'));
+test('loop-to-conditional', () => runTest('loop-to-conditional'));
 
-// test('three-pages-xkcd-news', (t: ExecutionContext) => runTest(t, 'three-pages-xkcd-news'));
+// test('three-pages-xkcd-news', () => runTest('three-pages-xkcd-news'));

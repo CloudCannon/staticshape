@@ -1,7 +1,8 @@
-import test, { ExecutionContext } from 'ava';
-import { isBestMatch, nodeEquivalencyScore, loopThreshold } from '../src/helpers/node-equivalency';
-import { ASTElementNode, ASTNode, ASTTextNode } from '../src/types';
-import { TestLogger } from './helpers/test-logger';
+import { test } from 'node:test';
+import * as assert from 'node:assert/strict';
+import { isBestMatch, nodeEquivalencyScore, loopThreshold } from '../src/helpers/node-equivalency.ts';
+import { ASTElementNode, ASTNode, ASTTextNode } from '../src/types.ts';
+import { TestLogger } from './helpers/test-logger.ts';
 
 interface TestDefinition {
 	currentTree: ASTNode[];
@@ -17,15 +18,15 @@ function roundScore(score: number) {
 
 const textNode = (text: string): ASTNode => ({ type: 'text', value: text }) as ASTTextNode;
 
-async function runTest(t: ExecutionContext, def: TestDefinition) {
+async function runTest(def: TestDefinition) {
 	const logger = new TestLogger();
 	const forwardsScore = nodeEquivalencyScore(def.currentTree[0], def.otherTree[0]);
-	t.is(roundScore(forwardsScore), def.score);
+	assert.strictEqual(roundScore(forwardsScore), def.score);
 	const reverseScore = nodeEquivalencyScore(def.currentTree[0], def.otherTree[0]);
-	t.is(roundScore(reverseScore), def.score);
-	t.is(isBestMatch(def.currentTree, def.otherTree, logger), def.isBestMatch);
-	t.is(isBestMatch(def.otherTree, def.currentTree, logger), def.isBestMatch);
-	t.is(
+	assert.strictEqual(roundScore(reverseScore), def.score);
+	assert.strictEqual(isBestMatch(def.currentTree, def.otherTree, logger), def.isBestMatch);
+	assert.strictEqual(isBestMatch(def.otherTree, def.currentTree, logger), def.isBestMatch);
+	assert.strictEqual(
 		forwardsScore >= loopThreshold,
 		def.isAboveLoopThreshold,
 		def.isAboveLoopThreshold
@@ -34,8 +35,8 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 	);
 }
 
-test('same', (t: ExecutionContext) =>
-	runTest(t, {
+test('same', () =>
+	runTest({
 		currentTree: [textNode('a')],
 		otherTree: [textNode('a')],
 		isBestMatch: true,
@@ -43,8 +44,8 @@ test('same', (t: ExecutionContext) =>
 		score: 1
 	}));
 
-test('just as good', (t: ExecutionContext) =>
-	runTest(t, {
+test('just as good', () =>
+	runTest({
 		currentTree: [textNode('a'), textNode('c')],
 		otherTree: [textNode('b')],
 		isBestMatch: true,
@@ -52,8 +53,8 @@ test('just as good', (t: ExecutionContext) =>
 		score: 0.5
 	}));
 
-test('later', (t: ExecutionContext) =>
-	runTest(t, {
+test('later', () =>
+	runTest({
 		currentTree: [textNode('a'), textNode('b')],
 		otherTree: [textNode('b')],
 		isBestMatch: false,
@@ -61,8 +62,8 @@ test('later', (t: ExecutionContext) =>
 		score: 0.5
 	}));
 
-test('even later', (t: ExecutionContext) =>
-	runTest(t, {
+test('even later', () =>
+	runTest({
 		currentTree: [textNode('a'), textNode('c'), textNode('b')],
 		otherTree: [textNode('b')],
 		isBestMatch: false,
@@ -70,8 +71,8 @@ test('even later', (t: ExecutionContext) =>
 		score: 0.5
 	}));
 
-test('text to element comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('text to element comparison', () =>
+	runTest({
 		currentTree: [textNode('a')],
 		otherTree: [{ type: 'element', name: 'div', attrs: {}, children: [] }],
 		isBestMatch: false,
@@ -79,8 +80,8 @@ test('text to element comparison', (t: ExecutionContext) =>
 		score: 0
 	}));
 
-test('element to text comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('element to text comparison', () =>
+	runTest({
 		currentTree: [{ type: 'element', name: 'div', attrs: {}, children: [] }],
 		otherTree: [textNode('a')],
 		isBestMatch: false,
@@ -88,8 +89,8 @@ test('element to text comparison', (t: ExecutionContext) =>
 		score: 0
 	}));
 
-test('variable to variable comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('variable to variable comparison', () =>
+	runTest({
 		currentTree: [{ type: 'variable', reference: ['a'] }],
 		otherTree: [{ type: 'variable', reference: ['a'] }],
 		isBestMatch: true,
@@ -97,8 +98,8 @@ test('variable to variable comparison', (t: ExecutionContext) =>
 		score: 1
 	}));
 
-test('loop and element comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('loop and element comparison', () =>
+	runTest({
 		currentTree: [
 			{
 				type: 'loop',
@@ -146,8 +147,8 @@ test('loop and element comparison', (t: ExecutionContext) =>
 		score: 1
 	}));
 
-test('div to section comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('div to section comparison', () =>
+	runTest({
 		currentTree: [
 			{
 				name: 'div',
@@ -169,8 +170,8 @@ test('div to section comparison', (t: ExecutionContext) =>
 		score: 0
 	}));
 
-test('a to a[target] comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('a to a[target] comparison', () =>
+	runTest({
 		currentTree: [
 			{
 				name: 'a',
@@ -214,8 +215,8 @@ test('a to a[target] comparison', (t: ExecutionContext) =>
 		score: 0.9
 	}));
 
-test('li.badge.badge-green to li.badge.badge-navy comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('li.badge.badge-green to li.badge.badge-navy comparison', () =>
+	runTest({
 		currentTree: [
 			{
 				name: 'li',
@@ -249,8 +250,8 @@ test('li.badge.badge-green to li.badge.badge-navy comparison', (t: ExecutionCont
 		score: 0.98
 	}));
 
-test('img - different alt', (t: ExecutionContext) =>
-	runTest(t, {
+test('img - different alt', () =>
+	runTest({
 		currentTree: [
 			{
 				name: 'img',
@@ -294,8 +295,8 @@ test('img - different alt', (t: ExecutionContext) =>
 		score: 0.98
 	}));
 
-test('ul to the same ul', (t: ExecutionContext) =>
-	runTest(t, {
+test('ul to the same ul', () =>
+	runTest({
 		currentTree: [
 			{
 				type: 'element',
@@ -1799,8 +1800,8 @@ const sectionB2: ASTElementNode = {
 	]
 };
 
-test('sectionA1 and sectionA2', (t: ExecutionContext) =>
-	runTest(t, {
+test('sectionA1 and sectionA2', () =>
+	runTest({
 		currentTree: [sectionA1],
 		otherTree: [sectionA2],
 		isBestMatch: true,
@@ -1808,8 +1809,8 @@ test('sectionA1 and sectionA2', (t: ExecutionContext) =>
 		score: 1
 	}));
 
-test('sectionA1 and sectionB1', (t: ExecutionContext) =>
-	runTest(t, {
+test('sectionA1 and sectionB1', () =>
+	runTest({
 		currentTree: [sectionA1],
 		otherTree: [sectionB1],
 		isBestMatch: true,
@@ -1817,8 +1818,8 @@ test('sectionA1 and sectionB1', (t: ExecutionContext) =>
 		score: 0.86
 	}));
 
-test('sectionA2 and sectionB2', (t: ExecutionContext) =>
-	runTest(t, {
+test('sectionA2 and sectionB2', () =>
+	runTest({
 		currentTree: [sectionA2],
 		otherTree: [sectionB2],
 		isBestMatch: true,

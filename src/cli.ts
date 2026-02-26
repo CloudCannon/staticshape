@@ -1,10 +1,10 @@
-#!/usr/bin/env node --experimental-specifier-resolution=node
+#!/usr/bin/env node
 import * as p from '@clack/prompts';
 import * as path from 'path';
 import * as fs from 'fs';
-import Site from './site.js';
-import Exporter, { Engine } from './exporter.js';
-import { Logger } from './logger.js';
+import Site from './site.ts';
+import Exporter, { Engine } from './exporter.ts';
+import { Logger } from './logger.ts';
 
 p.intro(`Welcome to the StaticShape`);
 
@@ -12,7 +12,7 @@ const sourcePath = await p.text({
 	message: 'What folder contains your static site?',
 	placeholder: './_site/',
 	initialValue: '',
-	validate(sourcePath) {
+	validate(sourcePath = '') {
 		if (sourcePath.length === 0) return `Source path is required!`;
 
 		const absoluteSourcePath = path.resolve(sourcePath);
@@ -40,7 +40,7 @@ const configPath = await p.text({
 	message: 'Where is your staticshape config file?',
 	placeholder: './example.json',
 	initialValue: '',
-	validate(configPath) {
+	validate(configPath = '') {
 		if (configPath.length === 0) return `Config path is required!`;
 		const absoluteConfigPath = path.resolve(configPath);
 
@@ -74,7 +74,7 @@ const outputPath = await p.text({
 	message: 'What folder should we output your SSG site?',
 	placeholder: './_output/',
 	initialValue: './_output/',
-	validate(outputPath) {
+	validate(outputPath = '') {
 		if (outputPath.length === 0) return `Output path is required!`;
 		if (!outputPath.startsWith('./')) return `Output path must be relative`;
 		if (path.normalize(outputPath).includes('..')) return `Output path must be relative`;

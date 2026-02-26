@@ -83,7 +83,7 @@
 								{
 									"type": "conditional",
 									"reference": ["meta_description"],
-									"child": {
+									"template": {
 										"type": "element",
 										"name": "meta",
 										"attrs": {

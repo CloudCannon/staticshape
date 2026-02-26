@@ -8,8 +8,8 @@ import {
 	ASTElementNode,
 	ASTNode,
 	ASTTextNode
-} from '../types.js';
-import { DocumentConfig } from '../document.js';
+} from '../types.ts';
+import { DocumentConfig } from '../document.ts';
 
 type NodeType = 'element' | 'attribute' | 'text' | 'cdata' | 'PROCESSING_INSTRUCTION_NODE' | 'comment' | 'DOCUMENT_NODE' | 'docType' | 'DOCUMENT_FRAGMENT_NODE';
 

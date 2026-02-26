@@ -1,15 +1,16 @@
-import test, { ExecutionContext } from 'ava';
-import { isMarkdownTree } from '../src/helpers/markdown';
-import htmlToAST from '../src/helpers/html-parser';
+import { test } from 'node:test';
+import * as assert from 'node:assert/strict';
+import { isMarkdownTree } from '../src/helpers/markdown.ts';
+import htmlToAST from '../src/helpers/html-parser.ts';
 import * as fs from 'fs';
-import { ASTElementNode, ASTTextNode } from '../src/types';
+import { ASTElementNode, ASTTextNode } from '../src/types.ts';
 
 const whitespaceNode: ASTTextNode = {
 	type: 'text',
 	value: '\n\t'
 };
 
-async function runTest(t: ExecutionContext, testName: string) {
+async function runTest(testName: string) {
 	const html = (await fs.promises.readFile(`./test/fixtures/markdown/${testName}.html`)).toString(
 		'utf-8'
 	);
@@ -24,14 +25,14 @@ async function runTest(t: ExecutionContext, testName: string) {
 	) as ASTElementNode;
 
 	const ast = bodyEl.children;
-	t.deepEqual(isMarkdownTree(ast), true);
-	t.deepEqual(isMarkdownTree([whitespaceNode, ...ast]), true, 'whitespace before');
-	t.deepEqual(isMarkdownTree([...ast, whitespaceNode]), true, 'whitespace after');
-	t.deepEqual(
+	assert.deepStrictEqual(isMarkdownTree(ast), true);
+	assert.deepStrictEqual(isMarkdownTree([whitespaceNode, ...ast]), true, 'whitespace before');
+	assert.deepStrictEqual(isMarkdownTree([...ast, whitespaceNode]), true, 'whitespace after');
+	assert.deepStrictEqual(
 		isMarkdownTree([whitespaceNode, ...ast, whitespaceNode]),
 		true,
 		'whitespace before and after'
 	);
 }
 
-test('ul', (t: ExecutionContext) => runTest(t, 'ul'));
+test('ul', () => runTest('ul'));

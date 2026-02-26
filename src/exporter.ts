@@ -1,9 +1,9 @@
-import File from './file.js';
+import File from './file.ts';
 import * as path from 'path';
-import HugoExportEngine from './export-engines/hugo.js';
-import HtmlExportEngine, { FileExport } from './export-engines/html.js';
-import { SiteResponse } from './site.js';
-import Page from './page.js';
+import HugoExportEngine from './export-engines/hugo.ts';
+import HtmlExportEngine, { FileExport } from './export-engines/html.ts';
+import { SiteResponse } from './site.ts';
+import Page from './page.ts';
 
 export type Engine = 'hugo';
 

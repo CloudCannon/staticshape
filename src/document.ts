@@ -1,10 +1,10 @@
-import Page from './page.js';
+import Page from './page.ts';
 
-import { mergeTree } from './helpers/dom-diff.js';
-import htmlToAST, { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser.js';
-import { ASTNode } from './types.js';
-import Data from './helpers/Data.js';
-import { Logger } from './logger.js';
+import { mergeTree } from './helpers/dom-diff.ts';
+import htmlToAST, { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser.ts';
+import { ASTNode } from './types.ts';
+import Data from './helpers/Data.ts';
+import { Logger } from './logger.ts';
 
 export interface ASTTree {
 	base: Page;

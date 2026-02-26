@@ -1,0 +1,167 @@
+{
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "a.html",
+					"data": {
+					"title": "Page A",
+					"nav": "Nav A",
+					"div_items": [
+						{
+							"div_card": "Card A"
+						}
+					]
+					},
+					"content": []
+				},
+				{
+					"pathname": "b.html",
+					"data": {
+					"div_items": [
+						{
+							"div_card": "Card B1"
+						},
+						{
+							"div_card": "Card B2"
+						},
+						{
+							"div_card": "Card B3"
+						}
+					],
+					"title": "Page B",
+					"nav": "Nav B"
+					},
+					"content": []
+				},
+				{
+					"pathname": "c.html",
+					"data": {
+					"title": "Page C",
+					"nav": "Nav C",
+					"div_card": []
+					},
+					"content": []
+				}
+			],
+			"layout": [
+				{
+					"type": "doctype",
+					"value": "html"
+				},
+				{
+					"type": "element",
+					"name": "html",
+					"attrs": {},
+					"children": [
+						{
+							"type": "element",
+							"name": "head",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "title",
+									"attrs": {},
+									"children": [
+										{
+											"type": "variable",
+											"reference": [
+												"title"
+											]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n\t"
+						},
+						{
+							"type": "element",
+							"name": "body",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "div",
+									"attrs": {},
+									"children": [
+										{
+											"type": "text",
+											"value": "\n\t\t\t"
+										},
+										{
+											"type": "element",
+											"name": "nav",
+											"attrs": {},
+											"children": [
+												{
+													"type": "variable",
+													"reference": [
+														"nav"
+													]
+												}
+											]
+										},
+										{
+											"type": "text",
+											"value": "\n\t\t\t"
+										},
+										{
+											"type": "loop",
+										"reference": [
+											"div_card"
+										],
+										"template": {
+											"type": "element",
+											"name": "div",
+											"attrs": {
+												"class": {
+													"type": "attribute",
+													"name": "class",
+													"value": "card"
+												}
+											},
+											"children": [
+												{
+													"type": "variable",
+													"reference": [
+														"div_card"
+													]
+												}
+											]
+										}
+										},
+										{
+											"type": "text",
+											"value": "\n\t\t"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t\n"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	},
+	"staticFiles": []
+}

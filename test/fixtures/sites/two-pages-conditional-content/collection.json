@@ -94,7 +94,7 @@
 								{
 									"reference": ["show-div.content"],
 									"type": "conditional",
-									"child": {
+									"template": {
 										"type": "element",
 										"name": "div",
 										"attrs": [

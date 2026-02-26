@@ -1,5 +1,5 @@
-import { ASTAttribute, ASTElementNode } from '../types.js';
-import { getClassList } from './node-helper.js';
+import { ASTAttribute, ASTElementNode } from '../types.ts';
+import { getClassList } from './node-helper.ts';
 
 function getAttributeSignature(attr: ASTAttribute | undefined): string | null {
 	if (attr?.type === 'attribute') {

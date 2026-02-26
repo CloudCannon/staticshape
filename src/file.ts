@@ -29,7 +29,7 @@ export default class File {
 		return this.extension() === '.html';
 	}
 
-	async write(contents: string | Buffer): Promise<void> {
+	async write(contents: string | Uint8Array): Promise<void> {
 		const absolutePath = this.absolutePath();
 		const dirname = path.dirname(absolutePath);
 		await fs.promises.mkdir(dirname, { recursive: true });

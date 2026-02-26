@@ -30,13 +30,13 @@ StaticShape uses dom diffing to generate conditionals in documents, loop nodes o
 
 ## Output Format
 
-Conditional nodes use the type `ASTconditionalNode` which has the following format:
+Conditional nodes use the type `ASTConditionalNode` which has the following format:
 
 ```typescript
 {
   type: 'conditional';
   reference: string[];
-  child: ASTElementNode;
+  template: ASTElementNode;
 }
 ```
 

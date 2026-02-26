@@ -1,6 +1,6 @@
-import { ASTAttribute, ASTElementNode } from '../types.js';
-import { getElementSignature } from './getElementSignature.js';
-import { getClassList } from './node-helper.js';
+import { ASTAttribute, ASTElementNode } from '../types.ts';
+import { getElementSignature } from './getElementSignature.ts';
+import { getClassList } from './node-helper.ts';
 
 const htmlTagToVariableSuffix: Record<string, string> = {
 	ol: 'list',

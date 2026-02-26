@@ -1,6 +1,6 @@
-import { ASTElementNode, ASTNode, ASTAttributeList } from '../types.js';
-import { invalidLoopTags, findRepeatedIndex } from './loops.js';
-import Data from './Data.js';
+import { ASTElementNode, ASTNode, ASTAttributeList } from '../types.ts';
+import { invalidLoopTags, findRepeatedIndex } from './loops.ts';
+import Data from './Data.ts';
 import {
 	findEndOfMarkdownIndex,
 	invalidMarkdownParentTags,
@@ -9,10 +9,10 @@ import {
 	markdownify,
 	validMarkdownBlockTags,
 	validMarkdownInlineTags
-} from './markdown.js';
-import { diffNodes } from './dom-diff.js';
-import { Logger, nodeDebugString } from '../logger.js';
-import { liftVariables } from './variable-lifting.js';
+} from './markdown.ts';
+import { diffNodes } from './dom-diff.ts';
+import { Logger, nodeDebugString } from '../logger.ts';
+import { liftVariables } from './variable-lifting.ts';
 
 export interface ComponentBuilderConfig {
 	disableMarkdown?: boolean;
@@ -58,12 +58,13 @@ export function convertAttrsToVariables(
 			const variableName = attr.reference[0];
 			if (!existingData.hasKey(variableName)) {
 				logger.log(
-					'💿 Failed attr inheritance',
+					'💿 Attr variable missing from data context, skipping inheritance',
 					JSON.stringify(attr.reference),
 					variableName,
 					JSON.stringify(existingData)
 				);
-				throw new Error('Found attr variable but could not find existing value');
+				converted[attrName] = attr;
+				return;
 			}
 
 			if (data !== existingData) {

@@ -101,7 +101,7 @@
 											"reference": [
 												"div_xkcdNews"
 											],
-											"child": {
+											"template": {
 												"type": "element",
 												"name": "div",
 												"attrs": {

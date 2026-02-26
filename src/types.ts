@@ -39,7 +39,7 @@ export interface ASTElementNode {
 export interface ASTConditionalNode {
 	type: 'conditional';
 	reference: string[];
-	child: ASTElementNode;
+	template: ASTElementNode;
 }
 
 export interface ASTContentNode {

@@ -1,4 +1,4 @@
-import { CollectionResponse } from '../collection.js';
+import { CollectionResponse } from '../collection.ts';
 import {
 	ASTConditionalAttribute,
 	ASTConditionalNode,
@@ -9,8 +9,8 @@ import {
 	ASTNode,
 	ASTVariableAttribute,
 	ASTVariableNode
-} from '../types.js';
-import HtmlExportEngine, { FileExport } from './html.js';
+} from '../types.ts';
+import HtmlExportEngine, { FileExport } from './html.ts';
 import { dump } from 'js-yaml';
 
 function renderFrontMatter(data: Record<string, any>) {
@@ -94,7 +94,7 @@ export default class HugoExportEngine extends HtmlExportEngine {
 
 	renderConditional(node: ASTConditionalNode, variableScope: string): string {
 		return `{{ with ${variableScope}${formatParam(node)} }} ${this.renderASTNode(
-			node.child, "."
+			node.template, "."
 		)}{{ end }}`;
 	}
 

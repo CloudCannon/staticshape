@@ -1,16 +1,17 @@
-import File from './file.js';
-import { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser.js';
-import Document from './document.js';
-import { PageJSON } from './page.js';
-import { Logger } from './logger.js';
-import slugify from 'slugify';
-import Data from './helpers/Data.js';
-import { mergeTree } from './helpers/dom-diff.js';
-import { ASTNode } from './types.js';
+import File from './file.ts';
+import { HtmlProcessorConfig, PageContentsConfig } from './helpers/html-parser.ts';
+import Document from './document.ts';
+import { PageJSON } from './page.ts';
+import { Logger } from './logger.ts';
+import * as _slugify from 'slugify';
+const slugify = (_slugify as any).default as (str: string) => string;
+import Data from './helpers/Data.ts';
+import { mergeTree } from './helpers/dom-diff.ts';
+import { ASTNode } from './types.ts';
 
 export interface CollectionConfig {
 	name: string;
-	subPath: string;
+	subPath?: string;
 	only?: string[] | null | void;
 	include?: string[] | null | void;
 	exclude?: string[] | null | void;
@@ -59,7 +60,7 @@ export default class Collection {
 				return false;
 			}
 
-			return pathname.startsWith(config.subPath);
+			return pathname.startsWith(config.subPath ?? '');
 		});
 	}
 
@@ -80,8 +81,15 @@ export default class Collection {
 			})
 		);
 
+		if (documents.length === 0) {
+			throw new Error(
+				'No HTML files found in this collection. Check your subPath, include, exclude, and only settings.'
+			);
+		}
 		if (documents.length === 1) {
-			throw new Error('Only 1 html file detected');
+			throw new Error(
+				'Only 1 HTML file found in this collection. At least 2 are needed to detect a shared layout.'
+			);
 		}
 
 		const baseDoc = documents[0];

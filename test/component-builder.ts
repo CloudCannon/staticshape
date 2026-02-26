@@ -1,12 +1,13 @@
-import test, { ExecutionContext } from 'ava';
+import { test } from 'node:test';
+import * as assert from 'node:assert/strict';
 import * as fs from 'fs';
-import { convertElementToComponent } from '../src/helpers/component-builder';
-import htmlToAST from '../src/helpers/html-parser';
-import { ASTElementNode } from '../src/types';
-import Data from '../src/helpers/Data';
-import { TestLogger } from './helpers/test-logger';
+import { convertElementToComponent } from '../src/helpers/component-builder.ts';
+import htmlToAST from '../src/helpers/html-parser.ts';
+import { ASTElementNode } from '../src/types.ts';
+import Data from '../src/helpers/Data.ts';
+import { TestLogger } from './helpers/test-logger.ts';
 
-async function runTest(t: ExecutionContext, testName: string) {
+async function runTest(testName: string) {
 	const html = (
 		await fs.promises.readFile(`./test/fixtures/components/${testName}/component.html`)
 	).toString('utf-8');
@@ -57,16 +58,16 @@ async function runTest(t: ExecutionContext, testName: string) {
 		)
 	);
 
-	t.deepEqual(component, expectedComponent);
-	t.deepEqual(data.toJSON(), expectedData);
+	assert.deepStrictEqual(component, expectedComponent);
+	assert.deepStrictEqual(data.toJSON(), expectedData);
 }
 
-test('p', (t: ExecutionContext) => runTest(t, 'p'));
-test('ul', (t: ExecutionContext) => runTest(t, 'ul'));
-test('img', (t: ExecutionContext) => runTest(t, 'img'));
-test('markdown', (t: ExecutionContext) => runTest(t, 'markdown'));
-test('logo-row', (t: ExecutionContext) => runTest(t, 'logo-row'));
-test('recursive-loop', (t: ExecutionContext) => runTest(t, 'recursive-loop'));
-test('dunedinattractions-grid', (t: ExecutionContext) => runTest(t, 'dunedinattractions-grid'));
-test('hugo-showcase', (t: ExecutionContext) => runTest(t, 'hugo-showcase'));
-test('hugo-testimonials', (t: ExecutionContext) => runTest(t, 'hugo-testimonials'));
+test('p', () => runTest('p'));
+test('ul', () => runTest('ul'));
+test('img', () => runTest('img'));
+test('markdown', () => runTest('markdown'));
+test('logo-row', () => runTest('logo-row'));
+test('recursive-loop', () => runTest('recursive-loop'));
+test('dunedinattractions-grid', () => runTest('dunedinattractions-grid'));
+test('hugo-showcase', () => runTest('hugo-showcase'));
+test('hugo-testimonials', () => runTest('hugo-testimonials'));

@@ -12,6 +12,8 @@ StaticShape is designed to streamline migrations from any site to your SSG of ch
 
 ![Diagram of a static site being shaped back into a SSG codebase](/how-staticshape-works.svg)
 
+For a walkthrough of StaticShape in action, see the [HugoConf 2023 talk](/docs/hugoconf-talk/).
+
 Using an SSG gives enormous benefits to the developers, content editors and end users of the website. However, migrating your existing website to an SSG can take a long time, especially if you have a large number of pages. Transitioning to an SSG is even more daunting if you have more than one website. 
 
 ## What is an SSG?

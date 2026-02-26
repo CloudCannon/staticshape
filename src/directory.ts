@@ -1,4 +1,4 @@
-import File from './file.js';
+import File from './file.ts';
 import * as fs from 'fs';
 import * as path from 'path';
 

@@ -1,9 +1,9 @@
 import { distance, closest } from 'fastest-levenshtein';
-import { normalizeClassList } from './node-helper.js';
-import { ASTAttributeList, ASTElementNode, ASTNode } from '../types.js';
-import { nodeDebugString } from '../logger.js';
-import { booleanAttributes } from './attributes.js';
-import { Logger } from '../logger.js';
+import { normalizeClassList } from './node-helper.ts';
+import { ASTAttributeList, ASTElementNode, ASTNode } from '../types.ts';
+import { nodeDebugString } from '../logger.ts';
+import { booleanAttributes } from './attributes.ts';
+import { Logger } from '../logger.ts';
 
 export const loopThreshold = 0.89;
 // TODO: increase for mismatches
@@ -139,15 +139,15 @@ export function nodeTreeEquivalencyScore(firstTree: ASTNode[], secondTree: ASTNo
 
 export function nodeEquivalencyScore(first: ASTNode, second: ASTNode): number {
 	if (first.type === 'conditional' && second.type === 'conditional') {
-		return first.reference.join('') === second.reference.join('') ? (1 + nodeEquivalencyScore(first.child, second.child))/2 : 0;
+		return first.reference.join('') === second.reference.join('') ? (1 + nodeEquivalencyScore(first.template, second.template))/2 : 0;
 	}
 
 	if (second.type === 'conditional') {
-		return nodeEquivalencyScore(first, second.child);
+		return nodeEquivalencyScore(first, second.template);
 	}
 
 	if (first.type === 'conditional') {
-		return nodeEquivalencyScore(first.child, second);
+		return nodeEquivalencyScore(first.template, second);
 	}
 
 	if (second.type === 'loop') {

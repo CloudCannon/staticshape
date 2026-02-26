@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { ASTNode } from './types.js';
+import { ASTNode } from './types.ts';
 
 export type Level = number;
 const levels: Record<string, Level> = {
@@ -102,7 +102,7 @@ export function nodeDebugString(node: ASTNode, depth = 0, maxDepth = 1): string 
 			return `${node.type}: ${node.reference}`;
 		case 'conditional':
 			return `${node.type}: ${node.reference} ${nodeDebugString(
-				node.child,
+				node.template,
 				depth + 1,
 				maxDepth
 			)}`;

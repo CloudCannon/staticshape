@@ -1,8 +1,9 @@
-import test, { ExecutionContext } from 'ava';
-import { mergeTree } from '../src/helpers/dom-diff';
-import { ASTNode } from '../src/types';
-import Data from '../src/helpers/Data';
-import { TestLogger } from './helpers/test-logger';
+import { test } from 'node:test';
+import * as assert from 'node:assert/strict';
+import { mergeTree } from '../src/helpers/dom-diff.ts';
+import { ASTNode } from '../src/types.ts';
+import Data from '../src/helpers/Data.ts';
+import { TestLogger } from './helpers/test-logger.ts';
 
 interface TestDefinition {
 	primary: ASTNode[];
@@ -17,7 +18,6 @@ interface TestDefinition {
 }
 
 function testTree(
-	t: ExecutionContext,
 	primaryData: Data,
 	secondaryData: Data,
 	primary: ASTNode[],
@@ -43,23 +43,22 @@ function testTree(
 		new TestLogger()
 	);
 
-	t.deepEqual(tree, merged, message);
+	assert.deepStrictEqual(tree, merged, message);
 	if (expectedPrimaryData) {
-		t.deepEqual(primaryData.toJSON(), expectedPrimaryData, message);
+		assert.deepStrictEqual(primaryData.toJSON(), expectedPrimaryData, message);
 	}
 	if (expectedSecondaryData) {
-		t.deepEqual(secondaryData.toJSON(), expectedSecondaryData, message);
+		assert.deepStrictEqual(secondaryData.toJSON(), expectedSecondaryData, message);
 	}
 
 	return tree;
 }
 
-async function runTest(t: ExecutionContext, def: TestDefinition) {
+async function runTest(def: TestDefinition) {
 	const primaryData = new Data([], structuredClone(def.primaryData));
 	const secondaryData = new Data([], structuredClone(def.secondaryData));
 
 	const forwards = testTree(
-		t,
 		primaryData,
 		secondaryData,
 		def.primary,
@@ -73,7 +72,6 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 	const primaryReversedData = new Data([], structuredClone(def.primaryData));
 	const secondaryReversedData = new Data([], structuredClone(def.secondaryData));
 	const reversed = testTree(
-		t,
 		secondaryReversedData,
 		primaryReversedData,
 		def.secondary,
@@ -85,7 +83,6 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 	);
 
 	testTree(
-		t,
 		primaryData,
 		secondaryData,
 		forwards,
@@ -97,7 +94,6 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 	);
 
 	testTree(
-		t,
 		primaryData,
 		new Data([], structuredClone(def.secondaryData)),
 		forwards,
@@ -109,7 +105,6 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 	);
 
 	testTree(
-		t,
 		new Data([], structuredClone(secondaryReversedData.data)),
 		new Data([], structuredClone(def.primaryData)),
 		reversed,
@@ -121,8 +116,8 @@ async function runTest(t: ExecutionContext, def: TestDefinition) {
 	);
 }
 
-test('text to text', (t: ExecutionContext) =>
-	runTest(t, {
+test('text to text', () =>
+	runTest({
 		primary: [
 			{
 				type: 'text',
@@ -151,8 +146,8 @@ test('text to text', (t: ExecutionContext) =>
 		}
 	}));
 
-test('text to empty', (t: ExecutionContext) =>
-	runTest(t, {
+test('text to empty', () =>
+	runTest({
 		primary: [],
 		secondary: [
 			{
@@ -176,8 +171,8 @@ test('text to empty', (t: ExecutionContext) =>
 		}
 	}));
 
-test('markdown to empty', (t: ExecutionContext) =>
-	runTest(t, {
+test('markdown to empty', () =>
+	runTest({
 		primary: [],
 		secondary: [
 			{
@@ -209,8 +204,8 @@ test('markdown to empty', (t: ExecutionContext) =>
 		}
 	}));
 
-test('conditional meta - no whitespace', (t: ExecutionContext) =>
-	runTest(t, {
+test('conditional meta - no whitespace', () =>
+	runTest({
 		primary: [
 			{
 				type: 'element',
@@ -254,7 +249,7 @@ test('conditional meta - no whitespace', (t: ExecutionContext) =>
 			{
 				type: 'conditional',
 				reference: ['meta_description'],
-				child: {
+				template: {
 					type: 'element',
 					name: 'meta',
 					attrs: {
@@ -285,8 +280,8 @@ test('conditional meta - no whitespace', (t: ExecutionContext) =>
 		}
 	}));
 
-test('conditional meta - with whitespace', (t: ExecutionContext) =>
-	runTest(t, {
+test('conditional meta - with whitespace', () =>
+	runTest({
 		primary: [
 			{ type: 'text', value: '\n\t\t' },
 			{
@@ -337,7 +332,7 @@ test('conditional meta - with whitespace', (t: ExecutionContext) =>
 			{
 				type: 'conditional',
 				reference: ['meta_description'],
-				child: {
+				template: {
 					type: 'element',
 					name: 'meta',
 					attrs: {
@@ -367,8 +362,8 @@ test('conditional meta - with whitespace', (t: ExecutionContext) =>
 		}
 	}));
 
-test('loop and element comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('loop and element comparison', () =>
+	runTest({
 		primary: [
 			{
 				type: 'loop',
@@ -469,8 +464,8 @@ test('loop and element comparison', (t: ExecutionContext) =>
 		}
 	}));
 
-test('loop with same first item', (t: ExecutionContext) =>
-	runTest(t, {
+test('loop with same first item', () =>
+	runTest({
 		primary: [
 			{
 				type: 'element',
@@ -590,8 +585,8 @@ test('loop with same first item', (t: ExecutionContext) =>
 		}
 	}));
 
-test('loop template and element comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('loop template and element comparison', () =>
+	runTest({
 		primary: [
 			{
 				type: 'element',
@@ -664,13 +659,13 @@ test('loop template and element comparison', (t: ExecutionContext) =>
 		}
 	}));
 
-test('conditional and element comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('conditional and element comparison', () =>
+	runTest({
 		primary: [
 			{
 				type: 'conditional',
 				reference: ['meta_description_content'],
-				child: {
+				template: {
 					type: 'element',
 					name: 'meta',
 					attrs: {
@@ -716,7 +711,7 @@ test('conditional and element comparison', (t: ExecutionContext) =>
 			{
 				type: 'conditional',
 				reference: ['meta_description_content'],
-				child: {
+				template: {
 					type: 'element',
 					name: 'meta',
 					attrs: {
@@ -747,8 +742,8 @@ test('conditional and element comparison', (t: ExecutionContext) =>
 		}
 	}));
 
-test('conditional object', (t: ExecutionContext) =>
-	runTest(t, {
+test('conditional object', () =>
+	runTest({
 		primary: [
 			{
 				type: 'element',
@@ -825,7 +820,7 @@ test('conditional object', (t: ExecutionContext) =>
 			{
 				type: 'conditional',
 				reference: ['div'],
-				child: {
+				template: {
 					type: 'element',
 					name: 'div',
 					attrs: {},
@@ -892,8 +887,8 @@ test('conditional object', (t: ExecutionContext) =>
 		}
 	}));
 
-test('conditional object with sibling variable', (t: ExecutionContext) =>
-	runTest(t, {
+test('conditional object with sibling variable', () =>
+	runTest({
 		primary: [
 			{
 				type: 'element',
@@ -997,7 +992,7 @@ test('conditional object with sibling variable', (t: ExecutionContext) =>
 			{
 				type: 'conditional',
 				reference: ['div'],
-				child: {
+				template: {
 					type: 'element',
 					name: 'div',
 					attrs: {},
@@ -1066,8 +1061,8 @@ test('conditional object with sibling variable', (t: ExecutionContext) =>
 		}
 	}));
 
-test('conditional and loop comparison', (t: ExecutionContext) =>
-	runTest(t, {
+test('conditional and loop comparison', () =>
+	runTest({
 		primary: [
 			{
 				type: 'element',
@@ -1174,7 +1169,7 @@ test('conditional and loop comparison', (t: ExecutionContext) =>
 			{
 				type: 'conditional',
 				reference: ['div'],
-				child: {
+				template: {
 					type: 'element',
 					name: 'div',
 					attrs: {},

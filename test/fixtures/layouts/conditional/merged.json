@@ -2,7 +2,7 @@
 	{
 		"type": "conditional",
 		"reference": ["h1"],
-		"child": {
+		"template": {
 			"type": "element",
 			"name": "h1",
 			"attrs": {},

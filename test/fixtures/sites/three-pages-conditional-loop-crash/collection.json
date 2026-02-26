@@ -1,0 +1,220 @@
+{
+	"collections": {
+		"pages": {
+			"pages": [
+				{
+					"pathname": "about.html",
+					"data": {
+						"h1_inline_markdown": "Beta",
+						"ul_items": [
+							{
+								"li": "Beta description",
+								"strong": null
+							},
+							{
+								"li": "",
+								"strong": {
+									"strong": "Beta closed"
+								}
+							},
+							{
+								"li": "Beta time",
+								"strong": null
+							}
+						],
+						"title": "Beta | Test"
+					},
+					"content": []
+				},
+				{
+					"pathname": "contact.html",
+					"data": {
+						"h1_inline_markdown": "Gamma",
+						"ul_items": [
+							{
+								"li": "Gamma description"
+							},
+							{
+								"li": "Gamma open"
+							},
+							{
+								"li": "Gamma time"
+							}
+						],
+						"title": "Gamma | Test"
+					},
+					"content": []
+				},
+				{
+					"pathname": "index.html",
+					"data": {
+						"h1_inline_markdown": "Alpha",
+						"ul_items": [
+							{
+								"li": "Alpha description"
+							},
+							{
+								"li": "Alpha open"
+							},
+							{
+								"li": "Alpha time"
+							}
+						],
+						"title": "Alpha | Test"
+					},
+					"content": []
+				}
+			],
+			"layout": [
+				{
+					"type": "doctype",
+					"value": "html"
+				},
+				{
+					"type": "element",
+					"name": "html",
+					"attrs": {},
+					"children": [
+						{
+							"type": "element",
+							"name": "head",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "title",
+									"attrs": {},
+									"children": [
+										{
+											"type": "variable",
+											"reference": [
+												"title"
+											]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t"
+								}
+							]
+						},
+						{
+							"type": "text",
+							"value": "\n\t"
+						},
+						{
+							"type": "element",
+							"name": "body",
+							"attrs": {},
+							"children": [
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "h1",
+									"attrs": {},
+									"children": [
+										{
+											"type": "inline-markdown-variable",
+											"reference": [
+												"h1_inline_markdown"
+											]
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t\t"
+								},
+								{
+									"type": "element",
+									"name": "ul",
+									"attrs": {},
+									"children": [
+										{
+											"type": "text",
+											"value": "\n\t\t\t"
+										},
+										{
+											"type": "loop",
+											"reference": [
+												"ul_items"
+											],
+											"template": {
+												"type": "element",
+												"name": "li",
+												"attrs": {},
+												"children": [
+													{
+														"type": "element",
+														"name": "svg",
+														"attrs": {},
+														"children": [
+															{
+																"type": "element",
+																"name": "path",
+																"attrs": {
+																	"d": {
+																		"type": "attribute",
+																		"name": "d",
+																		"value": "M1"
+																	}
+																},
+																"children": []
+															}
+														]
+													},
+													{
+														"type": "variable",
+														"reference": [
+															"li"
+														]
+													},
+													{
+														"type": "conditional",
+														"reference": [
+															"strong"
+														],
+														"template": {
+															"type": "element",
+															"name": "strong",
+															"attrs": {},
+															"children": [
+																{
+																	"type": "variable",
+																	"reference": [
+																		"strong"
+																	]
+																}
+															]
+														}
+													}
+												]
+											}
+										},
+										{
+											"type": "text",
+											"value": "\n\t\t"
+										}
+									]
+								},
+								{
+									"type": "text",
+									"value": "\n\t\n"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	},
+	"staticFiles": []
+}

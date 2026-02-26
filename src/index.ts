@@ -1,9 +1,8 @@
-#!/usr/bin/env node --experimental-specifier-resolution=node
-import { ComponentBuilderConfig, convertElementToComponent } from './helpers/component-builder.js';
-import { ASTElementNode } from './types.js';
-import { htmlProcessor } from './helpers/html-parser.js';
-import Data from './helpers/Data.js';
-import { Logger } from './logger.js';
+import { ComponentBuilderConfig, convertElementToComponent } from './helpers/component-builder.ts';
+import { ASTElementNode } from './types.ts';
+import { htmlProcessor } from './helpers/html-parser.ts';
+import Data from './helpers/Data.ts';
+import { Logger } from './logger.ts';
 
 export class WebLogger extends Logger {
 	constructor(defaultLogLevel = 1) {
